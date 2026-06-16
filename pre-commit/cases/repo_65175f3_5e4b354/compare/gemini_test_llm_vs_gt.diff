@@ -1,0 +1,9 @@
+--- cases/repo_65175f3_5e4b354/merge_test.py	2026-03-01 20:27:03
++++ cases/repo_65175f3_5e4b354/llm_gemini_test.py	2026-06-15 13:25:55
+@@ -505,4 +505,4 @@
+     )
+ 
+     expected = b"['i have spaces', 'and\"\\'quotes', '$and !this']\n"
+-    assert ret == (0, expected)
++    assert ret == (0, expected)
+\ No newline at end of file

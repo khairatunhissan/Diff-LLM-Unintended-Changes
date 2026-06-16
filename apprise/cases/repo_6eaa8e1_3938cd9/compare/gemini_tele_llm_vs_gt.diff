@@ -1,0 +1,46 @@
+--- cases/repo_6eaa8e1_3938cd9/merge_tele.py	2026-04-08 10:17:59
++++ cases/repo_6eaa8e1_3938cd9/llm_gemini_tele.py	2026-06-10 13:40:11
+@@ -182,7 +182,6 @@
+             'name': _('Target Chat ID'),
+             'type': 'string',
+             'map_to': 'targets',
+-            'map_to': 'targets',
+             'regex': (r'^((-?[0-9]{1,32})|([a-z_-][a-z0-9_-]+))$', 'i'),
+         },
+         'targets': {
+@@ -223,7 +222,7 @@
+         if not self.bot_token:
+             err = 'The Telegram Bot Token specified ({}) is invalid.'.format(
+                 bot_token)
+-            self.logger.warning(err)
++            self.header.warning(err)
+             raise TypeError(err)
+ 
+         # Parse our list
+@@ -548,9 +547,8 @@
+             )
+ 
+         else:  # TEXT
+-            payload['parse_mode'] = 'HTML'
+             payload['text'] = '{}{}'.format(
+-                '<b>{}</b>\r\n'.format(title) if title else '',
++                '{}\r\n'.format(title) if title else '',
+                 body,
+             )
+ 
+@@ -582,7 +580,7 @@
+                 # Define our path
+                 if not self.send_media(payload['chat_id'], notify_type):
+                     # We failed to send the image associated with our
+-                    notify_type
++                    # notify_type
+                     self.logger.warning(
+                         'Failed to send Telegram type image to {}.',
+                         payload['chat_id'])
+@@ -765,4 +763,4 @@
+         results['detect_owner'] = \
+             parse_bool(results['qsd'].get('detect', True))
+ 
+-        return results
++        return results
+\ No newline at end of file

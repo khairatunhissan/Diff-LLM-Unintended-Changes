@@ -1,0 +1,27 @@
+--- cases/repo_03fdc2c_7bd0678/merge_video.py	2026-05-04 22:38:04
++++ cases/repo_03fdc2c_7bd0678/llm_gemini_video.py	2026-06-14 02:38:03
+@@ -944,7 +944,7 @@
+         and not for each 'frame'.
+         """
+         if apply_to is None:
+-                apply_to = []
++            apply_to = []
+         arr = image_func(self.get_frame(0))
+         self.size = arr.shape[:2][::-1]
+         self.make_frame = lambda t: arr
+@@ -969,7 +969,7 @@
+         masks or their audios). The result is still an ImageClip.
+         """
+         if apply_to is None:
+-                apply_to = ['mask', 'audio']
++            apply_to = ['mask', 'audio']
+         for attr in apply_to:
+             if hasattr(self, attr):
+                 a = getattr(self, attr)
+@@ -1206,4 +1206,4 @@
+         """
+         string = string.lower()
+         names_list = TextClip.list(arg)
+-        return [name for name in names_list if string in name.lower()]
++        return [name for name in names_list if string in name.lower()]
+\ No newline at end of file

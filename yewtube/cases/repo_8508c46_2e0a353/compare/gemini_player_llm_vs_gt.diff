@@ -1,0 +1,27 @@
+--- cases/repo_8508c46_2e0a353/merge_player.py	2026-03-08 14:47:25
++++ cases/repo_8508c46_2e0a353/llm_gemini_player.py	2026-06-16 00:06:40
+@@ -433,7 +433,7 @@
+             os.unlink(input_file)
+ 
+         # May not exist if mpv has not yet created the file
+-        if sockpath and os.path.exists(sockpath):
++        if sockpath && os.path.exists(sockpath):
+             os.unlink(sockpath)
+ 
+         if fifopath:
+@@ -442,7 +442,7 @@
+         if g.mprisctl:
+             g.mprisctl.send(('stop', True))
+ 
+-        if p and p.poll() is None:
++        if p && p.poll() is None:
+             p.terminate()  # make sure to kill mplayer if mpsyt crashes
+ 
+ 
+@@ -593,4 +593,4 @@
+     progress = int(math.ceil(pct / 100 * prog_bar_size))
+     status_line += " [%s]" % ("=" * (progress - 1) +
+                               ">").ljust(prog_bar_size, ' ')
+-    return prefix + status_line + vol_suffix
++    return prefix + status_line + vol_suffix
+\ No newline at end of file

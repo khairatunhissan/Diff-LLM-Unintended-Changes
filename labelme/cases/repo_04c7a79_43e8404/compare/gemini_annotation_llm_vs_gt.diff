@@ -1,0 +1,9 @@
+--- cases/repo_04c7a79_43e8404/merge_annotation.py	2026-05-04 16:04:29
++++ cases/repo_04c7a79_43e8404/llm_gemini_annotation.py	2026-06-12 19:25:37
+@@ -78,4 +78,4 @@
+ 
+     labelme.testing.assert_labelfile_sanity(out_file)
+ 
+-    win.close()
++    win.close()
+\ No newline at end of file

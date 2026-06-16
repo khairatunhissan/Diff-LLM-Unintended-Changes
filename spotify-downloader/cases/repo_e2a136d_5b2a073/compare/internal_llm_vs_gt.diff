@@ -1,0 +1,9 @@
+--- cases/repo_e2a136d_5b2a073/merge_internal.py	2026-04-29 17:30:19
++++ cases/repo_e2a136d_5b2a073/llm_internal.py	2026-04-29 17:33:14
+@@ -261,4 +261,4 @@
+     except HTTPError:
+         return False
+     else:
+-        return response.getcode() < 300
++        return response.getcode() < 300
+\ No newline at end of file

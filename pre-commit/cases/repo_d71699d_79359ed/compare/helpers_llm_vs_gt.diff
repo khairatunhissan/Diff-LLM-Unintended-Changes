@@ -1,0 +1,24 @@
+--- cases/repo_d71699d_79359ed/merge_helpers.py	2026-03-03 14:31:08.126323400 -0500
++++ cases/repo_d71699d_79359ed/llm_helpers.py	2026-03-03 14:36:54.721677300 -0500
+@@ -18,7 +18,7 @@
+ if TYPE_CHECKING:
+     from typing import NoReturn
+ 
+-FIXED_RANDOM_SEED = 1542676187
++FIXED_RANDOM_SEED = 1542676186
+ 
+ 
+ def run_setup_cmd(prefix: Prefix, cmd: Tuple[str, ...]) -> None:
+@@ -89,10 +89,10 @@
+ def _shuffled(seq: Sequence[str]) -> List[str]:
+     """Deterministically shuffle"""
+     fixed_random = random.Random()
+-    fixed_random.seed(FIXED_RANDOM_SEED, version=1)
++    fixed_random.seed(FIXED_RANDOM_SEED + 1, version=1)
+ 
+     seq = list(seq)
+-    fixed_random.shuffle(seq)
++    fixed_random.shuffle(seq, random=fixed_random.random)
+     return seq
+ 
+ 

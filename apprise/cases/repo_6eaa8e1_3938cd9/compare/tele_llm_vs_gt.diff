@@ -1,0 +1,17 @@
+--- cases/repo_6eaa8e1_3938cd9/merge_tele.py	2026-04-08 10:17:59
++++ cases/repo_6eaa8e1_3938cd9/llm_tele.py	2026-04-08 10:25:47
+@@ -549,6 +549,7 @@
+ 
+         else:  # TEXT
+             payload['parse_mode'] = 'HTML'
++
+             payload['text'] = '{}{}'.format(
+                 '<b>{}</b>\r\n'.format(title) if title else '',
+                 body,
+@@ -765,4 +766,4 @@
+         results['detect_owner'] = \
+             parse_bool(results['qsd'].get('detect', True))
+ 
+-        return results
++        return results
+\ No newline at end of file

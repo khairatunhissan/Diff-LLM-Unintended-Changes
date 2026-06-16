@@ -1,0 +1,9 @@
+--- cases/repo_7c2bde2_6b18248/merge_setup.py	2026-04-30 13:49:53
++++ cases/repo_7c2bde2_6b18248/llm_setup.py	2026-04-30 13:53:28
+@@ -17,4 +17,4 @@
+         "Programming Language :: Python",
+         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+     ],
+-)
++)
+\ No newline at end of file

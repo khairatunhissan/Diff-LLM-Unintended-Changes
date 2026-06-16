@@ -1,0 +1,9 @@
+--- cases/repo_ea4831f_8d2c22d/merge_main.py	2026-03-28 21:56:28
++++ cases/repo_ea4831f_8d2c22d/llm_main.py	2026-03-28 22:04:59
+@@ -3819,4 +3819,4 @@
+             elif userinput and g.command_line:
+                 sys.exit("Bad syntax")
+ 
+-        screen.update()
++        screen.update()
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_d30da4f_c19e194/merge_cmd.py	2026-04-05 11:28:00
++++ cases/repo_d30da4f_c19e194/llm_cmd.py	2026-04-05 11:43:40
+@@ -385,4 +385,4 @@
+         cmd = cmdutils.cmd_dict['fun']
+         with pytest.raises(cmdexc.PrerequisitesError) as excinfo:
+             cmd.run(win_id=0)
+-        assert str(excinfo.value).endswith(' backend.')
++        assert str(excinfo.value).endswith(' backend.')
+\ No newline at end of file

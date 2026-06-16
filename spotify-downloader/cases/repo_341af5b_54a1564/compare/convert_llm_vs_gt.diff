@@ -1,0 +1,18 @@
+--- cases/repo_341af5b_54a1564/merge_convert.py	2026-04-29 21:03:16
++++ cases/repo_341af5b_54a1564/llm_convert.py	2026-04-29 21:09:35
+@@ -97,7 +97,7 @@
+         return code, command
+ 
+     def with_ffmpeg(self, trim_silence=False):
+-        ffmpeg_pre = "ffmpeg -y -nostdin " # -nostdin is necessary for spotdl to be able to run in the backgroung.
++        ffmpeg_pre = "ffmpeg -y -nostdin " # -nostdin is necessary for spotdl to be able to run in the backgroung
+ 
+         if not log.level == 10:
+             ffmpeg_pre += "-hide_banner -nostats -v panic "
+@@ -150,4 +150,4 @@
+             log.debug('Removing original file: "{}"'.format(self.input_file))
+             os.remove(self.input_file)
+ 
+-        return code, command
++        return code, command
+\ No newline at end of file

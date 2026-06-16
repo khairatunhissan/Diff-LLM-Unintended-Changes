@@ -1,0 +1,70 @@
+--- cases/repo_721b6b5_0315081/merge_gui.py	2026-04-30 14:29:28
++++ cases/repo_721b6b5_0315081/llm_gui.py	2026-04-30 14:53:28
+@@ -3,6 +3,7 @@
+ import sys
+ import os
+ import tkinter as tk
++import tkinter.messagebox
+ import tkinter.filedialog
+ from pathlib import Path
+ 
+@@ -119,14 +120,14 @@
+ URL_entry_img = canvas.create_image(650.5, 248.5, image=text_box_bg)
+ filePath_entry_img = canvas.create_image(650.5, 329.5, image=text_box_bg)
+ 
+-token_entry = tk.Entry(bd=0, bg="#F6F7F9",fg="#000716",  highlightthickness=0)
++token_entry = tk.Entry(bd=0, bg="#F6F7F9", highlightthickness=0)
+ token_entry.place(x=490.0, y=137+25, width=321.0, height=35)
+ token_entry.focus()
+ 
+-URL_entry = tk.Entry(bd=0, bg="#F6F7F9", fg="#000716",  highlightthickness=0)
++URL_entry = tk.Entry(bd=0, bg="#F6F7F9", highlightthickness=0)
+ URL_entry.place(x=490.0, y=218+25, width=321.0, height=35)
+ 
+-path_entry = tk.Entry(bd=0, bg="#F6F7F9", fg="#000716", highlightthickness=0)
++path_entry = tk.Entry(bd=0, bg="#F6F7F9", highlightthickness=0)
+ path_entry.place(x=490.0, y=299+25, width=321.0, height=35)
+ 
+ path_picker_img = tk.PhotoImage(file = ASSETS_PATH / "path_picker.png")
+@@ -134,7 +135,7 @@
+     image = path_picker_img,
+     text = '',
+     compound = 'center',
+-    fg = 'white',
++    fg = '#000716',
+     borderwidth = 0,
+     highlightthickness = 0,
+     command = select_path,
+@@ -163,7 +164,7 @@
+ 
+ title = tk.Label(
+     text="Welcome to Tkinter Designer", bg="#3A7FF6",
+-    fg="white", font=("Arial-BoldMT", int(20.0)))
++    fg="#000716", font=("Arial-BoldMT", int(20.0)))
+ title.place(x=27.0, y=120.0)
+ 
+ info_text = tk.Label(
+@@ -174,14 +175,14 @@
+ 
+     "Even this GUI was created\n"
+     "using Tkinter Designer.",
+-    bg="#3A7FF6", fg="white", justify="left",
++    bg="#3A7FF6", fg="#000716", justify="left",
+     font=("Georgia", int(16.0)))
+ 
+ info_text.place(x=27.0, y=200.0)
+ 
+ know_more = tk.Label(
+     text="Click here for instructions",
+-    bg="#3A7FF6", fg="white", cursor="hand2")
++    bg="#3A7FF6", fg="#000716", cursor="hand2")
+ know_more.place(x=27, y=400)
+ know_more.bind('<Button-1>', know_more_clicked)
+ 
+@@ -192,4 +193,4 @@
+ generate_btn.place(x=557, y=401, width=180, height=55)
+ 
+ window.resizable(False, False)
+-window.mainloop()
++window.mainloop()
+\ No newline at end of file

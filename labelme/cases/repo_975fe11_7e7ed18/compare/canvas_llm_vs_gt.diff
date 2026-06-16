@@ -1,0 +1,9 @@
+--- cases/repo_975fe11_7e7ed18/merge_canvas.py	2026-05-04 16:15:40
++++ cases/repo_975fe11_7e7ed18/llm_canvas.py	2026-05-04 16:19:01
+@@ -821,4 +821,4 @@
+         self.restoreCursor()
+         self.pixmap = None
+         self.shapesBackups = []
+-        self.update()
++        self.update()
+\ No newline at end of file

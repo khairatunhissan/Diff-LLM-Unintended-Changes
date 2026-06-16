@@ -1,0 +1,24 @@
+--- cases/repo_30450d5_9079508/merge_custom.py	2026-04-29 22:32:40
++++ cases/repo_30450d5_9079508/llm_gemini_custom.py	2026-06-10 22:06:53
+@@ -13,7 +13,13 @@
+ class U2netCustomSession(BaseSession):
+     """This is a class representing a custom session for the U2net model."""
+ 
+-    def __init__(self, model_name: str, sess_opts: ort.SessionOptions, *args, **kwargs):
++    def __init__(
++        self,
++        model_name: str,
++        sess_opts: ort.SessionOptions,
++        *args,
++        **kwargs
++    ):
+         """
+         Initialize a new U2netCustomSession object.
+ 
+@@ -94,4 +100,4 @@
+         Returns:
+             str: The name of the model.
+         """
+-        return "u2net_custom"
++        return "u2net_custom"
+\ No newline at end of file

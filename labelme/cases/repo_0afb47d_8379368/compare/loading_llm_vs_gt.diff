@@ -1,0 +1,9 @@
+--- cases/repo_0afb47d_8379368/merge_loading.py	2026-05-04 15:25:22
++++ cases/repo_0afb47d_8379368/llm_loading.py	2026-05-04 15:27:04
+@@ -98,4 +98,4 @@
+         assert item
+         assert item.checkState() == expected_check_state
+ 
+-    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
++    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+\ No newline at end of file

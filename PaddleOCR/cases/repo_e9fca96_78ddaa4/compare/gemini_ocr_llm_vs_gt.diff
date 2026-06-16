@@ -1,0 +1,9 @@
+--- cases/repo_e9fca96_78ddaa4/merge_ocr.py	2026-04-05 13:21:45
++++ cases/repo_e9fca96_78ddaa4/llm_gemini_ocr.py	2026-06-10 13:26:33
+@@ -1015,4 +1015,4 @@
+                 item.pop("img")
+                 item.pop("res")
+                 logger.info(item)
+-            logger.info("result save to {}".format(args.output))
++            logger.info("result save to {}".format(args.output))
+\ No newline at end of file

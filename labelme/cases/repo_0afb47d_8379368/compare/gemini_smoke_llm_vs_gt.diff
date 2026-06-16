@@ -1,0 +1,9 @@
+--- cases/repo_0afb47d_8379368/merge_smoke.py	2026-05-04 15:31:22
++++ cases/repo_0afb47d_8379368/llm_gemini_smoke.py	2026-06-12 19:22:18
+@@ -37,4 +37,4 @@
+     assert win._docks.file_search.text() == "2011_000003"
+     assert win._docks.file_list.count() == 1
+ 
+-    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
++    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+\ No newline at end of file

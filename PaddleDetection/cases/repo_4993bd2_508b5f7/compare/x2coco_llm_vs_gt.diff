@@ -1,0 +1,13 @@
+--- cases/repo_4993bd2_508b5f7/merge_x2coco.py	2026-03-03 16:50:15.196517300 -0500
++++ cases/repo_4993bd2_508b5f7/llm_x2coco.py	2026-03-03 16:53:38.661562300 -0500
+@@ -43,8 +43,8 @@
+             return obj.tolist()
+         else:
+             return super(MyEncoder, self).default(obj)
+-        
+-        
++
++
+ def images_labelme(data, num):
+     image = {}
+     image['height'] = data['imageHeight']

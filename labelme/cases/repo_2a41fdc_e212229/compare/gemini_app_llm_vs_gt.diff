@@ -1,0 +1,9 @@
+--- cases/repo_2a41fdc_e212229/merge_app.py	2026-05-04 16:27:47
++++ cases/repo_2a41fdc_e212229/llm_gemini_app.py	2026-06-12 19:31:36
+@@ -138,4 +138,4 @@
+     win.saveFile()
+ 
+     labelme.testing.assert_labelfile_sanity(out_file)
+-    shutil.rmtree(tmp_dir)
++    shutil.rmtree(tmp_dir)
+\ No newline at end of file

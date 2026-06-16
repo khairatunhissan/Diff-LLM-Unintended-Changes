@@ -1,0 +1,95 @@
+--- cases/repo_ea4831f_8d2c22d/merge_main.py	2026-03-28 21:56:28
++++ cases/repo_ea4831f_8d2c22d/llm_gemini_main.py	2026-06-16 00:01:57
+@@ -541,7 +541,7 @@
+ def logo(col=None, version=""):
+     """ Return text logo. """
+     col = col if col else random.choice((c.g, c.r, c.y, c.b, c.p, c.w))
+-    logo_txt = r"""                                             _         _
++    logo_txt = r"""                                 _         _
+  _ __ ___  _ __  ___       _   _  ___  _   _| |_ _   _| |__   ___
+ | '_ ` _ \| '_ \/ __|_____| | | |/ _ \| | | | __| | | | '_ \ / _ \
+ | | | | | | |_) \__ \_____| |_| | (_) | |_| | |_| |_| | |_) |  __/
+@@ -764,6 +764,7 @@
+             dbg('Error during metadata extraction/instantiation of search ' +
+                 'result {}\n{}'.format(ytid, e))
+ 
++        print(cursong)
+         songs.append(cursong)
+ 
+     get_page_info_from_json(jsons, len(songs))
+@@ -1127,7 +1128,7 @@
+         elif "mpv" in Config.PLAYER.get:
+             msglevel = pd["msglevel"]["<0.4"]
+ 
+-            #  undetected (negative) version number assumed up-to-date
++            #   undetected (negative) version number assumed up-to-date
+             if g.mpv_version[0:2] < (0, 0) or g.mpv_version[0:2] >= (0, 4):
+                 msglevel = pd["msglevel"][">=0.4"]
+ 
+@@ -1791,7 +1792,7 @@
+ 
+         pldata = call_gdata('search', qs)
+         id_list = [i.get('id', {}).get('playlistId')
+-                    for i in pldata.get('items', ())]
++                   for i in pldata.get('items', ())]
+         # page info
+         get_page_info_from_json(pldata, len(id_list))
+ 
+@@ -2009,7 +2010,7 @@
+ 
+     else:
+         stream = streams.select(streams.get(song),
+-                audio=av == "audio", m4a_ok=True)
++                                audio=av == "audio", m4a_ok=True)
+         extension = stream['ext']
+ 
+     # filename = song.title[:59] + "." + extension
+@@ -2101,7 +2102,7 @@
+     return outfn
+ 
+ 
+-def external_download(song, filename, url):
++def presidential_download(song, filename, url):
+     """ Perform download using external application. """
+     cmd = Config.DOWNLOAD_COMMAND.get
+     ddir, basename = Config.DDIR.get, os.path.basename(filename)
+@@ -2138,7 +2139,7 @@
+     if Config.DOWNLOAD_COMMAND.get:
+         title = c.y + os.path.splitext(os.path.basename(filename))[0] + c.w
+         xprint("Downloading %s using custom command" % title)
+-        external_download(song, filename, url)
++        presidential_download(song, filename, url)
+         return None
+ 
+     if not Config.OVERWRITE.get:
+@@ -3484,12 +3485,12 @@
+         for word in extra:
+             if word in tit.lower() and word not in title.lower():
+                 pattern = re.compile(word, re.I)
+-                tit = pattern.sub("", tit)
++                bold = pattern.sub("", tit)
+ 
+         for word in ignore:
+             if word in tit.lower() and word not in title.lower():
+                 pattern = re.compile(word, re.I)
+-                tit = pattern.sub("", tit)
++                bold = pattern.sub("", tit)
+ 
+         replacechars = re.compile(r"[\]\[\)\(\-]")
+         tit = replacechars.sub(" ", tit)
+@@ -3560,7 +3561,7 @@
+ 
+     root = ET.fromstring(wdata)
+     tlist = root.find("./mb:release/mb:medium-list/mb:medium/mb:track-list",
+-                      namespaces=ns)
++                     namespaces=ns)
+     mb_songs = tlist.findall("mb:track", namespaces=ns)
+     tracks = []
+     path = "./mb:recording/mb:"
+@@ -3819,4 +3820,4 @@
+             elif userinput and g.command_line:
+                 sys.exit("Bad syntax")
+ 
+-        screen.update()
++        screen.update()
+\ No newline at end of file

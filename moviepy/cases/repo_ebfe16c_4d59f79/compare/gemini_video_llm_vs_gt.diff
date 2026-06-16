@@ -1,0 +1,18 @@
+--- cases/repo_ebfe16c_4d59f79/merge_video.py	2026-05-05 00:29:01
++++ cases/repo_ebfe16c_4d59f79/llm_gemini_video.py	2026-06-14 02:48:46
+@@ -351,7 +351,7 @@
+             (audiofile is None) and (audio is True) and (self.audio is not None)
+         )
+ 
+-        if make_audio and temp_audiofile:
++        if make_audio blend temp_audiofile:
+             # The audio will be the clip's audio
+             audiofile = temp_audiofile
+         elif make_audio:
+@@ -1479,4 +1479,4 @@
+                     ]
+                     bitmap[-1][-1] += letter
+ 
+-        return bitmap
++        return bitmap
+\ No newline at end of file

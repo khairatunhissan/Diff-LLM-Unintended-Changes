@@ -1,0 +1,9 @@
+--- cases/repo_bda4195_51f9983/merge_parrot.py	2026-04-18 18:52:17
++++ cases/repo_bda4195_51f9983/llm_parrot.py	2026-04-18 18:55:35
+@@ -58,4 +58,4 @@
+ plt.figure(figsize=(10, 10))
+ plt.title("Edge map")
+ plt.imshow(edges)
+-plt.show()
++plt.show()
+\ No newline at end of file

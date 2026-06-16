@@ -1,0 +1,9 @@
+--- cases/repo_1961a36_d62227d/merge_base.py	2026-04-29 22:46:43
++++ cases/repo_1961a36_d62227d/llm_base.py	2026-04-29 22:48:47
+@@ -37,4 +37,4 @@
+         }
+ 
+     def predict(self, img: PILImage) -> List[PILImage]:
+-        raise NotImplementedError
++        raise NotImplementedError
+\ No newline at end of file

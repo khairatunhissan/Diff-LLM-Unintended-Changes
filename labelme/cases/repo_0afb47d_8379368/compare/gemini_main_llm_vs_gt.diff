@@ -1,0 +1,14 @@
+--- cases/repo_0afb47d_8379368/merge_main.py	2026-05-04 15:16:40
++++ cases/repo_0afb47d_8379368/llm_gemini_main.py	2026-06-12 19:16:54
+@@ -1,3 +1,4 @@
++# -*- coding: utf-8 -*-
+ from __future__ import annotations
+ 
+ import argparse
+@@ -319,4 +320,4 @@
+ 
+ # this main block is required to generate executable by pyinstaller
+ if __name__ == "__main__":
+-    main()
++    main()
+\ No newline at end of file

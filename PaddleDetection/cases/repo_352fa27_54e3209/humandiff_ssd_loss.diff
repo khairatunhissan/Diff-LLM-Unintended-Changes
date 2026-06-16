@@ -1,0 +1,15 @@
+diff --git a/ppdet/modeling/losses/ssd_loss.py b/ppdet/modeling/losses/ssd_loss.py
+index 771ae038c..3285d14bd 100644
+--- a/ppdet/modeling/losses/ssd_loss.py
++++ b/ppdet/modeling/losses/ssd_loss.py
+@@ -146,8 +146,8 @@ class SSDLoss(nn.Layer):
+         bbox_mask = paddle.tile(targets_label != bg_index, [1, 1, 4])
+         if bbox_mask.astype(boxes.dtype).sum() > 0:
+             location = paddle.masked_select(boxes, bbox_mask)
+-            targets_bbox = paddle.masked_select(targets_bbox, bbox_mask)
+-            loc_loss = F.smooth_l1_loss(location, targets_bbox, reduction='sum')
++            targets_bbox_tmp = paddle.masked_select(targets_bbox, bbox_mask)
++            loc_loss = F.smooth_l1_loss(location, targets_bbox_tmp, reduction='sum')
+             loc_loss = loc_loss * self.loc_loss_weight
+         else:
+             loc_loss = paddle.zeros([])

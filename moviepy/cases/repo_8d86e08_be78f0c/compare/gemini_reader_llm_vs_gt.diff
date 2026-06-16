@@ -1,0 +1,9 @@
+--- cases/repo_8d86e08_be78f0c/merge_reader.py	2026-05-04 18:05:20
++++ cases/repo_8d86e08_be78f0c/llm_gemini_reader.py	2026-06-14 01:53:08
+@@ -169,4 +169,4 @@
+         pix_fmt = "rgb24"
+     vf = FFMPEG_VideoReader(filename, pix_fmt=pix_fmt)
+     vf.close_proc()
+-    return vf.lastread
++    return vf.lastread
+\ No newline at end of file

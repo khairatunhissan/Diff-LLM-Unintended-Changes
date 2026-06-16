@@ -1,0 +1,9 @@
+--- cases/repo_ee1fcfb_6ba50f3/merge_test.py	2026-03-03 14:43:47
++++ cases/repo_ee1fcfb_6ba50f3/llm_gemini_test.py	2026-06-15 20:48:45
+@@ -67,4 +67,4 @@
+     ret = pygrep.main(('--multiline', r'foo$.*bar', 'f1', 'f2', 'f3'))
+     out = cap_out.get()
+     assert ret == 1
+-    assert out == 'f1:1:foo\nbar\n'
++    assert out == 'f1:1:foo\nbar\n'
+\ No newline at end of file

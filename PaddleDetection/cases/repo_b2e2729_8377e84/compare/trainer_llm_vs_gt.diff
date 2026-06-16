@@ -1,0 +1,9 @@
+--- cases/repo_b2e2729_8377e84/merge_trainer.py	2026-03-28 21:25:48
++++ cases/repo_b2e2729_8377e84/llm_trainer.py	2026-03-28 21:31:10
+@@ -1503,4 +1503,4 @@
+                 if new_sublayer is not sublayer:
+                     setattr(layer, name, new_sublayer)
+ 
+-        return layer
++        return layer
+\ No newline at end of file

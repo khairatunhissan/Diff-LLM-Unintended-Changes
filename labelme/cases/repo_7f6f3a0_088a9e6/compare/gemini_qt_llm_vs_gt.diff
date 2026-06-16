@@ -1,0 +1,9 @@
+--- cases/repo_7f6f3a0_088a9e6/merge_qt.py	2026-05-04 17:50:01
++++ cases/repo_7f6f3a0_088a9e6/llm_gemini_qt.py	2026-06-12 19:36:14
+@@ -90,4 +90,4 @@
+ 
+ def fmtShortcut(text):
+     mod, key = text.split("+", 1)
+-    return "<b>%s</b>+<b>%s</b>" % (mod, key)
++    return "<b>%s</b>+<b>%s</b>" % (mod, key)
+\ No newline at end of file

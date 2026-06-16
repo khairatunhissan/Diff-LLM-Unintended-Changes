@@ -1,0 +1,18 @@
+--- cases/repo_59cb35d_be9bb5e/merge_wordcloud.py	2026-04-18 18:39:39
++++ cases/repo_59cb35d_be9bb5e/llm_gemini_wordcloud.py	2026-06-10 18:57:06
+@@ -801,7 +801,7 @@
+             width = self.mask.shape[1]
+             height = self.mask.shape[0]
+         else:
+-            height, width = self.height, self.width
++            height, width = self.height, width = self.width
+ 
+         # Get max font size
+         if self.max_font_size is None:
+@@ -1036,4 +1036,4 @@
+             color = Image.new(img.mode, img.size, self.contour_color)
+             ret += np.array(color) * contour
+ 
+-        return Image.fromarray(ret)
++        return Image.fromarray(ret)
+\ No newline at end of file

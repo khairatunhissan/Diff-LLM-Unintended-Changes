@@ -1,0 +1,34 @@
+--- cases/repo_03fdc2c_7bd0678/merge_clip.py	2026-05-04 22:28:17
++++ cases/repo_03fdc2c_7bd0678/llm_gemini_clip.py	2026-06-14 02:12:56
+@@ -131,6 +131,7 @@
+         >>> newclip = clip.fl(fl, apply_to='mask')
+         
+         """
++
+         if apply_to is None:
+             apply_to = []
+ 
+@@ -186,6 +187,7 @@
+         >>> newclip = clip.fl_time(lambda: 3-t)
+         
+         """
++        
+         if apply_to is None:
+             apply_to = []
+         
+@@ -392,7 +394,7 @@
+                              "should be smaller than the clip's "+
+                              "duration (%.02f)."%self.duration)
+ 
+-        newclip = self.fl_time(lambda t: t + t_start, apply_to=[])
++        newclip = self.fl_time(lambda t: t + t_start, apply_to=None)
+ 
+         if (t_end is None) and (self.duration is not None):
+         
+@@ -488,4 +490,4 @@
+             nframes = int(self.duration*fps)+1
+             return tqdm(generator(), total=nframes)
+ 
+-        return generator()
++        return generator()
+\ No newline at end of file

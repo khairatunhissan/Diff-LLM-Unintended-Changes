@@ -1,0 +1,22 @@
+--- cases/repo_ede6169_9345a60/merge_elements.py	2026-04-30 15:05:30
++++ cases/repo_ede6169_9345a60/llm_elements.py	2026-04-30 15:12:34
+@@ -74,10 +74,10 @@
+ canvas.create_text(
+     {self.x},
+     {self.y},
+-    anchor="nw",
+     text="{self.text}",
+     fill="{self.text_color}",
+-    font=("{self.font}", int({self.font_size}))
++    font=("{self.font}", int({self.font_size})),
++    anchor="nw"
+ )
+ """
+ 
+@@ -154,4 +154,4 @@
+     width={self.entry_width},
+     height={self.entry_height}
+ )
+-"""
++"""
+\ No newline at end of file

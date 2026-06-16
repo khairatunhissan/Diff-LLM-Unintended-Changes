@@ -1,0 +1,10 @@
+--- cases/repo_2e29b41_4aa1a40/merge_analysis.py	2026-04-05 13:35:28
++++ cases/repo_2e29b41_4aa1a40/llm_analysis.py	2026-04-05 13:40:50
+@@ -105,5 +105,4 @@
+             #            color = (255, 0, 0)
+             #            cv2.circle(dimg, (lmk[l][0], lmk[l][1]), 1, color,
+             #                       2)
+-        return dimg
+-
++        return dimg
+\ No newline at end of file

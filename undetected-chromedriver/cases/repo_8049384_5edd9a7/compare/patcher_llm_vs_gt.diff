@@ -1,0 +1,9 @@
+--- cases/repo_8049384_5edd9a7/merge_patcher.py	2026-04-29 13:31:13
++++ cases/repo_8049384_5edd9a7/llm_patcher.py	2026-04-29 13:49:17
+@@ -350,4 +350,4 @@
+                     time.sleep(0.01)
+                     continue
+                 except FileNotFoundError:
+-                    break
++                    break
+\ No newline at end of file

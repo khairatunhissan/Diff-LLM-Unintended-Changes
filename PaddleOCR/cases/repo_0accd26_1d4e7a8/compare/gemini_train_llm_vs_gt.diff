@@ -1,0 +1,9 @@
+--- cases/repo_0accd26_1d4e7a8/merge_train.py	2026-04-05 12:36:10
++++ cases/repo_0accd26_1d4e7a8/llm_gemini_train.py	2026-06-10 13:02:30
+@@ -267,4 +267,4 @@
+     seed = config["Global"]["seed"] if "seed" in config["Global"] else 1024
+     set_seed(seed)
+     main(config, device, logger, vdl_writer, seed)
+-    # test_reader(config, device, logger)
++    # test_reader(config, device, logger)
+\ No newline at end of file

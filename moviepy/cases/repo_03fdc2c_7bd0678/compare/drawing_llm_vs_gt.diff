@@ -1,0 +1,23 @@
+--- cases/repo_03fdc2c_7bd0678/merge_drawing.py	2026-05-05 00:08:43
++++ cases/repo_03fdc2c_7bd0678/llm_drawing.py	2026-05-05 00:10:28
+@@ -12,11 +12,11 @@
+     ``mask`` if provided. If ``im1`` and ``im2`` are mask pictures
+     (2D float arrays) then ``ismask`` must be ``True``.
+     """
+-    if pos is None:
+-        pos = [0, 0]
+ 
+     # xp1,yp1,xp2,yp2 = blit area on im2
+     # x1,y1,x2,y2 = area of im1 to blit on im2
++    if pos is None:
++        pos = [0, 0]
+     xp, yp = pos
+     x1 = max(0, -xp)
+     y1 = max(0, -yp)
+@@ -266,4 +266,4 @@
+     """
+     return color_gradient(screensize,p1=center,r=radius, col1=col1,
+               col2=col2, shape='radial', offset = 0 if (radius==0) else
+-                                              1.0*(radius-blur)/radius)
++                                              1.0*(radius-blur)/radius)
+\ No newline at end of file

@@ -1,0 +1,11 @@
+--- cases/repo_6b9a83a_e43b36f/merge_playlist.py	2026-03-08 15:04:14.721078900 -0400
++++ cases/repo_6b9a83a_e43b36f/llm_playlist.py	2026-03-08 16:00:07.695191600 -0400
+@@ -29,8 +29,6 @@
+ def playlist_add(nums, playlist):
+     """ Add selected song nums to saved playlist. """
+     nums = util.parse_multi(nums)
+-    # Replacing spaces with hyphens before checking if playlist already exist.
+-    # See https://github.com/mps-youtube/mps-youtube/issues/1046.
+     playlist = playlist.replace(" ", "-")
+ 
+     if not g.userpl.get(playlist):

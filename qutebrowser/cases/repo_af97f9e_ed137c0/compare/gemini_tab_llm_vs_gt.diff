@@ -1,0 +1,18 @@
+--- cases/repo_af97f9e_ed137c0/merge_tab.py	2026-04-05 11:50:59
++++ cases/repo_af97f9e_ed137c0/llm_gemini_tab.py	2026-06-10 12:23:37
+@@ -244,7 +244,7 @@
+                 url = config.get('general', 'default-page')
+                 self.openurl(url, newtab=True)
+ 
+-    def _remove_tab(self, tab, *, add_undo=True):
++    def _remove_tab(self, tab, add_undo=True):
+         """Remove a tab from the tab list and delete it properly.
+ 
+         Args:
+@@ -700,4 +700,4 @@
+ 
+             tab.scroller.to_point(point)
+         else:
+-            message.error(self._win_id, "Mark {} is not set".format(key))
++            message.error(self._win_id, "Mark {} is not set".format(key))
+\ No newline at end of file

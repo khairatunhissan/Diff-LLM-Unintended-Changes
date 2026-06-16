@@ -1,0 +1,18 @@
+--- cases/repo_bda4195_51f9983/merge_parrot.py	2026-04-18 18:52:17
++++ cases/repo_bda4195_51f9983/llm_gemini_parrot.py	2026-06-10 19:13:01
+@@ -19,7 +19,7 @@
+ d = os.path.dirname(__file__) if "__file__" in locals() else os.getcwd()
+ 
+ # load wikipedia text on rainbow
+-text = open(os.path.join(d, 'wiki_rainbow.txt'), encoding="utf-8").read()
++text = open(os.path.join(d, 'wiki_rainbow.txt'), encoding='utf-8').read()
+ 
+ # load image. This has been modified in gimp to be brighter and have more saturation.
+ parrot_color = np.array(Image.open(os.path.join(d, "parrot-by-jose-mari-gimenez2.jpg")))
+@@ -58,4 +58,4 @@
+ plt.figure(figsize=(10, 10))
+ plt.title("Edge map")
+ plt.imshow(edges)
+-plt.show()
++plt.show()
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_4294b89_fa4bdc5/merge_url.py	2026-04-29 14:37:15
++++ cases/repo_4294b89_fa4bdc5/llm_gemini_url.py	2026-06-10 19:35:11
+@@ -62,4 +62,4 @@
+             return await downloader.loop.run_in_executor(None, process_song, song)
+ 
+     tasks = [pool_worker(song) for song in songs]
+-    downloader.loop.run_until_complete(asyncio.gather(*tasks))
++    downloader.loop.run_until_complete(asyncio.gather(*tasks))
+\ No newline at end of file

@@ -1,0 +1,106 @@
+--- cases/repo_c2baf17_ebce32a/merge_icecream.py	2026-04-30 15:43:16
++++ cases/repo_c2baf17_ebce32a/llm_icecream.py	2026-04-30 15:49:43
+@@ -10,6 +10,7 @@
+ # License: MIT
+ #
+ 
++import functools
+ import sys
+ import unittest
+ import warnings
+@@ -60,8 +61,8 @@
+ 
+ @contextmanager
+ def configure_icecream_output(prefix=None, outputFunction=None,
+-                            argToStringFunction=None, includeContext=None,
+-                            contextAbsPath=None):
++                              argToStringFunction=None, includeContext=None,
++                              contextAbsPath=None):
+     oldPrefix = ic.prefix
+     oldOutputFunction = ic.outputFunction
+     oldArgToStringFunction = ic.argToStringFunction
+@@ -152,7 +153,8 @@
+ 
+     return line
+ 
+-def parse_output_into_pairs(out, err, assert_num_lines,
++
++def parse_output_into_pairs(out, err, assertNumLines,
+                             prefix=icecream.DEFAULT_PREFIX):
+     if isinstance(out, StringIO):
+         out = out.getvalue()
+@@ -162,35 +164,35 @@
+     assert not out
+ 
+     lines = err.splitlines()
+-    if assert_num_lines:
+-        assert len(lines) == assert_num_lines
++    if assertNumLines:
++        assert len(lines) == assertNumLines
+ 
+-    line_pairs = []
++    linePairs = []
+     for line in lines:
+         line = line_after_context(line, prefix)
+ 
+         if not line:
+-            line_pairs.append([])
++            linePairs.append([])
+             continue
+ 
+         pairStrs = line.split(TEST_PAIR_DELIMITER)
+         pairs = [tuple(s.split(':', 1)) for s in pairStrs]
+         # Indented line of a multiline value.
+         if len(pairs[0]) == 1 and line.startswith(' '):
+-            arg, value = line_pairs[-1][-1]
++            arg, value = linePairs[-1][-1]
+             looksLikeAString = value[0] in ["'", '"']
+             prefix = ((arg + ': ' if arg is not None else '')  # A multiline value
+                       + (' ' if looksLikeAString else ''))
+             dedented = line[len(ic.prefix) + len(prefix):]
+-            line_pairs[-1][-1] = (arg, value + '\n' + dedented)
++            linePairs[-1][-1] = (arg, value + '\n' + dedented)
+         else:
+             items = [
+                 (None, p[0].strip()) if len(p) == 1  # A value, like ic(3).
+                 else (p[0].strip(), p[1].strip())  # A variable, like ic(a).
+                 for p in pairs]
+-            line_pairs.append(items)
++            linePairs.append(items)
+ 
+-    return line_pairs
++    return linePairs
+ 
+ 
+ class TestIceCream(unittest.TestCase):
+@@ -491,7 +493,7 @@
+ 
+         pair = parse_output_into_pairs(out, err, 3)[1][0]
+         assert pair == ('multilineStr', ic.argToStringFunction(multilineStr))
+-
++    
+     def test_format(self):
+         with disable_coloring(), capture_standard_streams() as (out, err):
+             """comment"""; noop(); ic(  # noqa
+@@ -541,11 +543,11 @@
+ 
+     def test_no_source_available_issues_exactly_one_warning(self):
+         with disable_coloring(), capture_standard_streams() as (out, err):
+-            with warnings.catch_warnings(record=True) as all_warnings:
++            with warnings.catch_warnings(record=True) as allWarnings:
+                 eval('ic(a)')
+                 eval('ic(b)')
+-                assert len(all_warnings) == 1
+-                warning = all_warnings[-1]
++                assert len(allWarnings) == 1
++                warning = allWarnings[-1]
+                 assert NO_SOURCE_AVAILABLE_WARNING_MESSAGE in str(warning.message)
+ 
+     def test_single_tuple_argument(self):
+@@ -682,4 +684,4 @@
+         s = err.getvalue()
+         self.assertIn("ic|", s)
+         # Don’t assert exact text; just ensure something printed.
+-        self.assertTrue(len(s) > 0)
++        self.assertTrue(len(s) > 0)
+\ No newline at end of file

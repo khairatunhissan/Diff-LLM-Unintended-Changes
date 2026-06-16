@@ -1,0 +1,27 @@
+--- cases/repo_adb9f3a_87d877e/merge_load.py	2026-04-08 10:30:11
++++ cases/repo_adb9f3a_87d877e/llm_load.py	2026-04-08 10:37:17
+@@ -248,7 +248,7 @@
+ 
+         def _postcomment_asdict(comment):
+             return {**_postcommentanswer_asdict(comment),
+-                    'answers': sorted([_postcommentanswer_asdict(answer) for answer in comment.answers],
++                    'answers': sorted([_postcommentanswer_asdict(answer) for answer in (comment.answers or [])],
+                                       key=lambda t: int(t['id']),
+                                       reverse=True)}
+ 
+@@ -276,7 +276,7 @@
+         comments.extend(_postcomment_asdict(comment) for comment in post.get_comments())
+         if comments:
+             comments = get_unique_comments(comments, combine_answers=True)
+-            answer_ids = set(int(answer['id']) for comment in comments for answer in comment.get('answers', []))
++            answer_ids = set(int(answer['id']) for comment in comments for answer in comment.get('answers'))
+             with open(filename, 'w') as file:
+                 file.write(json.dumps(list(filter(lambda t: int(t['id']) not in answer_ids, comments)), indent=4))
+             self.context.log('comments', end=' ', flush=True)
+@@ -1137,4 +1137,4 @@
+                     self.two_factor_login(code)
+                     break
+                 except BadCredentialsException:
+-                    pass
++                    pass
+\ No newline at end of file

@@ -1,0 +1,32 @@
+--- cases/repo_352fa27_54e3209/merge_loss.py	2026-03-03 15:23:40
++++ cases/repo_352fa27_54e3209/llm_gemini_loss.py	2026-06-15 22:34:26
+@@ -136,9 +136,9 @@
+         bg_index = scores.shape[-1] - 1
+ 
+         # Match bbox and get targets.
+-        targets_bbox, targets_label = \
++        targets_bbox_tmp, targets_label = \
+             self._bipartite_match_for_batch(gt_bbox, gt_label, prior_boxes, bg_index)
+-        targets_bbox.stop_gradient = True
++        targets_bbox_tmp.stop_gradient = True
+         targets_label.stop_gradient = True
+ 
+         # Compute regression loss.
+@@ -146,8 +146,8 @@
+         bbox_mask = paddle.tile(targets_label != bg_index, [1, 1, 4])
+         if bbox_mask.astype(boxes.dtype).sum() > 0:
+             location = paddle.masked_select(boxes, bbox_mask)
+-            targets_bbox_tmp = paddle.masked_select(targets_bbox, bbox_mask)
+-            loc_loss = F.smooth_l1_loss(location, targets_bbox_tmp, reduction='sum')
++            targets_bbox = paddle.masked_select(targets_bbox_tmp, bbox_mask)
++            loc_loss = F.smooth_l1_loss(location, targets_bbox, reduction='sum')
+             loc_loss = loc_loss * self.loc_loss_weight
+         else:
+             loc_loss = paddle.zeros([])
+@@ -165,4 +165,4 @@
+             min=1)
+         loss = (conf_loss + loc_loss) / normalizer
+ 
+-        return loss
++        return loss
+\ No newline at end of file

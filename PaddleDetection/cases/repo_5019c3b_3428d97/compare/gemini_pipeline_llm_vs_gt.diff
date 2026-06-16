@@ -1,0 +1,19 @@
+--- cases/repo_5019c3b_3428d97/merge_pipeline.py	2026-03-28 21:38:48
++++ cases/repo_5019c3b_3428d97/llm_gemini_pipeline.py	2026-06-15 23:45:59
+@@ -751,8 +751,7 @@
+                     skeleton_action_res = {}
+                     if state:
+                         if frame_id > self.warmup_frame:
+-                            self.pipe_timer.module_time[
+-                                'skeleton_action'].start()
++                            self.pipe_timer.module_time['skeleton_action'].start()
+                         collected_keypoint = self.kpt_buff.get_collected_keypoint(
+                         )  # reoragnize kpt output with ID
+                         skeleton_action_input = parse_mot_keypoint(
+@@ -1003,4 +1002,4 @@
+     assert FLAGS.device in ['CPU', 'GPU', 'XPU'
+                             ], "device should be CPU, GPU or XPU"
+ 
+-    main()
++    main()
+\ No newline at end of file

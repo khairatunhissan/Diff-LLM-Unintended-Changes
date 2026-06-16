@@ -1,0 +1,9 @@
+--- cases/repo_d970d6a_29cc0f6/merge_setup.py	2026-05-04 14:47:13
++++ cases/repo_d970d6a_29cc0f6/llm_setup.py	2026-05-04 14:50:49
+@@ -110,4 +110,4 @@
+         'test': RunTests,
+         'publish': Publish,
+     },
+-)
++)
+\ No newline at end of file

@@ -1,0 +1,26 @@
+--- cases/repo_b631679_2158f87/merge_diigo.py	2026-04-29 23:06:03
++++ cases/repo_b631679_2158f87/llm_diigo.py	2026-04-29 23:09:29
+@@ -15,13 +15,13 @@
+         'DNT': '1',
+         'Connection': 'keep-alive',
+         'Referer': 'https://www.diigo.com/sign-up?plan=free',
+-        'X-Requested-With': 'XMLHttpRequest'
+     }
+ 
++    headers["X-Requested-With"] = 'XMLHttpRequest'
++
+     params = {
+         'email': email,
+     }
+-    
+     try:
+         response = await client.get('https://www.diigo.com/user_mana2/check_email', headers=headers, params=params)
+     except Exception:
+@@ -53,5 +53,4 @@
+                     "exists": False,
+                     "emailrecovery": None,
+                     "phoneNumber": None,
+-                    "others": None})
+-
++                    "others": None})
+\ No newline at end of file

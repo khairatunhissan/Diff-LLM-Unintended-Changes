@@ -1,0 +1,15 @@
+--- cases/repo_03fdc2c_7bd0678/merge_color.py	2026-05-05 00:03:18
++++ cases/repo_03fdc2c_7bd0678/llm_color.py	2026-05-05 00:04:47
+@@ -12,10 +12,10 @@
+     which is 1 when d>>thr and 0 for d<<thr, the stiffness of the effect being
+     parametrized by s
+     """
+-    if color is None:
+-        color = [0,0,0]
+ 
+     # code a little sloppy, it just works.
++    if color is None:
++        color = [0,0,0]
+     hill = lambda x: (1.0*(x!=0) if (thr==0) else (x**s/ (thr**s+x**s)))
+     color = np.array(color)
+     flim = lambda im: hill(np.sqrt(((im-color)**2).sum(axis=2)))

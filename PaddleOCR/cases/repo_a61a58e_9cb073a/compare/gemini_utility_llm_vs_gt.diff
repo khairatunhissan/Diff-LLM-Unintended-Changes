@@ -1,0 +1,18 @@
+--- cases/repo_a61a58e_9cb073a/merge_utility.py	2026-04-05 12:44:32
++++ cases/repo_a61a58e_9cb073a/llm_gemini_utility.py	2026-06-10 13:10:32
+@@ -63,7 +63,7 @@
+     parser.add_argument("--det_sast_nms_thresh", type=float, default=0.2)
+     parser.add_argument("--det_sast_polygon", type=str2bool, default=False)
+ 
+-    # params for text recognizer
++    # params for text text recognizer
+     parser.add_argument("--rec_algorithm", type=str, default='CRNN')
+     parser.add_argument("--rec_model_dir", type=str)
+     parser.add_argument("--rec_image_shape", type=str, default="3, 32, 320")
+@@ -543,4 +543,4 @@
+ 
+ 
+ if __name__ == '__main__':
+-    pass
++    pass
+\ No newline at end of file

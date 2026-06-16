@@ -1,0 +1,115 @@
+--- cases/repo_a0169b7_eb2accc/merge_load.py	2026-04-08 10:44:11
++++ cases/repo_a0169b7_eb2accc/llm_gemini_load.py	2026-06-10 17:45:18
+@@ -488,7 +488,7 @@
+         if location.lat is not None and location.lng is not None:
+             location_string = (location.name + "\n" +
+                                "https://maps.google.com/maps?q={0},{1}&ll={0},{1}\n".format(location.lat,
+-                                                                                            location.lng))
++                                                                                                            location.lng))
+         else:
+             location_string = location.name
+         with open(filename, 'wb') as text_file:
+@@ -1260,7 +1260,8 @@
+     def download_tagged(self, profile: Profile, fast_update: bool = False,
+                         target: Optional[str] = None,
+                         post_filter: Optional[Callable[[Post], bool]] = None,
+-                        latest_stamps: Optional[LatestStamps] = None) -> None:
++                        latest_stamps: Optional[LatestStamps] = None,
++                        max_count: Optional[int] = None) -> None:
+         """Download all posts where a profile is tagged.
+ 
+         .. versionadded:: 4.1
+@@ -1277,13 +1278,14 @@
+                                  target if target
+                                  else (Path(_PostPathFormatter.sanitize_path(profile.username, self.sanitize_paths)) /
+                                        _PostPathFormatter.sanitize_path(':tagged', self.sanitize_paths)),
+-                                 fast_update, post_filter, takewhile=posts_takewhile)
++                                 fast_update, post_filter, takewhile=posts_takewhile, max_count=max_count)
+         if latest_stamps is not None and tagged_posts.first_item is not None:
+             latest_stamps.set_last_tagged_timestamp(profile.username, tagged_posts.first_item.date_local)
+ 
+     def download_igtv(self, profile: Profile, fast_update: bool = False,
+                       post_filter: Optional[Callable[[Post], bool]] = None,
+-                      latest_stamps: Optional[LatestStamps] = None) -> None:
++                      latest_stamps: Optional[LatestStamps] = None,
++                      max_count: Optional[int] = None) -> None:
+         """Download IGTV videos of a profile.
+ 
+         .. versionadded:: 4.3
+@@ -1297,7 +1299,7 @@
+             posts_takewhile = lambda p: p.date_local > last_scraped
+         igtv_posts = profile.get_igtv_posts()
+         self.posts_download_loop(igtv_posts, profile.username, fast_update, post_filter,
+-                                 total_count=profile.igtvcount, owner_profile=profile, takewhile=posts_takewhile)
++                                 total_count=profile.igtvcount, owner_profile=profile, takewhile=posts_takewhile, max_count=max_count)
+         if latest_stamps is not None and igtv_posts.first_item is not None:
+             latest_stamps.set_last_igtv_timestamp(profile.username, igtv_posts.first_item.date_local)
+ 
+@@ -1428,7 +1430,6 @@
+            Whether :exc:`LoginRequiredException` and :exc:`PrivateProfileNotFollowedException` should be raised or
+            catched and printed with :meth:`InstaloaderContext.error_catcher`.
+         :param latest_stamps: :option:`--latest-stamps`.
+-        :param max_count: Maximum count of posts to download.
+ 
+         .. versionadded:: 4.1
+ 
+@@ -1437,9 +1438,6 @@
+ 
+         .. versionchanged:: 4.8
+            Add `latest_stamps` parameter.
+-
+-        .. versionchanged:: 4.13
+-           Add `max_count` parameter.
+         """
+ 
+         @contextmanager
+@@ -1481,13 +1479,13 @@
+                 if tagged:
+                     with self.context.error_catcher('Download tagged of {}'.format(profile_name)):
+                         self.download_tagged(profile, fast_update=fast_update, post_filter=post_filter,
+-                                             latest_stamps=latest_stamps)
++                                             latest_stamps=latest_stamps, max_count=max_count)
+ 
+                 # Download IGTV, if requested
+                 if igtv:
+                     with self.context.error_catcher('Download IGTV of {}'.format(profile_name)):
+                         self.download_igtv(profile, fast_update=fast_update, post_filter=post_filter,
+-                                           latest_stamps=latest_stamps)
++                                           latest_stamps=latest_stamps, max_count=max_count)
+ 
+                 # Download highlights, if requested
+                 if highlights:
+@@ -1522,7 +1520,8 @@
+                          download_stories: bool = False, download_stories_only: bool = False,
+                          download_tagged: bool = False, download_tagged_only: bool = False,
+                          post_filter: Optional[Callable[[Post], bool]] = None,
+-                         storyitem_filter: Optional[Callable[[StoryItem], bool]] = None) -> None:
++                         storyitem_filter: Optional[Callable[[StoryItem], bool]] = None,
++                         max_count: Optional[int] = None) -> None:
+         """Download one profile
+ 
+         .. deprecated:: 4.1
+@@ -1581,14 +1580,14 @@
+         # Download tagged, if requested
+         if download_tagged or download_tagged_only:
+             with self.context.error_catcher('Download tagged of {}'.format(profile_name)):
+-                self.download_tagged(profile, fast_update=fast_update, post_filter=post_filter)
++                self.download_tagged(profile, fast_update=fast_update, post_filter=post_filter, max_count=max_count)
+         if download_tagged_only:
+             return
+ 
+         # Iterate over pictures and download them
+         self.context.log("Retrieving posts from profile {}.".format(profile_name))
+         self.posts_download_loop(profile.get_posts(), profile_name, fast_update, post_filter,
+-                                 total_count=profile.mediacount, owner_profile=profile)
++                                 total_count=profile.mediacount, owner_profile=profile, max_count=max_count)
+ 
+     def interactive_login(self, username: str) -> None:
+         """Logs in and internally stores session, asking user for password interactively.
+@@ -1627,4 +1626,4 @@
+         """Returns whether any error has been reported and stored to be repeated at program termination.
+ 
+         .. versionadded: 4.12"""
+-        return self.context.has_stored_errors
++        return self.context.has_stored_errors
+\ No newline at end of file
