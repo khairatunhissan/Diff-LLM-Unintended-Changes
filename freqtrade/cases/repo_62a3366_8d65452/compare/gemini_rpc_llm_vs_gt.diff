@@ -1,0 +1,9 @@
+--- cases/repo_62a3366_8d65452/merge_rpc.py	2026-03-08 15:18:45
++++ cases/repo_62a3366_8d65452/llm_gemini_rpc.py	2026-06-03 15:13:53
+@@ -382,4 +382,4 @@
+             return True, '`trader is not running`'
+ 
+         trades = Trade.query.filter(Trade.is_open.is_(True)).all()
+-        return False, trades
++        return False, trades
+\ No newline at end of file

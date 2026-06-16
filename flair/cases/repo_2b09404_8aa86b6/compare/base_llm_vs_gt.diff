@@ -1,0 +1,9 @@
+--- cases/repo_2b09404_8aa86b6/merge_base.py	2026-03-02 22:44:58
++++ cases/repo_2b09404_8aa86b6/llm_base.py	2026-03-02 22:50:02
+@@ -777,4 +777,4 @@
+                             expanded_sentence[token_idx + context_offset].get_embedding(self.name),
+                         )
+                 if self.document_embedding:
+-                    original_sentence.set_embedding(self.name, expanded_sentence.get_embedding(self.name))
++                    original_sentence.set_embedding(self.name, expanded_sentence.get_embedding(self.name))
+\ No newline at end of file

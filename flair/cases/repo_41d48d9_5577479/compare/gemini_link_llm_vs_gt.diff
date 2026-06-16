@@ -1,0 +1,61 @@
+--- cases/repo_41d48d9_5577479/merge_link.py	2026-03-03 00:05:46
++++ cases/repo_41d48d9_5577479/llm_gemini_link.py	2026-06-07 21:49:42
+@@ -361,12 +361,12 @@
+ 
+                 ids += qid_list[i]
+                 # request
+-                response_json = requests.get(base_url + ids).json()
++                options_json = requests.get(base_url + ids).json()
+ 
+-                for qid in response_json["entities"]:
++                for qid in options_json["entities"]:
+ 
+                     try:
+-                        wikiname = response_json["entities"][qid]["sitelinks"][self.wiki_language]["title"].replace(
++                        wikiname = options_json["entities"][qid]["sitelinks"][self.wiki_language]["title"].replace(
+                             " ", "_"
+                         )
+                     except KeyError:  # language not available for specific wikiitem
+@@ -403,7 +403,7 @@
+             to point to a different folder but typically this should not be necessary.
+         in_memory: If True, keeps dataset in memory giving speedups in training.
+         use_ids_and_check_existence: If True the existence of the given wikipedia ids/pagenames is checked and non existent ids/names will be ignored. This also means that one works with
+-            current wikipedia-arcticle names and possibly alter some of the out-dated ones in the original dataset
++                                     current wikipedia-arcticle names and possibly alter some of the out-dated ones in the original dataset
+         """
+         if not base_path:
+             base_path = flair.cache_root / "datasets"
+@@ -550,7 +550,7 @@
+         **corpusargs,
+     ):
+         """
+-        Initialize ITTB Entity Linking corpus introduced in "Collective Annotation of Wikipedia Entities in Web Text" Sayali Kulkarni, Amit Singh, Ganesh Ramakrishnan, and Soumen Chakrabarti.
++        Initialize ittb Entity Linking corpus introduced in "Collective Annotation of Wikipedia Entities in Web Text" Sayali Kulkarni, Amit Singh, Ganesh Ramakrishnan, and Soumen Chakrabarti.
+         If you call the constructor the first time the dataset gets automatically downloaded and transformed in tab-separated column format.
+ 
+         Parameters
+@@ -956,7 +956,7 @@
+             # incorrectly, in order to keep the desired format (empty line as a sentence separator).
+             try:
+                 if (
+-                    (sentence[i].text in {".", "!", "?", "!*"})
++                    ((sentence[i].text in {".", "!", "?", "!*"}))
+                     and (sentence[i + 1].text not in {'"', "“", "'", "''", "!", "?", ";)", "."})
+                     and ("." not in sentence[i - 1].text)
+                 ):
+@@ -1210,7 +1210,7 @@
+             if you want to use additional pos and/or lemma for the words.
+         :param banned_sentences: Optionally remove sentences from the corpus. Works only if `in_memory` is true
+         :param sample_missing_splits_in_multicorpus: Whether to sample missing splits when loading the multicorpus (this is redundant if
+-                                                                                                                    sample_missing_splits_in_each_corpus is True)
++                                                     sample_missing_splits_in_each_corpus is True)
+         :param sample_missing_splits_in_each_corpus: Whether to sample missing splits when loading each single corpus given in filenames.
+         :param use_raganato_ALL_as_test_data: If True, the raganato_ALL dataset (Raganato et al. "Word Sense Disambiguation: A unified evaluation framework and empirical compariso")
+             will be used as test data. Note that the sample_missing_splits parameters are set to 'only_dev' in this case if set to True.
+@@ -1766,4 +1766,4 @@
+             label_name_map=label_name_map,
+             banned_sentences=banned_sentences,
+             sample_missing_splits=sample_missing_splits,
+-        )
++        )
+\ No newline at end of file

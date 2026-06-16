@@ -1,0 +1,9 @@
+--- cases/repo_b77fad6_77023c0/merge_backtesting.py	2026-03-08 22:35:31
++++ cases/repo_b77fad6_77023c0/llm_gemini_backtesting.py	2026-06-03 15:56:50
+@@ -163,4 +163,4 @@
+     logger.info(
+         '\n====================== BACKTESTING REPORT ======================================\n%s',
+         generate_text_table(data, results, config['stake_currency'], args.ticker_interval)
+-    )
++    )
+\ No newline at end of file

@@ -1,0 +1,29 @@
+--- cases/repo_a0cdc63_79ae3c2/merge_freq.py	2026-03-08 21:55:13
++++ cases/repo_a0cdc63_79ae3c2/llm_freq.py	2026-03-08 22:02:06
+@@ -715,13 +715,12 @@
+ 
+     def _check_and_execute_sell(self, trade: Trade, sell_rate: float,
+                                 buy: bool, sell: bool) -> bool:
+-        """
+-        Check and execute sell
+-        """
+-        should_sell = self.strategy.should_sell(
+-                trade, sell_rate, datetime.utcnow(), buy, sell,
+-                force_stoploss=self.edge.stoploss(trade.pair) if self.edge else 0
+-        )
++        if self.edge:
++            stoploss = self.edge.stoploss(trade.pair)
++            should_sell = self.strategy.should_sell(
++                trade, sell_rate, datetime.utcnow(), buy, sell, force_stoploss=stoploss)
++        else:
++            should_sell = self.strategy.should_sell(trade, sell_rate, datetime.utcnow(), buy, sell)
+ 
+         if should_sell.sell_flag:
+             self.execute_sell(trade, sell_rate, should_sell.sell_type)
+@@ -913,4 +912,4 @@
+             })
+ 
+         # Send the message
+-        self.rpc.send_msg(msg)
++        self.rpc.send_msg(msg)
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_98ca948_0661374/merge_light.py	2026-02-27 23:34:06
++++ cases/repo_98ca948_0661374/llm_light.py	2026-02-27 23:41:41
+@@ -1194,4 +1194,4 @@
+             await self.async_run_script(off_script, context=self._context)
+         if self._attr_assumed_state:
+             self._attr_is_on = False
+-            self.async_write_ha_state()
++            self.async_write_ha_state()
+\ No newline at end of file

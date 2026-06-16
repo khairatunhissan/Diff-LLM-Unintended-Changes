@@ -1,0 +1,9 @@
+--- cases/repo_b87b726_c38aeb8/merge_testbase.py	2026-02-28 21:56:15
++++ cases/repo_b87b726_c38aeb8/llm_testbase.py	2026-02-28 21:58:16
+@@ -132,4 +132,4 @@
+         self.strategy.active_executors = [active_executor_mock]
+         self.assertFalse(self.strategy.max_active_executors_condition)
+         self.strategy.active_executors = []
+-        self.assertTrue(self.strategy.max_active_executors_condition)
++        self.assertTrue(self.strategy.max_active_executors_condition)
+\ No newline at end of file

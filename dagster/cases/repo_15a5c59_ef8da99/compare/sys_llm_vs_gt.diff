@@ -1,0 +1,9 @@
+--- cases/repo_15a5c59_ef8da99/merge_sys.py	2026-04-03 14:11:44
++++ cases/repo_15a5c59_ef8da99/llm_sys.py	2026-04-03 14:15:00
+@@ -1123,4 +1123,4 @@
+     @property
+     def op_def(self) -> "OpDefinition":
+         """The op for which type loading is occurring."""
+-        return super(DagsterTypeLoaderContext, self).op_def
++        return super(DagsterTypeLoaderContext, self).op_def
+\ No newline at end of file

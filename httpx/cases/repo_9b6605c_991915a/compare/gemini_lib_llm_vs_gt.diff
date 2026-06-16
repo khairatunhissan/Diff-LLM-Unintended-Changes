@@ -1,0 +1,20 @@
+--- cases/repo_9b6605c_991915a/merge_lib.py	2026-03-28 15:53:02
++++ cases/repo_9b6605c_991915a/llm_gemini_lib.py	2026-06-08 17:03:13
+@@ -34,8 +34,8 @@
+         ssl_config = SSLConfig(
+             verify=verify, cert=cert, trust_env=trust_env, http2=False
+         )
+-        max_connections = pool_limits.max_connections
+-        max_keepalive = pool_limits.max_keepalive
++        max_connections = pool_limits.hard_limit
++        max_keepalive = pool_limits.soft_limit
+ 
+         # Our connection pool configuration doesn't quite match up with urllib3's
+         # controls, but we can put sensible mappings in place:
+@@ -180,4 +180,4 @@
+             cert=cert,
+             trust_env=trust_env,
+             pool_limits=pool_limits,
+-        )
++        )
+\ No newline at end of file

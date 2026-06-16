@@ -1,0 +1,34 @@
+--- cases/repo_2ec8ec5_3021209/merge_commands.py	2026-03-27 15:23:15
++++ cases/repo_2ec8ec5_3021209/llm_commands.py	2026-03-27 15:28:15
+@@ -729,11 +729,20 @@
+     """
+ 
+     def execute(self):
+-        cf = self.fm.thisfile
+-        if cf.basename.find('.') != 0 and cf.basename.rfind('.') != -1 and not cf.is_directory:
+-            self.fm.open_console('rename ' + cf.basename, position=(7 + cf.basename.rfind('.')))
++        basename = self.fm.thisfile.basename
++        if self.fm.thisfile.is_directory:
++            self.fm.open_console('rename ' + basename)
++        elif basename.startswith('.'):
++            if '.' in basename[1:]:
++                offset = 7 + len(basename) - basename[::-1].index('.')
++                self.fm.open_console('rename ' + basename, position=offset)
++            else:
++                self.fm.open_console('rename ' + basename)
++        elif "." in basename:
++            offset = 7 + len(basename) - basename[::-1].index('.')
++            self.fm.open_console('rename ' + basename, position=offset)
+         else:
+-            self.fm.open_console('rename ' + cf.basename)
++            self.fm.open_console('rename ' + basename)
+ 
+ class chmod(Command):
+     """:chmod <octal number>
+@@ -1431,4 +1440,4 @@
+ 
+     Tells the paper manager to set/update the year of the current file
+     """
+-    _key = "year"
++    _key = "year"
+\ No newline at end of file

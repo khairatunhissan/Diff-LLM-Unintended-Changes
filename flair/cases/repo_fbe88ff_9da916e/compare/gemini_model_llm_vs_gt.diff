@@ -1,0 +1,10 @@
+--- cases/repo_fbe88ff_9da916e/merge_model.py	2026-03-02 23:18:09
++++ cases/repo_fbe88ff_9da916e/llm_gemini_model.py	2026-06-07 13:22:40
+@@ -140,5 +140,4 @@
+     print(f'"{ungrammatical}" - perplexity is {perplexity_ungramamtical_sentence}')
+ 
+     assert perplexity_gramamtical_sentence < perplexity_ungramamtical_sentence
+-    del language_model
+-
++    del language_model
+\ No newline at end of file

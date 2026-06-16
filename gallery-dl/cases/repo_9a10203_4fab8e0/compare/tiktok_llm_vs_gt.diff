@@ -1,0 +1,47 @@
+--- cases/repo_9a10203_4fab8e0/merge_tiktok.py	2026-03-04 20:48:25
++++ cases/repo_9a10203_4fab8e0/llm_tiktok.py	2026-03-04 21:01:05
+@@ -912,13 +912,26 @@
+         # We should offset the cursor by the number of items in the response.
+         # Sometimes less items are returned than what was requested in the
+         # count parameter! We could fall back onto the count query parameter
+-        # but we could miss out on some posts.
+-        self.cursor += len(data.get(self.list_key, ()))
++        # but we could miss out on some posts, and truth is if the expected
++        # item list isn't in the response, the extraction was going to fail
++        # anyway.
++        self.cursor += len(data[self.list_key])
+         if "hasMore" in data:
+             return not data["hasMore"]
+         return not data.get("HasMoreAfter", False)
+ 
+ 
++class TiktokStoryItemCursor(TiktokItemCursor):
++    def next_page(self, data, query_parameters):
++        items = data.get(self.list_key)
++        if not items:
++            return True
++        self.cursor += len(items)
++        if "hasMore" in data:
++            return not data["hasMore"]
++        return not data.get("HasMoreAfter", False)
++
++
+ class TiktokPaginationRequest:
+     def __init__(self, endpoint):
+         self.endpoint = endpoint
+@@ -1375,7 +1388,7 @@
+         assert query_parameters["loadBackward"] in ["true", "false"]
+ 
+     def cursor_type(self, query_parameters):
+-        return TiktokItemCursor
++        return TiktokStoryItemCursor
+ 
+ 
+ class TiktokStoryBatchItemListRequest(TiktokItemListRequest):
+@@ -1438,4 +1451,4 @@
+ 
+     def generate_urls(self):
+         return [(id, f"https://www.tiktok.com/@{name}")
+-                for id, name in self.items.items()]
++                for id, name in self.items.items()]
+\ No newline at end of file

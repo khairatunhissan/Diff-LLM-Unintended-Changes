@@ -1,0 +1,9 @@
+--- cases/repo_62a77e7_aed0637/merge_vcs.py	2026-03-27 15:07:14
++++ cases/repo_62a77e7_aed0637/llm_gemini_vcs.py	2026-06-08 13:33:05
+@@ -522,4 +522,4 @@
+ 
+ class SVNRoot(VcsRoot, SVN):
+     """SVN root"""
+-    pass
++    pass
+\ No newline at end of file

@@ -1,0 +1,36 @@
+--- cases/repo_be42ae7_1c64c28/merge_sites.py	2026-03-24 16:15:24
++++ cases/repo_be42ae7_1c64c28/llm_sites.py	2026-03-24 16:20:48
+@@ -9,7 +9,7 @@
+ 
+ class SiteInformation:
+     def __init__(self, name, url_home, url_username_format, username_claimed,
+-                username_unclaimed, information, is_nsfw):
++                 username_unclaimed, information, is_nsfw):
+         """Create Site Information Object.
+ 
+         Contains information about a specific website.
+@@ -52,7 +52,7 @@
+         self.url_username_format = url_username_format
+ 
+         self.username_claimed = username_claimed
+-        self.username_unclaimed = secrets.token_urlsafe(32)
++        self.username_unclaimed = username_unclaimed
+         self.information = information
+         self.is_nsfw  = is_nsfw
+ 
+@@ -164,7 +164,7 @@
+                                     site_data[site_name]["urlMain"],
+                                     site_data[site_name]["url"],
+                                     site_data[site_name]["username_claimed"],
+-                                    site_data[site_name]["username_unclaimed"],
++                                    secrets.token_urlsafe(32),
+                                     site_data[site_name],
+                                     site_data[site_name].get("isNSFW",False)
+ 
+@@ -227,4 +227,4 @@
+         Return Value:
+         Length of sites object.
+         """
+-        return len(self.sites)
++        return len(self.sites)
+\ No newline at end of file

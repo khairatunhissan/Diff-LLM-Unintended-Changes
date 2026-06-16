@@ -1,0 +1,20 @@
+--- cases/repo_cd43282_20c4509/merge_lib.py	2026-03-18 17:25:59
++++ cases/repo_cd43282_20c4509/llm_lib.py	2026-03-18 17:35:52
+@@ -2384,8 +2384,10 @@
+         Returns:
+             dict: Search results as {"webSearchUrl": "URL", "urls": [results]}
+         """
++
+         if opts is None:
+             opts = {}
++
+         search_string = searchString.replace(" ", "%20")
+         params = urllib.parse.urlencode({
+             "cx": opts["cse_id"],
+@@ -2477,4 +2479,4 @@
+ 
+         return None
+ 
+-# end of SpiderFoot class
++# end of SpiderFoot class
+\ No newline at end of file

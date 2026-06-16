@@ -1,0 +1,12 @@
+diff --git a/salt/utils/gitfs.py b/salt/utils/gitfs.py
+index 4e494f63ef..c2188b46fc 100644
+--- a/salt/utils/gitfs.py
++++ b/salt/utils/gitfs.py
+@@ -124,7 +124,6 @@ class GitProvider(object):
+         self.env_whitelist = self.opts.get(
+             '{0}_env_whitelist'.format(self.role), [])
+         repo_conf = copy.deepcopy(per_remote_defaults)
+-        bad_per_remote_conf = False
+ 
+         per_remote_collisions = [x for x in override_params
+                                  if x in PER_REMOTE_ONLY]

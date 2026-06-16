@@ -1,0 +1,9 @@
+--- cases/repo_41101f7_a0e5c3d/merge_run.py	2026-04-03 15:32:19
++++ cases/repo_41101f7_a0e5c3d/llm_run.py	2026-04-03 15:37:04
+@@ -2697,4 +2697,4 @@
+     assert len(records) == 1
+     record = records[0]
+     assert record[DAGSTER_META_KEY]["orig_message"] == "hello hello"
+-    instance.compute_log_manager.delete_logs(log_key=tick.log_key)
++    instance.compute_log_manager.delete_logs(log_key=tick.log_key)
+\ No newline at end of file

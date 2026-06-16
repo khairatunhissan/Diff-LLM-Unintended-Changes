@@ -1,0 +1,25 @@
+--- cases/repo_e4cbe9e_f7cea8d/merge_model.py	2026-03-03 22:25:14
++++ cases/repo_e4cbe9e_f7cea8d/llm_model.py	2026-03-03 22:29:28
+@@ -106,13 +106,13 @@
+         # avoid numerical instabilities.
+         local_w_t = tf.cast(w_t, tf.float32)
+         local_b = tf.cast(b, tf.float32)
+-        local_inputs = tf.cast(logits, tf.float32)
++        local_logits = tf.cast(logits, tf.float32)
+         return tf.cast(
+             tf.nn.sampled_softmax_loss(
+                 weights=local_w_t,
+                 biases=local_b,
+                 labels=labels,
+-                inputs=local_inputs,
++                inputs=local_logits,
+                 num_sampled=num_samples,
+                 num_classes=self.target_vocab_size),
+             dtype)
+@@ -312,4 +312,4 @@
+         if length_idx == decoder_size - 1 or target == data_utils.PAD_ID:
+           batch_weight[batch_idx] = 0.0
+       batch_weights.append(batch_weight)
+-    return batch_encoder_inputs, batch_decoder_inputs, batch_weights
++    return batch_encoder_inputs, batch_decoder_inputs, batch_weights
+\ No newline at end of file

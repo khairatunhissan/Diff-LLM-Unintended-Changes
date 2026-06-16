@@ -1,0 +1,9 @@
+--- cases/repo_0ff8692_c140c7b/merge_init.py	2026-03-04 16:15:41
++++ cases/repo_0ff8692_c140c7b/llm_gemini_init.py	2026-06-08 12:10:32
+@@ -289,4 +289,4 @@
+     if variant:
+         variant_function(pdf, metadata, document, page_streams, compress)
+ 
+-    return pdf
++    return pdf
+\ No newline at end of file

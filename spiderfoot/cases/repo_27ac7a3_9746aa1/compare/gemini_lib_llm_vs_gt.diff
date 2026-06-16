@@ -1,0 +1,2761 @@
+--- cases/repo_27ac7a3_9746aa1/merge_lib.py	2026-03-18 19:30:21
++++ cases/repo_27ac7a3_9746aa1/llm_gemini_lib.py	2026-06-08 15:07:42
+@@ -1,1664 +1,1383 @@
+-#  -*- coding: utf-8 -*-
+-# -------------------------------------------------------------------------------
+-# Name:         sflib
+-# Purpose:      Common functions used by SpiderFoot modules.
+-#
+-# Author:      Steve Micallef <steve@binarypool.com>
+-#
+-# Created:     26/03/2012
+-# Copyright:   (c) Steve Micallef 2012
+-# Licence:     MIT
+-# -------------------------------------------------------------------------------
++# test_spiderfoot.py
++import pytest
++import unittest
+ 
+-import hashlib
+-import inspect
+-import io
+-import json
+-import logging
+-import os
+-import random
+-import re
+-import socket
+-import ssl
+-import sys
+-import time
+-import urllib.error
+-import urllib.parse
+-import urllib.request
+-from copy import deepcopy
+-from datetime import datetime
++from sflib import SpiderFoot
++from spiderfoot import SpiderFootTarget
+ 
+-import cryptography
+-import dns.resolver
+-import netaddr
+-import OpenSSL
+-import requests
+-import urllib3
+-from publicsuffixlist import PublicSuffixList
+-from spiderfoot import SpiderFootHelpers
+ 
+-# For hiding the SSL warnings coming from the requests lib
+-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)  # noqa: DUO131
++@pytest.mark.usefixtures
++class TestSpiderFoot(unittest.TestCase):
++    """
++    Test SpiderFoot
++    """
+ 
++    default_modules = [
++        "sfp_binstring",
++        "sfp_company",
++        "sfp_cookie",
++        "sfp_countryname",
++        "sfp_creditcard",
++        "sfp_email",
++        "sfp_errors",
++        "sfp_ethereum",
++        "sfp_filemeta",
++        "sfp_hashes",
++        "sfp_iban",
++        "sfp_names",
++        "sfp_pageinfo",
++        "sfp_phone",
++        "sfp_webanalytics"
++    ]
+ 
+-class SpiderFoot:
+-    """SpiderFoot
++    test_tlds = "// ===BEGIN ICANN DOMAINS===\n\ncom\nnet\norg\n\n// // ===END ICANN DOMAINS===\n"
+ 
+-    Attributes:
+-        dbh (SpiderFootDb): database handle
+-        scanId (str): scan ID this instance of SpiderFoot is being used in
+-        socksProxy (str): SOCKS proxy
+-        opts (dict): configuration options
+-    """
+-    _dbh = None
+-    _scanId = None
+-    _socksProxy = None
+-    opts = dict()
++    def test_init_argument_options_of_invalid_type_should_raise_TypeError(self):
++        """
++        Test __init__(self, options):
++        """
++        invalid_types = [None, "", list(), int()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type), self.assertRaises(TypeError):
++                SpiderFoot(invalid_type)
+ 
+-    def __init__(self, options: dict) -> None:
+-        """Initialize SpiderFoot object.
++    def test_init_argument_options_with_empty_dict(self):
++        """
++        Test __init__(self, options):
++        """
++        sf = SpiderFoot(dict())
++        self.assertIsInstance(sf, SpiderFoot)
+ 
+-        Args:
+-            options (dict): dictionary of configuration options.
+-
+-        Raises:
+-            TypeError: options argument was invalid type
++    def test_init_argument_options_with_default_options(self):
+         """
+-        if not isinstance(options, dict):
+-            raise TypeError(f"options is {type(options)}; expected dict()")
++        Test __init__(self, options):
++        """
++        sf = SpiderFoot(self.default_options)
++        self.assertIsInstance(sf, SpiderFoot)
+ 
+-        self.opts = deepcopy(options)
+-        self.log = logging.getLogger(f"spiderfoot.{__name__}")
++    def test_attribute_dbh(self):
++        sf = SpiderFoot(dict())
+ 
+-        # This is ugly but we don't want any fetches to fail - we expect
+-        # to encounter unverified SSL certs!
+-        ssl._create_default_https_context = ssl._create_unverified_context  # noqa: DUO122
++        sf.dbh = 'new handle'
++        self.assertEqual('new handle', sf.dbh)
+ 
+-        if self.opts.get('_dnsserver', "") != "":
+-            res = dns.resolver.Resolver()
+-            res.nameservers = [self.opts['_dnsserver']]
+-            dns.resolver.override_system_resolver(res)
++    def test_attribute_scanId(self):
++        sf = SpiderFoot(dict())
+ 
+-    @property
+-    def dbh(self):
+-        """Database handle
++        sf.scanId = 'new guid'
++        self.assertEqual('new guid', sf.scanId)
+ 
+-        Returns:
+-            SpiderFootDb: database handle
+-        """
+-        return self._dbh
++    def test_attribute_socksProxy(self):
++        sf = SpiderFoot(dict())
+ 
+-    @property
+-    def scanId(self) -> str:
+-        """Scan instance ID
++        sf.socksProxy = 'new socket'
++        self.assertEqual('new socket', sf.socksProxy)
+ 
+-        Returns:
+-            str: scan instance ID
++    def test_optValueToData_should_return_data_as_string(self):
+         """
+-        return self._scanId
++        Test optValueToData(self, val)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    @property
+-    def socksProxy(self) -> str:
+-        """SOCKS proxy
++        test_string = "example string"
++        opt_data = sf.optValueToData(test_string)
++        self.assertIsInstance(opt_data, str)
++        self.assertEqual(test_string, opt_data)
+ 
+-        Returns:
+-            str: socks proxy
++    def test_optValueToData_argument_val_filename_should_return_file_contents_as_string(self):
+         """
+-        return self._socksProxy
++        Test optValueToData(self, val)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    @dbh.setter
+-    def dbh(self, dbh):
+-        """Called usually some time after instantiation
+-        to set up a database handle and scan ID, used
+-        for logging events to the database about a scan.
++        test_string = "@VERSION"
++        opt_data = sf.optValueToData(test_string)
++        self.assertIsInstance(opt_data, str)
++        self.assertTrue(opt_data.startswith("SpiderFoot"))
+ 
+-        Args:
+-            dbh (SpiderFootDb): database handle
++    def test_optValueToData_argument_val_invalid_type_should_return_None(self):
+         """
+-        self._dbh = dbh
++        Test optValueToData(self, val)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    @scanId.setter
+-    def scanId(self, scanId: str) -> str:
+-        """Set the scan ID this instance of SpiderFoot is being used in.
++        invalid_types = [None, list(), int(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                opt_data = sf.optValueToData(invalid_type)
++                self.assertEqual(opt_data, None)
+ 
+-        Args:
+-            scanId (str): scan instance ID
++    def test_error(self):
+         """
+-        self._scanId = scanId
++        Test error(self, error):
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    @socksProxy.setter
+-    def socksProxy(self, socksProxy: str) -> str:
+-        """SOCKS proxy
++        sf.error(None)
++        self.assertEqual('TBD', 'TBD')
+ 
+-        Bit of a hack to support SOCKS because of the loading order of
+-        modules. sfscan will call this to update the socket reference
+-        to the SOCKS one.
+-
+-        Args:
+-            socksProxy (str): SOCKS proxy
++    def test_fatal_should_exit(self):
+         """
+-        self._socksProxy = socksProxy
++        Test fatal(self, error)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    def optValueToData(self, val: str) -> str:
+-        """Supplied an option value, return the data based on what the
+-        value is. If val is a URL, you'll get back the fetched content,
+-        if val is a file path it will be loaded and get back the contents,
+-        and if a string it will simply be returned back.
++        with self.assertRaises(SystemExit) as cm:
++            sf.fatal(None)
+ 
+-        Args:
+-            val (str): option name
++        self.assertEqual(cm.exception.code, -1)
+ 
+-        Returns:
+-            str: option data
++    def test_status(self):
+         """
+-        if not isinstance(val, str):
+-            self.error(f"Invalid option value {val}")
+-            return None
++        Test status(self, message)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if val.startswith('@'):
+-            fname = val.split('@')[1]
+-            self.info(f"Loading configuration data from: {fname}")
++        sf.status(None)
++        self.assertEqual('TBD', 'TBD')
+ 
+-            try:
+-                with open(fname, "r") as f:
+-                    return f.read()
+-            except Exception as e:
+-                self.error(f"Unable to open option file, {fname}: {e}")
+-                return None
++    def test_info(self):
++        """
++        Test info(self, message)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if val.lower().startswith('http://') or val.lower().startswith('https://'):
+-            try:
+-                self.info(f"Downloading configuration data from: {val}")
+-                session = self.getSession()
+-                res = session.get(val)
++        sf.info(None)
++        self.assertEqual('TBD', 'TBD')
+ 
+-                return res.content.decode('utf-8')
+-            except BaseException as e:
+-                self.error(f"Unable to open option URL, {val}: {e}")
+-                return None
++    def test_debug(self):
++        """
++        Test debug(self, message)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        return val
++        sf.debug(None)
++        self.assertEqual('TBD', 'TBD')
+ 
+-    def error(self, message: str) -> None:
+-        """Print and log an error message
+-
+-        Args:
+-            message (str): error message
++    def test_my_path_should_return_a_string(self):
+         """
+-        if not self.opts['__logging']:
+-            return
++        Test myPath(self)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        self.log.error(message, extra={'scanId': self._scanId})
++        path = sf.myPath()
++        self.assertIsInstance(path, str)
+ 
+-    def fatal(self, error: str) -> None:
+-        """Print an error message and stacktrace then exit.
+-
+-        Args:
+-            error (str): error message
++    def test_data_path_should_return_a_string(self):
+         """
+-        self.log.critical(error, extra={'scanId': self._scanId})
++        Test def dataPath(self)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        print(str(inspect.stack()))
++        path = sf.myPath()
++        self.assertIsInstance(path, str)
+ 
+-        sys.exit(-1)
++    def test_hash_string_should_return_a_string(self):
++        """
++        Test hashstring(self, string)
++        """
++        sf = SpiderFoot(dict())
+ 
+-    def status(self, message: str) -> None:
+-        """Log and print a status message.
++        hash_string = sf.hashstring('example string')
++        self.assertIsInstance(hash_string, str)
++        self.assertEqual("aedfb92b3053a21a114f4f301a02a3c6ad5dff504d124dc2cee6117623eec706", hash_string)
+ 
+-        Args:
+-            message (str): status message
++    def test_cache_path_should_return_a_string(self):
+         """
+-        if not self.opts['__logging']:
+-            return
++        Test cachePath(self)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        self.log.info(message, extra={'scanId': self._scanId})
++        cache_path = sf.cachePath()
++        self.assertIsInstance(cache_path, str)
+ 
+-    def info(self, message: str) -> None:
+-        """Log and print an info message.
+-
+-        Args:
+-            message (str): info message
++    def test_cache_get_should_return_a_string(self):
+         """
+-        if not self.opts['__logging']:
+-            return
++        Test cachePut(self, label, data)
++        Test cacheGet(self, label, timeoutHrs)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        self.log.info(f"{message}", extra={'scanId': self._scanId})
++        label = 'test-cache-label'
++        data = 'test-cache-data'
+ 
+-    def debug(self, message: str) -> None:
+-        """Log and print a debug message.
++        sf.cachePut(label, data)
+ 
+-        Args:
+-            message (str): debug message
++        cache_get = sf.cacheGet(label, sf.opts.get('cacheperiod', 0))
++        self.assertIsInstance(cache_get, str)
++        self.assertEqual(data, cache_get)
++
++    def test_config_serialize_invalid_opts_should_raise(self):
+         """
+-        if not self.opts['_debug']:
+-            return
+-        if not self.opts['__logging']:
+-            return
++        Test configSerialize(self, opts, filterSystem=True)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        self.log.debug(f"{message}", extra={'scanId': self._scanId})
++        with self.assertRaises(TypeError):
++            sf.configSerialize(None, None)
+ 
+-    def hashstring(self, string: str) -> str:
+-        """Returns a SHA256 hash of the specified input.
++    def test_config_serialize_should_return_a_dict(self):
++        """
++        Test configSerialize(self, opts, filterSystem=True)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        Args:
+-            string (str): data to be hashed
++        config = sf.configSerialize(dict(), None)
++        self.assertIsInstance(config, dict)
+ 
+-        Returns:
+-            str: SHA256 hash
++    def test_config_unserialize_invalid_opts_should_raise(self):
+         """
+-        s = string
+-        if type(string) in [list, dict]:
+-            s = str(string)
+-        return hashlib.sha256(s.encode('raw_unicode_escape')).hexdigest()
++        Test configUnserialize(self, opts, referencePoint, filterSystem=True)
++        """
++        sf = SpiderFoot(dict())
+ 
+-    def cachePut(self, label: str, data: str) -> None:
+-        """Store data to the cache.
++        with self.assertRaises(TypeError):
++            sf.configUnserialize(None, dict(), None)
+ 
+-        Args:
+-            label (str): Name of the cached data to be used when retrieving the cached data.
+-            data (str): Data to cache
++    def test_config_unserialize_invalid_reference_point_should_raise(self):
+         """
+-        pathLabel = hashlib.sha224(label.encode('utf-8')).hexdigest()
+-        cacheFile = SpiderFootHelpers.cachePath() + "/" + pathLabel
+-        with io.open(cacheFile, "w", encoding="utf-8", errors="ignore") as fp:
+-            if isinstance(data, list):
+-                for line in data:
+-                    if isinstance(line, str):
+-                        fp.write(line)
+-                        fp.write("\n")
+-                    else:
+-                        fp.write(line.decode('utf-8') + '\n')
+-            elif isinstance(data, bytes):
+-                fp.write(data.decode('utf-8'))
+-            else:
+-                fp.write(data)
++        Test configUnserialize(self, opts, referencePoint, filterSystem=True)
++        """
++        sf = SpiderFoot(dict())
+ 
+-    def cacheGet(self, label: str, timeoutHrs: int) -> str:
+-        """Retreive data from the cache.
++        with self.assertRaises(TypeError):
++            sf.configUnserialize(dict(), None, None)
+ 
+-        Args:
+-            label (str): Name of the cached data to retrieve
+-            timeoutHrs (int): Age of the cached data (in hours)
+-                              for which the data is considered to be too old and ignored.
+-
+-        Returns:
+-            str: cached data
++    def test_config_unserialize_should_return_a_dict(self):
+         """
+-        if not label:
+-            return None
++        Test configUnserialize(self, opts, referencePoint, filterSystem=True)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        pathLabel = hashlib.sha224(label.encode('utf-8')).hexdigest()
+-        cacheFile = SpiderFootHelpers.cachePath() + "/" + pathLabel
+-        try:
+-            cache_stat = os.stat(cacheFile)
+-        except OSError:
+-            return None
++        config = sf.configUnserialize(dict(), dict(), True)
++        self.assertIsInstance(config, dict)
+ 
+-        if cache_stat.st_size == 0:
+-            return None
++    def test_cache_get_invalid_label_should_return_none(self):
++        """
++        Test cacheGet(self, label, timeoutHrs)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        if cache_stat.st_mtime > time.time() - timeoutHrs * 3600 or timeoutHrs == 0:
+-            with open(cacheFile, "r", encoding='utf-8') as fp:
+-                return fp.read()
++        cache_get = sf.cacheGet('', sf.opts.get('cacheperiod', 0))
++        self.assertEqual(None, cache_get)
+ 
+-        return None
++    def test_cache_get_invalid_timeout_should_return_none(self):
++        """
++        Test cacheGet(self, label, timeoutHrs)
++        """
++        sf = SpiderFoot(dict())
+ 
+-    def configSerialize(self, opts: dict, filterSystem: bool = True):
+-        """Convert a Python dictionary to something storable in the database.
++        cache_get = sf.cacheGet('', None)
++        self.assertEqual(None, cache_get)
+ 
+-        Args:
+-            opts (dict): Dictionary of SpiderFoot configuration options
+-            filterSystem (bool): TBD
++    def test_modulesProducing_argument_events_should_return_a_list(self):
++        """
++        Test modulesProducing(self, events)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        Returns:
+-            dict: config options
++        events = ['IP_ADDRESS', 'DOMAIN_NAME', 'INTERNET_NAME']
+ 
+-        Raises:
+-            TypeError: arg type was invalid
++        modules_producing = sf.modulesProducing(events)
++        self.assertIsInstance(modules_producing, list)
++
++    def test_modulesProducing_argument_events_with_empty_value_should_return_a_list(self):
+         """
+-        if not isinstance(opts, dict):
+-            raise TypeError(f"opts is {type(opts)}; expected dict()")
++        Test modulesProducing(self, events)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        storeopts = dict()
++        modules_producing = sf.modulesProducing(list())
++        self.assertIsInstance(modules_producing, list)
+ 
+-        if not opts:
+-            return storeopts
++    def test_modulesConsuming_argument_events_should_return_a_list(self):
++        """
++        Test modulesConsuming(self, events)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        for opt in list(opts.keys()):
+-            # Filter out system temporary variables like GUID and others
+-            if opt.startswith('__') and filterSystem:
+-                continue
++        events = ['IP_ADDRESS', 'DOMAIN_NAME', 'INTERNET_NAME']
+ 
+-            if isinstance(opts[opt], (int, str)):
+-                storeopts[opt] = opts[opt]
++        modules_consuming = sf.modulesConsuming(events)
++        self.assertIsInstance(modules_consuming, list)
+ 
+-            if isinstance(opts[opt], bool):
+-                if opts[opt]:
+-                    storeopts[opt] = 1
+-                else:
+-                    storeopts[opt] = 0
+-            if isinstance(opts[opt], list):
+-                storeopts[opt] = ','.join(opts[opt])
++    def test_modulesConsuming_argument_events_with_empty_value_should_return_a_list(self):
++        """
++        Test modulesConsuming(self, events)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        if '__modules__' not in opts:
+-            return storeopts
++        modules_consuming = sf.modulesConsuming(list())
++        self.assertIsInstance(modules_consuming, list)
+ 
+-        if not isinstance(opts['__modules__'], dict):
+-            raise TypeError(f"opts['__modules__'] is {type(opts['__modules__'])}; expected dict()")
++    def test_eventsFromModules_argument_modules_with_empty_value_should_return_a_list(self):
++        """
++        Test eventsFromModules(self, modules)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        for mod in opts['__modules__']:
+-            for opt in opts['__modules__'][mod]['opts']:
+-                if opt.startswith('_') and filterSystem:
+-                    continue
++        events_from_modules = sf.eventsFromModules(list())
++        self.assertIsInstance(events_from_modules, list)
+ 
+-                mod_opt = f"{mod}:{opt}"
+-                mod_opt_val = opts['__modules__'][mod]['opts'][opt]
++    def test_eventsFromModules_argument_modules_should_return_events(self):
++        """
++        Test eventsFromModules(self, modules)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-                if isinstance(mod_opt_val, (int, str)):
+-                    storeopts[mod_opt] = mod_opt_val
++        events_from_modules = sf.eventsFromModules(self.default_modules)
++        self.assertIsInstance(events_from_modules, list)
+ 
+-                if isinstance(mod_opt_val, bool):
+-                    if mod_opt_val:
+-                        storeopts[mod_opt] = 1
+-                    else:
+-                        storeopts[mod_opt] = 0
+-                if isinstance(mod_opt_val, list):
+-                    storeopts[mod_opt] = ','.join(str(x) for x in mod_opt_val)
++    def test_eventsToModules_argument_modules_with_empty_value_should_return_a_list(self):
++        """
++        Test eventsToModules(self, modules)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        return storeopts
++        events_to_modules = sf.eventsToModules(list())
++        self.assertIsInstance(events_to_modules, list)
+ 
+-    def configUnserialize(self, opts: dict, referencePoint: dict, filterSystem: bool = True):
+-        """Take strings, etc. from the database or UI and convert them
+-        to a dictionary for Python to process.
++    def test_eventsToModules_argument_modules_should_return_events(self):
++        """
++        Test eventsToModules(self, modules)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        Args:
+-            opts (dict): SpiderFoot configuration options
+-            referencePoint (dict): needed to know the actual types the options are supposed to be.
+-            filterSystem (bool): Ignore global "system" configuration options
++        events_to_modules = sf.eventsToModules(self.default_modules)
++        self.assertIsInstance(events_to_modules, list)
+ 
+-        Returns:
+-            dict: TBD
+-
+-        Raises:
+-            TypeError: arg type was invalid
++    def test_url_relative_to_absolute_should_return_a_string(self):
+         """
++        Test urlRelativeToAbsolute(self, url)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        if not isinstance(opts, dict):
+-            raise TypeError(f"opts is {type(opts)}; expected dict()")
+-        if not isinstance(referencePoint, dict):
+-            raise TypeError(f"referencePoint is {type(referencePoint)}; expected dict()")
++        relative_url = sf.urlRelativeToAbsolute('/somewhere/else/../../path?param=value#fragment')
++        self.assertIsInstance(relative_url, str)
++        self.assertEqual('/path?param=value#fragment', relative_url)
+ 
+-        returnOpts = referencePoint
++    def test_url_base_dir_should_return_a_string(self):
++        """
++        Test urlBaseDir(self, url)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        # Global options
+-        for opt in list(referencePoint.keys()):
+-            if opt.startswith('__') and filterSystem:
+-                # Leave out system variables
+-                continue
++        base_dir = sf.urlBaseDir('http://localhost.local/path?param=value#fragment')
++        self.assertIsInstance(base_dir, str)
++        self.assertEqual('http://localhost.local/', base_dir)
+ 
+-            if opt not in opts:
+-                continue
++    def test_url_base_url_should_return_a_string(self):
++        """
++        Test urlBaseUrl(self, url)
++        """
++        sf = SpiderFoot(dict())
+ 
+-            if isinstance(referencePoint[opt], bool):
+-                if opts[opt] == "1":
+-                    returnOpts[opt] = True
+-                else:
+-                    returnOpts[opt] = False
+-                continue
++        base_url = sf.urlBaseUrl('http://localhost.local/path?param=value#fragment')
++        self.assertIsInstance(base_url, str)
++        self.assertEqual('http://localhost.local', base_url)
+ 
+-            if isinstance(referencePoint[opt], str):
+-                returnOpts[opt] = str(opts[opt])
+-                continue
++    def test_url_fqdn_should_return_a_string(self):
++        """
++        Test urlFQDN(self, url)
++        """
++        sf = SpiderFoot(dict())
+ 
+-            if isinstance(referencePoint[opt], int):
+-                returnOpts[opt] = int(opts[opt])
+-                continue
++        fqdn = sf.urlFQDN('http://localhost.local')
++        self.assertIsInstance(fqdn, str)
++        self.assertEqual("localhost.local", fqdn)
+ 
+-            if isinstance(referencePoint[opt], list):
+-                if isinstance(referencePoint[opt][0], int):
+-                    returnOpts[opt] = list()
+-                    for x in str(opts[opt]).split(","):
+-                        returnOpts[opt].append(int(x))
+-                else:
+-                    returnOpts[opt] = str(opts[opt]).split(",")
++    def test_domain_keyword_should_return_a_string(self):
++        """
++        Test domainKeyword(self, domain, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-        if '__modules__' not in referencePoint:
+-            return returnOpts
++        keyword = sf.domainKeyword('www.spiderfoot.net', sf.opts.get('_internettlds'))
++        self.assertIsInstance(keyword, str)
++        self.assertEqual('spiderfoot', keyword)
+ 
+-        if not isinstance(referencePoint['__modules__'], dict):
+-            raise TypeError(f"referencePoint['__modules__'] is {type(referencePoint['__modules__'])}; expected dict()")
++    def test_domain_keyword_invalid_domain_should_return_none(self):
++        """
++        Test domainKeyword(self, domain, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-        # Module options
+-        # A lot of mess to handle typing..
+-        for modName in referencePoint['__modules__']:
+-            for opt in referencePoint['__modules__'][modName]['opts']:
+-                if opt.startswith('_') and filterSystem:
+-                    continue
++        keyword = sf.domainKeyword("", sf.opts.get('_internettlds'))
++        self.assertEqual(None, keyword)
++        keyword = sf.domainKeyword([], sf.opts.get('_internettlds'))
++        self.assertEqual(None, keyword)
++        keyword = sf.domainKeyword(None, sf.opts.get('_internettlds'))
++        self.assertEqual(None, keyword)
++        keyword = sf.domainKeyword("net", sf.opts.get('_internettlds'))
++        self.assertEqual(None, keyword)
+ 
+-                if modName + ":" + opt in opts:
+-                    ref_mod = referencePoint['__modules__'][modName]['opts'][opt]
+-                    if isinstance(ref_mod, bool):
+-                        if opts[modName + ":" + opt] == "1":
+-                            returnOpts['__modules__'][modName]['opts'][opt] = True
+-                        else:
+-                            returnOpts['__modules__'][modName]['opts'][opt] = False
+-                        continue
++    def test_domain_keywords_should_return_a_set(self):
++        """
++        Test domainKeywords(self, domainList, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-                    if isinstance(ref_mod, str):
+-                        returnOpts['__modules__'][modName]['opts'][opt] = str(opts[modName + ":" + opt])
+-                        continue
++        domain_list = ['www.example.com', 'localhost.local']
++        keywords = sf.domainKeywords(domain_list, sf.opts.get('_internettlds'))
++        self.assertIsInstance(keywords, set)
++        self.assertIn('localhost', keywords)
++        self.assertIn('example', keywords)
+ 
+-                    if isinstance(ref_mod, int):
+-                        returnOpts['__modules__'][modName]['opts'][opt] = int(opts[modName + ":" + opt])
+-                        continue
++    def test_domain_keywords_invalid_domainlist_should_return_a_set(self):
++        """
++        Test domainKeyword(self, domain, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-                    if isinstance(ref_mod, list):
+-                        if isinstance(ref_mod[0], int):
+-                            returnOpts['__modules__'][modName]['opts'][opt] = list()
+-                            for x in str(opts[modName + ":" + opt]).split(","):
+-                                returnOpts['__modules__'][modName]['opts'][opt].append(int(x))
+-                        else:
+-                            returnOpts['__modules__'][modName]['opts'][opt] = str(opts[modName + ":" + opt]).split(",")
++        keywords = sf.domainKeywords("", sf.opts.get('_internettlds'))
++        self.assertIsInstance(keywords, set)
++        keywords = sf.domainKeywords([], sf.opts.get('_internettlds'))
++        self.assertIsInstance(keywords, set)
++        keywords = sf.domainKeywords(None, sf.opts.get('_internettlds'))
++        self.assertIsInstance(keywords, set)
+ 
+-        return returnOpts
++    def test_host_domain_invalid_host_should_return_none(self):
++        """
++        Test hostDomain(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-    def modulesProducing(self, events: list) -> list:
+-        """Return an array of modules that produce the list of types supplied.
++        host_domain = sf.hostDomain(None, sf.opts.get('_internettlds'))
++        self.assertEqual(None, host_domain)
+ 
+-        Args:
+-            events (list): list of event types
+-
+-        Returns:
+-            list: list of modules
++    def test_host_domain_should_return_a_string(self):
+         """
+-        modlist = list()
++        Test hostDomain(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-        if not events:
+-            return modlist
++        host_domain = sf.hostDomain('www.spiderfoot.net', sf.opts.get('_internettlds'))
++        self.assertIsInstance(host_domain, str)
++        self.assertEqual('spiderfoot.net', host_domain)
+ 
+-        loaded_modules = self.opts.get('__modules__')
++        host_domain = sf.hostDomain('spiderfoot.net', sf.opts.get('_internettlds'))
++        self.assertIsInstance(host_domain, str)
++        self.assertEqual('spiderfoot.net', host_domain)
+ 
+-        if not loaded_modules:
+-            return modlist
++        host_domain = sf.hostDomain('abc.www.spiderfoot.net', sf.opts.get('_internettlds'))
++        self.assertIsInstance(host_domain, str)
++        self.assertEqual('spiderfoot.net', host_domain)
+ 
+-        for mod in list(loaded_modules.keys()):
+-            provides = loaded_modules[mod].get('provides')
++    def test_host_domain_invalid_tldlist_should_return_none(self):
++        """
++        Test hostDomain(self, hostname, tldList)
++        """
++        sf = SpiderFoot(dict())
+ 
+-            if not provides:
+-                continue
++        host_domain = sf.hostDomain('spiderfoot.net', None)
++        self.assertEqual(None, host_domain)
+ 
+-            if "*" in events:
+-                modlist.append(mod)
++    def test_is_domain_valid_domain_should_return_true(self):
++        """
++        Test isDomain(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-            for evtype in provides:
+-                if evtype in events:
+-                    modlist.append(mod)
++        is_domain = sf.isDomain('spiderfoot.net', sf.opts.get('_internettlds'))
++        self.assertIsInstance(is_domain, bool)
++        self.assertTrue(is_domain)
+ 
+-        return list(set(modlist))
+-
+-    def modulesConsuming(self, events: list) -> list:
+-        """Return an array of modules that consume the list of types supplied.
+-
+-        Args:
+-            events (list): list of event types
+-
+-        Returns:
+-            list: list of modules
++    def test_is_domain_invalid_domain_should_return_false(self):
+         """
+-        modlist = list()
++        Test isDomain(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-        if not events:
+-            return modlist
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                is_domain = sf.isDomain(invalid_type, sf.opts.get('_internettlds'))
++                self.assertIsInstance(is_domain, bool)
++                self.assertFalse(is_domain)
+ 
+-        loaded_modules = self.opts.get('__modules__')
++        is_domain = sf.isDomain("local", sf.opts.get('_internettlds'))
++        self.assertIsInstance(is_domain, bool)
++        self.assertFalse(is_domain)
+ 
+-        if not loaded_modules:
+-            return modlist
++        _domain = sf.isDomain("spiderfoot.net\n.com", sf.opts.get('_internettlds'))
++        self.assertIsInstance(_domain, bool)
++        self.assertFalse(_domain)
+ 
+-        for mod in list(loaded_modules.keys()):
+-            consumes = loaded_modules[mod].get('consumes')
++    def test_is_domain_invalid_tldlist_should_return_false(self):
++        """
++        Test isDomain(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-            if not consumes:
+-                continue
++        is_domain = sf.isDomain('spiderfoot.net', None)
++        self.assertIsInstance(is_domain, bool)
++        self.assertFalse(is_domain)
+ 
+-            if "*" in consumes:
+-                modlist.append(mod)
+-                continue
++    def test_is_domain_invalid_tld_should_return_false(self):
++        """
++        Test isDomain(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-            for evtype in consumes:
+-                if evtype in events:
+-                    modlist.append(mod)
++        is_domain = sf.isDomain('spiderfoot.not_a_tld', sf.opts.get('_internettlds'))
++        self.assertIsInstance(is_domain, bool)
++        self.assertFalse(is_domain)
+ 
+-        return list(set(modlist))
+-
+-    def eventsFromModules(self, modules: list) -> list:
+-        """Return an array of types that are produced by the list of modules supplied.
+-
+-        Args:
+-            modules (list): list of modules
+-
+-        Returns:
+-            list: list of types
++    def test_valid_host_invalid_tldlist_should_return_false(self):
+         """
+-        evtlist = list()
++        Test validHost(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if not modules:
+-            return evtlist
++        is_host = sf.validHost('spiderfoot.net', None)
++        self.assertIsInstance(is_host, bool)
++        self.assertFalse(is_host)
+ 
+-        loaded_modules = self.opts.get('__modules__')
++    def test_valid_host_valid_host_should_return_true(self):
++        """
++        Test validHost(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-        if not loaded_modules:
+-            return evtlist
++        is_host = sf.validHost('spiderfoot.net', sf.opts.get('_internettlds'))
++        self.assertIsInstance(is_host, bool)
++        self.assertTrue(is_host)
+ 
+-        for mod in modules:
+-            if mod in list(loaded_modules.keys()):
+-                provides = loaded_modules[mod].get('provides')
+-                if provides:
+-                    for evt in provides:
+-                        evtlist.append(evt)
++    def test_valid_host_invalid_host_should_return_false(self):
++        """
++        Test validHost(self, hostname, tldList)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.opts['_internettlds'] = self.test_tlds
+ 
+-        return evtlist
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                is_valid = sf.validHost(invalid_type, sf.opts.get('_internettlds'))
++                self.assertIsInstance(is_valid, bool)
++                self.assertFalse(is_valid)
+ 
+-    def eventsToModules(self, modules: list) -> list:
+-        """Return an array of types that are consumed by the list of modules supplied.
++        is_valid = sf.validHost("local", sf.opts.get('_internettlds'))
++        self.assertIsInstance(is_valid, bool)
++        self.assertFalse(is_valid)
+ 
+-        Args:
+-            modules (list): list of modules
++        is_valid = sf.validHost('something.gif', sf.opts.get('_internettlds'))
++        self.assertIsInstance(is_valid, bool)
++        self.assertFalse(is_valid)
+ 
+-        Returns:
+-            list: list of types
++        is_valid = sf.validHost(".", sf.opts.get('_internettlds'))
++        self.assertIsInstance(is_valid, bool)
++        self.assertFalse(is_valid)
++
++        is_valid = sf.validHost("spiderfoot.net\n.com", sf.opts.get('_internettlds'))
++        self.assertIsInstance(is_valid, bool)
++        self.assertFalse(is_valid)
++
++    def test_valid_ip_should_return_a_boolean(self):
+         """
+-        evtlist = list()
++        Test validIP(self, address)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        if not modules:
+-            return evtlist
++        valid_ip = sf.validIP('0.0.0.0')
++        self.assertIsInstance(valid_ip, bool)
++        self.assertTrue(valid_ip)
+ 
+-        loaded_modules = self.opts.get('__modules__')
++    def test_valid_ip6_should_return_a_boolean(self):
++        """
++        Test validIP6(self, address)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        if not loaded_modules:
+-            return evtlist
++        valid_ip6 = sf.validIP6('::1')
++        self.assertIsInstance(valid_ip6, bool)
++        self.assertTrue(valid_ip6)
+ 
+-        for mod in modules:
+-            if mod in list(loaded_modules.keys()):
+-                consumes = loaded_modules[mod].get('consumes')
+-                if consumes:
+-                    for evt in consumes:
+-                        evtlist.append(evt)
++    def test_valid_ip_network_should_return_a_boolean(self):
++        """
++        Test validIpNetwork(self, cidr)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        return evtlist
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                valid_ip_network = sf.validIpNetwork(invalid_type)
++                self.assertIsInstance(valid_ip_network, bool)
++                self.assertFalse(valid_ip_network)
+ 
+-    def urlFQDN(self, url: str) -> str:
+-        """Extract the FQDN from a URL.
++        valid_ip_network = sf.validIpNetwork("/")
++        self.assertIsInstance(valid_ip_network, bool)
++        self.assertFalse(valid_ip_network)
+ 
+-        Args:
+-            url (str): URL
++        valid_ip_network = sf.validIpNetwork('0.0.0.0/0')
++        self.assertIsInstance(valid_ip_network, bool)
++        self.assertTrue(valid_ip_network)
+ 
+-        Returns:
+-            str: FQDN
++    def test_isPublicIpAddress_should_return_a_boolean(self):
+         """
+-        if not url:
+-            self.error(f"Invalid URL: {url}")
+-            return None
++        Test isPublicIpAddress(self, ip)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        baseurl = SpiderFootHelpers.urlBaseUrl(url)
+-        if '://' in baseurl:
+-            count = 2
+-        else:
+-            count = 0
++        self.assertTrue(sf.isPublicIpAddress('1.1.1.1'))
+ 
+-        # http://abc.com will split to ['http:', '', 'abc.com']
+-        return baseurl.split('/')[count].lower()
++        ips = [
++            'invalid ip address',
++            '0.0.0.0',
++            '127.0.0.1',
++            '10.1.1.1',
++            '172.16.1.1',
++            '192.168.1.1',
++            '255.240.0.0',
++            '172.31.255.255',
++            '224.0.1.0',
++            '255.255.255.255',
++            '169.254.0.1',
++            '253.0.0.1',
++            '::1',
++            'ff00::1',
++        ]
++        for ip in ips:
++            with self.subTest(ip=ip):
++                self.assertFalse(sf.isPublicIpAddress(ip))
+ 
+-    def domainKeyword(self, domain: str, tldList: list) -> str:
+-        """Extract the keyword (the domain without the TLD or any subdomains) from a domain.
+-
+-        Args:
+-            domain (str): The domain to check.
+-            tldList (list): The list of TLDs based on the Mozilla public list.
+-
+-        Returns:
+-            str: The keyword
++    def test_valid_email_should_return_a_boolean(self):
+         """
+-        if not domain:
+-            self.error(f"Invalid domain: {domain}")
+-            return None
++        Test validEmail(self, email)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        # Strip off the TLD
+-        dom = self.hostDomain(domain.lower(), tldList)
+-        if not dom:
+-            return None
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                valid_email = sf.validEmail(invalid_type)
++                self.assertIsInstance(valid_email, bool)
++                self.assertFalse(valid_email)
+ 
+-        tld = '.'.join(dom.split('.')[1:])
+-        ret = domain.lower().replace('.' + tld, '')
++        valid_email = sf.validEmail('%@localhost.local')
++        self.assertIsInstance(valid_email, bool)
++        self.assertFalse(valid_email)
+ 
+-        # If the user supplied a domain with a sub-domain, return the second part
+-        if '.' in ret:
+-            return ret.split('.')[-1]
++        valid_email = sf.validEmail('...@localhost.local')
++        self.assertIsInstance(valid_email, bool)
++        self.assertFalse(valid_email)
+ 
+-        return ret
++        valid_email = sf.validEmail('root@localhost.local\n.com')
++        self.assertIsInstance(valid_email, bool)
++        self.assertFalse(valid_email)
+ 
+-    def domainKeywords(self, domainList: list, tldList: list) -> set:
+-        """Extract the keywords (the domains without the TLD or any subdomains) from a list of domains.
++        valid_email = sf.validEmail('root@localhost')
++        self.assertIsInstance(valid_email, bool)
++        self.assertFalse(valid_email)
+ 
+-        Args:
+-            domainList (list): The list of domains to check.
+-            tldList (list): The list of TLDs based on the Mozilla public list.
++        valid_email = sf.validEmail('root@localhost.local')
++        self.assertIsInstance(valid_email, bool)
++        self.assertTrue(valid_email)
+ 
+-        Returns:
+-            set: List of keywords
++    def test_validPhoneNumber_should_return_a_boolean(self):
+         """
+-        if not domainList:
+-            self.error(f"Invalid domain list: {domainList}")
+-            return set()
++        Test validPhoneNumber(self, phone)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        keywords = list()
+-        for domain in domainList:
+-            keywords.append(self.domainKeyword(domain, tldList))
++        invalid_types = [None, "", list(), dict(), int()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                valid_phone = sf.validPhoneNumber(invalid_type)
++                self.assertIsInstance(valid_phone, bool)
++                self.assertFalse(valid_phone)
+ 
+-        self.debug(f"Keywords: {keywords}")
+-        return set([k for k in keywords if k])
++        valid_phone = sf.validPhoneNumber('+1234567890')
++        self.assertIsInstance(valid_phone, bool)
++        self.assertFalse(valid_phone)
+ 
+-    def hostDomain(self, hostname: str, tldList: list) -> str:
+-        """Obtain the domain name for a supplied hostname.
++        valid_phone = sf.validPhoneNumber('+12345678901234567890')
++        self.assertIsInstance(valid_phone, bool)
++        self.assertFalse(valid_phone)
+ 
+-        Args:
+-            hostname (str): The hostname to check.
+-            tldList (list): The list of TLDs based on the Mozilla public list.
++        valid_phone = sf.validPhoneNumber('+12345678901')
++        self.assertIsInstance(valid_phone, bool)
++        self.assertTrue(valid_phone)
+ 
+-        Returns:
+-            str: The domain name.
++    def test_normalize_dns(self):
+         """
+-        if not tldList:
+-            return None
+-        if not hostname:
+-            return None
++        Test normalizeDNS(self, res)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        ps = PublicSuffixList(tldList, only_icann=True)
+-        return ps.privatesuffix(hostname)
++        dns = sf.normalizeDNS(["example.local.", ["spiderfoot.net."]])
++        self.assertIsInstance(dns, list)
++        self.assertIn("example.local", dns)
++        self.assertIn("spiderfoot.net", dns)
+ 
+-    def validHost(self, hostname: str, tldList: str) -> bool:
+-        """Check if the provided string is a valid hostname with a valid public suffix TLD.
++    def test_normalize_dns_should_return_list(self):
++        """
++        Test normalizeDNS(self, res)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        Args:
+-            hostname (str): The hostname to check.
+-            tldList (str): The list of TLDs based on the Mozilla public list.
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                dns = sf.normalizeDNS(invalid_type)
++                self.assertIsInstance(dns, list)
+ 
+-        Returns:
+-            bool
++    def test_sanitise_input(self):
+         """
+-        if not tldList:
+-            return False
+-        if not hostname:
+-            return False
++        Test sanitiseInput(self, cmd)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        if "." not in hostname:
+-            return False
++        safe = sf.sanitiseInput("example-string")
++        self.assertIsInstance(safe, bool)
++        self.assertTrue(safe)
+ 
+-        if not re.match(r"^[a-z0-9-\.]*$", hostname, re.IGNORECASE):
+-            return False
++        safe = sf.sanitiseInput("example-string\n")
++        self.assertIsInstance(safe, bool)
++        self.assertFalse(safe)
+ 
+-        ps = PublicSuffixList(tldList, only_icann=True, accept_unknown=False)
+-        sfx = ps.privatesuffix(hostname)
+-        return sfx is not None
++        safe = sf.sanitiseInput("example string")
++        self.assertIsInstance(safe, bool)
++        self.assertFalse(safe)
+ 
+-    def isDomain(self, hostname: str, tldList: list) -> bool:
+-        """Check if the provided hostname string is a valid domain name.
++        safe = sf.sanitiseInput("-example-string")
++        self.assertIsInstance(safe, bool)
++        self.assertFalse(safe)
+ 
+-        Given a possible hostname, check if it's a domain name
+-        By checking whether it rests atop a valid TLD.
+-        e.g. www.example.com = False because tld of hostname is com,
+-        and www.example has a . in it.
++        safe = sf.sanitiseInput("..example-string")
++        self.assertIsInstance(safe, bool)
++        self.assertFalse(safe)
+ 
+-        Args:
+-            hostname (str): The hostname to check.
+-            tldList (list): The list of TLDs based on the Mozilla public list.
++        safe = sf.sanitiseInput("12")
++        self.assertIsInstance(safe, bool)
++        self.assertFalse(safe)
+ 
+-        Returns:
+-            bool
++    def test_dictwords_should_return_a_list(self):
+         """
+-        if not tldList:
+-            return False
+-        if not hostname:
+-            return False
++        Test dictwords(self)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        ps = PublicSuffixList(tldList, only_icann=True, accept_unknown=False)
+-        sfx = ps.privatesuffix(hostname)
+-        return sfx == hostname
++        dict_words = sf.dictwords()
++        self.assertIsInstance(dict_words, list)
+ 
+-    def validIP(self, address: str) -> bool:
+-        """Check if the provided string is a valid IPv4 address.
++    def test_dictnames_should_return_a_list(self):
++        """
++        Test dictnames(self)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        Args:
+-            address (str): The IPv4 address to check.
++        dict_names = sf.dictnames()
++        self.assertIsInstance(dict_names, list)
+ 
+-        Returns:
+-            bool
++    def test_resolve_host_should_return_list(self):
+         """
+-        if not address:
+-            return False
+-        return netaddr.valid_ipv4(address)
++        Test resolveHost(self, host)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    def validIP6(self, address: str) -> bool:
+-        """Check if the provided string is a valid IPv6 address.
++        addrs = sf.resolveHost('one.one.one.one')
++        self.assertIsInstance(addrs, list)
++        self.assertTrue(addrs)
++        self.assertIn('1.1.1.1', addrs)
+ 
+-        Args:
+-            address (str): The IPv6 address to check.
++        addrs = sf.resolveHost(None)
++        self.assertFalse(addrs)
++        self.assertIsInstance(addrs, list)
+ 
+-        Returns:
+-            bool: string is a valid IPv6 address
++    def test_resolve_ip_should_return_list(self):
+         """
+-        if not address:
+-            return False
+-        return netaddr.valid_ipv6(address)
++        Test resolveIP(self, ipaddr)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    def validIpNetwork(self, cidr: str) -> bool:
+-        """Check if the provided string is a valid CIDR netblock.
++        addrs = sf.resolveIP('1.1.1.1')
++        self.assertIsInstance(addrs, list)
++        self.assertTrue(addrs)
++        self.assertIn('one.one.one.one', addrs)
+ 
+-        Args:
+-            cidr (str): The netblock to check.
++        addrs = sf.resolveIP('2606:4700:4700::1001')
++        self.assertIsInstance(addrs, list)
++        self.assertTrue(addrs)
++        self.assertIn('one.one.one.one', addrs)
+ 
+-        Returns:
+-            bool: string is a valid CIDR netblock
+-        """
+-        if not isinstance(cidr, str):
+-            return False
++        addrs = sf.resolveIP(None)
++        self.assertFalse(addrs)
++        self.assertIsInstance(addrs, list)
+ 
+-        if '/' not in cidr:
+-            return False
++        addrs = sf.resolveIP([])
++        self.assertFalse(addrs)
++        self.assertIsInstance(addrs, list)
+ 
+-        try:
+-            return netaddr.IPNetwork(str(cidr)).size > 0
+-        except BaseException:
+-            return False
++        addrs = sf.resolveIP("")
++        self.assertFalse(addrs)
++        self.assertIsInstance(addrs, list)
+ 
+-    def isPublicIpAddress(self, ip: str) -> bool:
+-        """Check if an IP address is public.
++    def test_resolve_host6_should_return_a_list(self):
++        """
++        Test resolveHost6(self, hostname)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        Args:
+-            ip (str): IP address
++        addrs = sf.resolveHost6('one.one.one.one')
++        self.assertIsInstance(addrs, list)
++        self.assertTrue(addrs)
++        # TODO: Re-enable this once GitHub runners support IPv6
++        # https://github.com/actions/virtual-environments/issues/668
++        # self.assertIn('2606:4700:4700::1001', addrs)
++        # self.assertIn('2606:4700:4700::1111', addrs)
+ 
+-        Returns:
+-            bool: IP address is public
++        addrs = sf.resolveHost6(None)
++        self.assertFalse(addrs)
++        self.assertIsInstance(addrs, list)
++
++    def test_validate_ip_should_return_bool(self):
+         """
+-        if not isinstance(ip, (str, netaddr.IPAddress)):
+-            return False
+-        if not self.validIP(ip) and not self.validIP6(ip):
+-            return False
++        Test validateIP(self, host, ip)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if not netaddr.IPAddress(ip).is_unicast():
+-            return False
++        validate_ip = sf.validateIP(None, None)
++        self.assertIsInstance(validate_ip, bool)
++        self.assertFalse(validate_ip)
+ 
+-        if netaddr.IPAddress(ip).is_loopback():
+-            return False
+-        if netaddr.IPAddress(ip).is_reserved():
+-            return False
+-        if netaddr.IPAddress(ip).is_multicast():
+-            return False
+-        if netaddr.IPAddress(ip).is_private():
+-            return False
+-        return True
++        validate_ip = sf.validateIP('one.one.one.one', '1.1.1.1')
++        self.assertIsInstance(validate_ip, bool)
++        self.assertTrue(validate_ip)
+ 
+-    def normalizeDNS(self, res: list) -> list:
+-        """Clean DNS results to be a simple list
+-
+-        Args:
+-            res (list): List of DNS names
+-
+-        Returns:
+-            list: list of domains
++    def test_resolve_targets_should_return_list(self):
+         """
+-        ret = list()
++        Test resolveTargets(self, target, validateReverse)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if not res:
+-            return ret
++        invalid_types = [None, "", list()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                resolve_targets = sf.resolveTargets(invalid_type, False)
++                self.assertIsInstance(resolve_targets, list)
+ 
+-        for addr in res:
+-            if isinstance(addr, list):
+-                for host in addr:
+-                    host = str(host).rstrip(".")
+-                    if host:
+-                        ret.append(host)
+-            else:
+-                host = str(addr).rstrip(".")
+-                if host:
+-                    ret.append(host)
+-        return ret
++        target = SpiderFootTarget("spiderfoot.net", "INTERNET_NAME")
++        resolve_targets = sf.resolveTargets(target, False)
++        self.assertIsInstance(resolve_targets, list)
++        self.assertIn('spiderfoot.net', resolve_targets)
+ 
+-    def resolveHost(self, host: str) -> list:
+-        """Return a normalised IPv4 resolution of a hostname.
++        target = SpiderFootTarget("1.1.1.1", "IP_ADDRESS")
++        resolve_targets = sf.resolveTargets(target, False)
++        self.assertIsInstance(resolve_targets, list)
++        self.assertIn('1.1.1.1', resolve_targets)
+ 
+-        Args:
+-            host (str): host to resolve
++        target = SpiderFootTarget("127.0.0.1/32", "NETBLOCK_OWNER")
++        resolve_targets = sf.resolveTargets(target, False)
++        self.assertIsInstance(resolve_targets, list)
++        self.assertIn('127.0.0.1', resolve_targets)
+ 
+-        Returns:
+-            list: IP addresses
++    @unittest.skip("todo")
++    def test_safe_socket(self):
+         """
+-        if not host:
+-            self.error(f"Unable to resolve host: {host} (Invalid host)")
+-            return list()
++        Test safeSocket(self, host, port, timeout)
++        """
++        sf = SpiderFoot(self.default_options)
++        sf.safeSocket(None, None, None)
+ 
+-        addrs = list()
+-        try:
+-            addrs = self.normalizeDNS(socket.gethostbyname_ex(host))
+-        except BaseException as e:
+-            self.debug(f"Unable to resolve host: {host} ({e})")
+-            return addrs
++        self.assertEqual('TBD', 'TBD')
+ 
+-        if not addrs:
+-            self.debug(f"Unable to resolve host: {host}")
+-            return addrs
++    @unittest.skip("todo")
++    def test_safe_ssl_socket(self):
++        """
++        Test safeSSLSocket(self, host, port, timeout)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        self.debug(f"Resolved {host} to IPv4: {addrs}")
++        sf.safeSSLSocket(None, None, None, None)
++        self.assertEqual('TBD', 'TBD')
+ 
+-        return list(set(addrs))
++    def test_parseHashes_should_return_a_list(self):
++        """
++        Test parseHashes(self, data)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    def resolveIP(self, ipaddr: str) -> list:
+-        """Return a normalised resolution of an IPv4 or IPv6 address.
++        invalid_types = [None, "", list(), dict(), int()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                hashes = sf.parseHashes(invalid_type)
++                self.assertIsInstance(hashes, list)
+ 
+-        Args:
+-            ipaddr (str): IP address to reverse resolve
+-
+-        Returns:
+-            list: list of domain names
++    def test_parseHashes_argument_data_should_return_hahes(self):
+         """
++        Test parseHashes(self, data)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if not self.validIP(ipaddr) and not self.validIP6(ipaddr):
+-            self.error(f"Unable to reverse resolve {ipaddr} (Invalid IP address)")
+-            return list()
++        md5_hash = "e17cff4eb3e8fbe6ca3b83fb47532dba"
++        sha1_hash = "f81efbe70f8116fcf3dc4e9b37725dcb949719f5"
++        sha256_hash = "7cd444af3d8de9e195b1f1cb55e7b7d9409dcd4648247c853a2f64b7578dc9b7"
++        sha512_hash = "a55a2fe120d7d7d6e2ba930e6c56faa30b9d24a3178a0aff1d89312a89d61d8a9d5b7743e3af6b1a318d99974a1145ed76f85aa8c6574074dfb347613ccd3249"
+ 
+-        self.debug(f"Performing reverse resolve of {ipaddr}")
++        hashes = sf.parseHashes(f"spiderfoot{md5_hash}spiderfoot{sha1_hash}spiderfoot{sha256_hash}spiderfoot{sha512_hash}spiderfoot")
+ 
+-        try:
+-            addrs = self.normalizeDNS(socket.gethostbyaddr(ipaddr))
+-        except BaseException as e:
+-            self.debug(f"Unable to reverse resolve IP address: {ipaddr} ({e})")
+-            return list()
++        self.assertIsInstance(hashes, list)
++        self.assertIn(("MD5", md5_hash), hashes)
++        self.assertIn(("SHA1", sha1_hash), hashes)
++        self.assertIn(("SHA256", sha256_hash), hashes)
++        self.assertIn(("SHA512", sha512_hash), hashes)
+ 
+-        if not addrs:
+-            self.debug(f"Unable to reverse resolve IP address: {ipaddr}")
+-            return list()
++    def test_parse_credit_cards_should_return_a_list(self):
++        """
++        Test parseCreditCards(self, data)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        self.debug(f"Reverse resolved {ipaddr} to: {addrs}")
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                cards = sf.parseCreditCards(invalid_type)
++                self.assertIsInstance(cards, list)
+ 
+-        return list(set(addrs))
++        cards = sf.parseCreditCards("spiderfoot4111 1111 1111 1111spiderfoot")
++        self.assertIsInstance(cards, list)
++        self.assertIn("4111111111111111", cards)
+ 
+-    def resolveHost6(self, hostname: str) -> list:
+-        """Return a normalised IPv6 resolution of a hostname.
++    def test_getCountryCodeDict_should_return_a_dict(self):
++        """
++        Test getCountryCodeDict(self)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        Args:
+-            hostname (str): hostname to resolve
++        country_code_dict = sf.getCountryCodeDict()
++        self.assertIsInstance(country_code_dict, dict)
+ 
+-        Returns:
+-            list
++    def test_countryNameFromCountryCode_argument_countryCode_should_return_country_as_a_string(self):
+         """
+-        if not hostname:
+-            self.error(f"Unable to resolve host: {hostname} (Invalid host)")
+-            return list()
++        Test countryNameFromCountryCode(self, countryCode)
++        """
++        sf = SpiderFoot(dict())
+ 
+-        addrs = list()
+-        try:
+-            res = socket.getaddrinfo(hostname, None, socket.AF_INET6)
+-            for addr in res:
+-                if addr[4][0] not in addrs:
+-                    addrs.append(addr[4][0])
+-        except BaseException as e:
+-            self.debug(f"Unable to resolve host: {hostname} ({e})")
+-            return addrs
++        country_name = sf.countryNameFromCountryCode('US')
++        self.assertIsInstance(country_name, str)
++        self.assertEqual(country_name, "United States")
+ 
+-        if not addrs:
+-            self.debug(f"Unable to resolve host: {hostname}")
+-            return addrs
+-
+-        self.debug(f"Resolved {hostname} to IPv6: {addrs}")
+-
+-        return list(set(addrs))
++    def test_countryNameFromTld_argument_tld_should_return_country_as_a_string(self):
++        """
++        Test countryNameFromTld(self, tld)
++        """
++        sf = SpiderFoot(dict())
+ 
+-    def validateIP(self, host: str, ip: str) -> bool:
+-        """Verify a host resolves to a given IP.
++        tlds = ['com', 'net', 'org', 'gov', 'mil']
++        for tld in tlds:
++            with self.subTest(tld=tld):
++                country_name = sf.countryNameFromTld(tld)
++                self.assertIsInstance(country_name, str)
++                self.assertEqual(country_name, "United States")
+ 
+-        Args:
+-            host (str): host
+-            ip (str): IP address
+-
+-        Returns:
+-            bool: host resolves to the given IP address
++    def test_parse_iban_numbers_should_return_a_list(self):
+         """
+-        if not host:
+-            self.error(f"Unable to resolve host: {host} (Invalid host)")
+-            return False
++        Test parseIBANNumbers(self, data)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if self.validIP(ip):
+-            addrs = self.resolveHost(host)
+-        elif self.validIP6(ip):
+-            addrs = self.resolveHost6(host)
+-        else:
+-            self.error(f"Unable to verify hostname {host} resolves to {ip} (Invalid IP address)")
+-            return False
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                ibans = sf.parseIBANNumbers(invalid_type)
++                self.assertIsInstance(ibans, list)
+ 
+-        if not addrs:
+-            return False
++        # Example IBANS from https://www.iban.com/structure
++        ibans = [
++            "AL35202111090000000001234567",
++            "AD1400080001001234567890",
++            "AT483200000012345864",
++            "AZ96AZEJ00000000001234567890",
++            "BH02CITI00001077181611",
++            "BY86AKBB10100000002966000000",
++            "BE71096123456769",
++            "BA393385804800211234",
++            "BR1500000000000010932840814P2",
++            "BG18RZBB91550123456789",
++            "CR23015108410026012345",
++            "HR1723600001101234565",
++            "CY21002001950000357001234567",
++            "CZ5508000000001234567899",
++            "DK9520000123456789",
++            "DO22ACAU00000000000123456789",
++            "EG800002000156789012345180002",
++            "SV43ACAT00000000000000123123",
++            "EE471000001020145685",
++            "FO9264600123456789",
++            "FI1410093000123458",
++            "FR7630006000011234567890189",
++            "GE60NB0000000123456789",
++            "DE75512108001245126199",
++            "GI04BARC000001234567890",
++            "GR9608100010000001234567890",
++            "GL8964710123456789",
++            "GT20AGRO00000000001234567890",
++            "VA59001123000012345678",
++            "HU93116000060000000012345676",
++            "IS750001121234563108962099",
++            "IQ20CBIQ861800101010500",
++            "IE64IRCE92050112345678",
++            "IL170108000000012612345",
++            "IT60X0542811101000000123456",
++            "JO71CBJO0000000000001234567890",
++            "KZ563190000012344567",
++            "XK051212012345678906",
++            "KW81CBKU0000000000001234560101",
++            "LV97HABA0012345678910",
++            "LB92000700000000123123456123",
++            "LI7408806123456789012",
++            "LT601010012345678901",
++            "LU120010001234567891",
++            "MT31MALT01100000000000000000123",
++            "MR1300020001010000123456753",
++            "MU43BOMM0101123456789101000MUR",
++            "MD21EX000000000001234567",
++            "MC5810096180790123456789085",
++            "ME25505000012345678951",
++            "NL02ABNA0123456789",
++            "MK07200002785123453",
++            "NO8330001234567",
++            "PK36SCBL0000001123456702",
++            "PS92PALS000000000400123456702",
++            "PL10105000997603123456789123",
++            "PT50002700000001234567833",
++            "QA54QNBA000000000000693123456",
++            "RO09BCYP0000001234567890",
++            "LC14BOSL123456789012345678901234",
++            "SM76P0854009812123456789123",
++            "ST23000200000289355710148",
++            "SA4420000001234567891234",
++            "RS35105008123123123173",
++            "SC52BAHL01031234567890123456USD",
++            "SK8975000000000012345671",
++            "SI56192001234567892",
++            "ES7921000813610123456789",
++            "SE7280000810340009783242",
++            "CH5604835012345678009",
++            "TL380010012345678910106",
++            "TN5904018104004942712345",
++            "TR320010009999901234567890",
++            "UA903052992990004149123456789",
++            "AE460090000000123456789",
++            "GB33BUKB20201555555555",
++            "VG21PACG0000000123456789"
++        ]
++        for iban in ibans:
++            with self.subTest(iban=iban):
++                parse_ibans = sf.parseIBANNumbers(iban)
++                self.assertIsInstance(parse_ibans, list)
++                self.assertIn(iban, parse_ibans)
+ 
+-        return any(str(addr) == ip for addr in addrs)
++        # Invalid IBANs
++        ibans = [
++            # Invalid country code
++            "ZZ21PACG0000000123456789",
++            # Invalid length for country code
++            "VG123456789012345",
++            # Invalid mod 97 remainder
++            "VG21PACG0000000123456111"
++        ]
++        for iban in ibans:
++            with self.subTest(iban=iban):
++                parse_ibans = sf.parseIBANNumbers(iban)
++                self.assertIsInstance(parse_ibans, list)
++                self.assertNotIn(iban, parse_ibans)
+ 
+-    def safeSocket(self, host: str, port: int, timeout: int) -> 'ssl.SSLSocket':
+-        """Create a safe socket that's using SOCKS/TOR if it was enabled.
++    def test_parse_emails_should_return_list_of_emails_from_string(self):
++        """
++        Test parseEmails(self, data)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        Args:
+-            host (str): host
+-            port (int): port
+-            timeout (int): timeout
++        parse_emails = sf.parseEmails("<html><body><p>From:noreply@spiderfoot.net</p><p>Subject:Hello user@spiderfoot.net, here's some text</p></body></html>")
++        self.assertIsInstance(parse_emails, list)
++        self.assertIn('noreply@spiderfoot.net', parse_emails)
++        self.assertIn('user@spiderfoot.net', parse_emails)
+ 
+-        Returns:
+-            sock
++    def test_parse_emails_invalid_data_should_return_list(self):
+         """
+-        sock = socket.create_connection((host, int(port)), int(timeout))
+-        sock.settimeout(int(timeout))
+-        return sock
++        Test parseEmails(self, data)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    def safeSSLSocket(self, host: str, port: int, timeout: int) -> 'ssl.SSLSocket':
+-        """Create a safe SSL connection that's using SOCKs/TOR if it was enabled.
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                emails = sf.parseEmails(invalid_type)
++                self.assertIsInstance(emails, list)
+ 
+-        Args:
+-            host (str): host
+-            port (int): port
+-            timeout (int): timeout
++    def test_parse_cert_should_return_a_dict(self):
++        """
++        Test parseCert(self, rawcert, fqdn=None, expiringdays=30)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        Returns:
+-            sock
++        cert = "-----BEGIN CERTIFICATE-----\r\nMIIEkjCCA3qgAwIBAgIQCgFBQgAAAVOFc2oLheynCDANBgkqhkiG9w0BAQsFADA/MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMTDkRTVCBSb290IENBIFgzMB4XDTE2MDMxNzE2NDA0NloXDTIxMDMxNzE2NDA0NlowSjELMAkGA1UEBhMCVVMxFjAUBgNVBAoTDUxldCdzIEVuY3J5cHQxIzAhBgNVBAMTGkxldCdzIEVuY3J5cHQgQXV0aG9yaXR5IFgzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnNMM8FrlLke3cl03g7NoYzDq1zUmGSXhvb418XCSL7e4S0EFq6meNQhY7LEqxGiHC6PjdeTm86dicbp5gWAf15Gan/PQeGdxyGkOlZHP/uaZ6WA8SMx+yk13EiSdRxta67nsHjcAHJyse6cF6s5K671B5TaYucv9bTyWaN8jKkKQDIZ0Z8h/pZq4UmEUEz9l6YKHy9v6Dlb2honzhT+Xhq+w3Brvaw2VFn3EK6BlspkENnWAa6xK8xuQSXgvopZPKiAlKQTGdMDQMc2PMTiVFrqoM7hD8bEfwzB/onkxEz0tNvjj/PIzark5McWvxI0NHWQWM6r6hCm21AvA2H3DkwIDAQABo4IBfTCCAXkwEgYDVR0TAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMCAYYwfwYIKwYBBQUHAQEEczBxMDIGCCsGAQUFBzABhiZodHRwOi8vaXNyZy50cnVzdGlkLm9jc3AuaWRlbnRydXN0LmNvbTA7BggrBgEFBQcwAoYvaHR0cDovL2FwcHMuaWRlbnRydXN0LmNvbS9yb290cy9kc3Ryb290Y2F4My5wN2MwHwYDVR0jBBgwFoAUxKexpHsscfrb4UuQdf/EFWCFiRAwVAYDVR0gBE0wSzAIBgZngQwBAgEwPwYLKwYBBAGC3xMBAQEwMDAuBggrBgEFBQcCARYiaHR0cDovL2Nwcy5yb290LXgxLmxldHNlbmNyeXB0Lm9yZzA8BgNVHR8ENTAzMDGgL6AthitodHRwOi8vY3JsLmlkZW50cnVzdC5jb20vRFNUUk9PVENBWDNDUkwuY3JsMB0GA1UdDgQWBBSoSmpjBH3duubRObemRWXv86jsoTANBgkqhkiG9w0BAQsFAAOCAQEA3TPXEfNjWDjdGBX7CVW+dla5cEilaUcne8IkCJLxWh9KEik3JHRRHGJouM2VcGfl96S8TihRzZvoroed6ti6WqEBmtzw3Wodatg+VyOeph4EYpr/1wXKtx8/wApIvJSwtmVi4MFU5aMqrSDE6ea73Mj2tcMyo5jMd6jmeWUHK8so/joWUoHOUgwuX4Po1QYz+3dszkDqMp4fklxBwXRsW10KXzPMTZ+sOPAveyxindmjkW8lGy+QsRlGPfZ+G6Z6h7mjem0Y+iWlkYcV4PIWL1iwBi8saCbGS5jN2p8M+X+Q7UNKEkROb3N6KOqkqm57TH2H3eDJAkSnh6/DNFu0Qg==\r\n-----END CERTIFICATE-----"
++
++        parse_cert = sf.parseCert(cert)
++        self.assertIsInstance(parse_cert, dict)
++
++        parse_cert = sf.parseCert(cert, 'spiderfoot.net')
++        self.assertIsInstance(parse_cert, dict)
++
++    def test_parse_cert_invalid_cert_should_return_none(self):
+         """
+-        s = socket.socket()
+-        s.settimeout(int(timeout))
+-        s.connect((host, int(port)))
+-        sock = ssl.wrap_socket(s)
+-        sock.do_handshake()
+-        return sock
++        Test parseCert(self, rawcert, fqdn=None, expiringdays=30)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    def parseCert(self, rawcert: str, fqdn: str = None, expiringdays: int = 30) -> dict:
+-        """Parse a PEM-format SSL certificate.
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                parse_cert = sf.parseCert(invalid_type, 'spiderfoot.net', 30)
++                self.assertEqual(None, parse_cert)
+ 
+-        Args:
+-            rawcert (str): PEM-format SSL certificate
+-            fqdn (str): expected FQDN for certificate
+-            expiringdays (int): The certificate will be considered as "expiring" if within this number of days of expiry.
++    def test_parse_cert_invalid_fqdn_should_return_none(self):
++        """
++        Test parseCert(self, rawcert, fqdn=None, expiringdays=30)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        Returns:
+-            dict: certificate details
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                parse_cert = sf.parseCert(None, invalid_type, 30)
++                self.assertEqual(None, parse_cert)
++
++    def test_parse_cert_invalid_expiringdays_should_return_none(self):
+         """
+-        if not rawcert:
+-            self.error(f"Invalid certificate: {rawcert}")
+-            return None
++        Test parseCert(self, rawcert, fqdn=None, expiringdays=30)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        ret = dict()
+-        if '\r' in rawcert:
+-            rawcert = rawcert.replace('\r', '')
+-        if isinstance(rawcert, str):
+-            rawcert = rawcert.encode('utf-8')
++        invalid_types = [None, "", list()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                parse_cert = sf.parseCert(None, 'spiderfoot.net', invalid_type)
++                self.assertEqual(None, parse_cert)
+ 
+-        from cryptography.hazmat.backends.openssl import backend
+-        cert = cryptography.x509.load_pem_x509_certificate(rawcert, backend)
+-        sslcert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, rawcert)
+-        sslcert_dump = OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_TEXT, sslcert)
++    def test_extract_urls_should_extract_urls_from_string(self):
++        """
++        Test extractUrls(self, content)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        ret['text'] = sslcert_dump.decode('utf-8', errors='replace')
+-        ret['issuer'] = str(cert.issuer)
+-        ret['altnames'] = list()
+-        ret['expired'] = False
+-        ret['expiring'] = False
+-        ret['mismatch'] = False
+-        ret['certerror'] = False
+-        ret['issued'] = str(cert.subject)
++        urls = sf.extractUrls("abchttps://example.spiderfoot.net/path\rabchttp://example.spiderfoot.net:1337/path\rabc")
++        self.assertIsInstance(urls, list)
++        self.assertIn("https://example.spiderfoot.net/path", urls)
++        self.assertIn("http://example.spiderfoot.net:1337/path", urls)
+ 
+-        # Expiry info
+-        try:
+-            notafter = datetime.strptime(sslcert.get_notAfter().decode('utf-8'), "%Y%m%d%H%M%SZ")
+-            ret['expiry'] = int(notafter.strftime("%s"))
+-            ret['expirystr'] = notafter.strftime("%Y-%m-%d %H:%M:%S")
+-            now = int(time.time())
+-            warnexp = now + (expiringdays * 86400)
+-            if ret['expiry'] <= warnexp:
+-                ret['expiring'] = True
+-            if ret['expiry'] <= now:
+-                ret['expired'] = True
+-        except BaseException as e:
+-            self.error(f"Error processing date in certificate: {e}")
+-            ret['certerror'] = True
+-            return ret
++    def test_parse_links_should_return_a_dict_of_urls_from_string(self):
++        """
++        Test parseLinks(self, url, data, domains)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        # SANs
+-        try:
+-            ext = cert.extensions.get_extension_for_class(cryptography.x509.SubjectAlternativeName)
+-            for x in ext.value:
+-                if isinstance(x, cryptography.x509.DNSName):
+-                    ret['altnames'].append(x.value.lower().encode('raw_unicode_escape').decode("ascii", errors='replace'))
+-        except BaseException as e:
+-            self.debug(f"Problem processing certificate: {e}")
++        parse_links = sf.parseLinks('url', 'example html content', 'domains')
++        self.assertIsInstance(parse_links, dict)
+ 
+-        certhosts = list()
+-        try:
+-            attrs = cert.subject.get_attributes_for_oid(cryptography.x509.oid.NameOID.COMMON_NAME)
++        parse_links = sf.parseLinks('http://spiderfoot.net/', 'example html content<a href="http://spiderfoot.net/path"></a>', 'domains')
++        self.assertIsInstance(parse_links, dict)
+ 
+-            if len(attrs) == 1:
+-                name = attrs[0].value.lower()
+-                # CN often duplicates one of the SANs, don't add it then
+-                if name not in ret['altnames']:
+-                    certhosts.append(name)
+-        except BaseException as e:
+-            self.debug(f"Problem processing certificate: {e}")
++        self.assertEqual('TBD', 'TBD')
+ 
+-        # Check for mismatch
+-        if fqdn and ret['issued']:
+-            fqdn = fqdn.lower()
++    def test_parse_links_invalid_url_should_return_a_dict(self):
++        """
++        Test parseLinks(self, url, data, domains)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-            try:
+-                # Extract the CN from the issued section
+-                if "cn=" + fqdn in ret['issued'].lower():
+-                    certhosts.append(fqdn)
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                parse_links = sf.parseLinks(invalid_type, 'example html content', 'domains')
++                self.assertIsInstance(parse_links, dict)
+ 
+-                # Extract subject alternative names
+-                for host in ret['altnames']:
+-                    certhosts.append(host.replace("dns:", ""))
++    def test_parse_links_invalid_data_should_return_a_dict(self):
++        """
++        Test parseLinks(self, url, data, domains)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-                ret['hosts'] = certhosts
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                parse_links = sf.parseLinks("", invalid_type, 'domains')
++                self.assertIsInstance(parse_links, dict)
+ 
+-                self.debug(f"Checking for {fqdn} in certificate subject")
+-                fqdn_tld = ".".join(fqdn.split(".")[1:]).lower()
++    def test_parse_links_invalid_domains_should_return_a_dict(self):
++        """
++        Test parseLinks(self, url, data, domains)
++        """
++        sf = SpiderFoot(self.default_options)
++
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                parse_links = sf.parseLinks('url', 'example html content', invalid_type)
++                self.assertIsInstance(parse_links, dict)
++
++    def test_url_encode_unicode_should_return_a_string(self):
++        """
++        Test urlEncodeUnicode(self, url)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-                found = False
+-                for chost in certhosts:
+-                    if chost == fqdn:
+-                        found = True
+-                    if chost == "*." + fqdn_tld:
+-                        found = True
+-                    if chost == fqdn_tld:
+-                        found = True
++        url_encode_unicode = sf.urlEncodeUnicode('url')
++        self.assertIsInstance(url_encode_unicode, str)
+ 
+-                if not found:
+-                    ret['mismatch'] = True
+-            except BaseException as e:
+-                self.error(f"Error processing certificate: {e}")
+-                ret['certerror'] = True
++    def test_get_session_should_return_a_session(self):
++        """
++        Test getSession(self)
++        """
++        sf = SpiderFoot(self.default_options)
++        session = sf.getSession()
++        self.assertIn("requests.sessions.Session", str(session))
+ 
+-        return ret
++    def test_remove_url_creds_should_remove_credentials_from_url(self):
++        """
++        Test removeUrlCreds(self, url):
++        """
++        url = "http://local/?key=secret&pass=secret&user=secret&password=secret"
+ 
+-    def getSession(self) -> 'requests.sessions.Session':
+-        """Return requests session object.
++        sf = SpiderFoot(self.default_options)
++        new_url = sf.removeUrlCreds(url)
++        self.assertNotIn("secret", new_url)
+ 
+-        Returns:
+-            requests.sessions.Session: requests session
++    def test_useProxyForUrl_argument_url_should_return_a_bool(self):
+         """
+-        session = requests.session()
+-        if self.socksProxy:
+-            session.proxies = {
+-                'http': self.socksProxy,
+-                'https': self.socksProxy,
+-            }
+-        return session
++        Test useProxyForUrl(self, url)
++        """
++        opts = self.default_options
+ 
+-    def removeUrlCreds(self, url: str) -> str:
+-        """Remove potentially sensitive strings (such as "key=..." and "password=...") from a string.
++        proxy_host = 'spiderfoot.net'
+ 
+-        Used to remove potential credentials from URLs prior during logging.
++        opts['_socks1type'] = '5'
++        opts['_socks2addr'] = proxy_host
++        opts['_socks3port'] = '8080'
+ 
+-        Args:
+-            url (str): URL
++        sf = SpiderFoot(opts)
++        self.assertFalse(sf.useProxyForUrl('10.1.1.1'))
++        self.assertFalse(sf.useProxyForUrl('172.16.1.1'))
++        self.assertFalse(sf.useProxyForUrl('192.168.1.1'))
++        self.assertFalse(sf.useProxyForUrl('127.0.0.1'))
++        self.assertFalse(sf.useProxyForUrl('localhost'))
++        self.assertFalse(sf.useProxyForUrl('test.local'))
++        self.assertFalse(sf.useProxyForUrl(proxy_host))
+ 
+-        Returns:
+-            str: Sanitized URL
++    def test_fetchUrl_argument_url_should_return_http_response_as_dict(self):
+         """
+-        pats = {
+-            r'key=\S+': "key=XXX",
+-            r'pass=\S+': "pass=XXX",
+-            r'user=\S+': "user=XXX",
+-            r'password=\S+': "password=XXX"
+-        }
++        Test fetchUrl(self, url, fatal=False, cookies=None, timeout=30,
++                 useragent="SpiderFoot", headers=None, noLog=False,
++                 postData=None, disableContentEncoding=False, sizeLimit=None,
++                 headOnly=False, verify=False)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        ret = url
+-        for pat in pats:
+-            ret = re.sub(pat, pats[pat], ret, re.IGNORECASE)
++        res = sf.fetchUrl("https://spiderfoot.net/")
++        self.assertIsInstance(res, dict)
++        self.assertEqual(res['code'], "200")
++        self.assertNotEqual(res['content'], None)
+ 
+-        return ret
++    def test_fetchUrl_argument_headOnly_should_return_http_response_as_dict(self):
++        """
++        Test fetchUrl(self, url, fatal=False, cookies=None, timeout=30,
++                 useragent="SpiderFoot", headers=None, noLog=False,
++                 postData=None, disableContentEncoding=False, sizeLimit=None,
++                 headOnly=False, verify=False)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-    def isValidLocalOrLoopbackIp(self, ip: str) -> bool:
+-        """Check if the specified IPv4 or IPv6 address is a loopback or local network IP address (IPv4 RFC1918 / IPv6 RFC4192 ULA).
++        res = sf.fetchUrl("https://spiderfoot.net/", headOnly=True)
++        self.assertIsInstance(res, dict)
++        self.assertEqual(res['code'], "301")
++        self.assertEqual(res['content'], None)
+ 
+-        Args:
+-            ip (str): IPv4 or IPv6 address
+-
+-        Returns:
+-            bool: IP address is local or loopback
++    def test_fetchUrl_argument_url_invalid_type_should_return_none(self):
+         """
+-        if not self.validIP(ip) and not self.validIP6(ip):
+-            return False
++        Test fetchUrl(self, url, fatal=False, cookies=None, timeout=30,
++                 useragent="SpiderFoot", headers=None, noLog=False,
++                 postData=None, disableContentEncoding=False, sizeLimit=None,
++                 headOnly=False, verify=False)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if netaddr.IPAddress(ip).is_private():
+-            return True
++        invalid_types = [None, list(), dict(), int()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                res = sf.fetchUrl(invalid_type)
++                self.assertEqual(None, res)
+ 
+-        if netaddr.IPAddress(ip).is_loopback():
+-            return True
++    def test_fetchUrl_argument_url_invalid_url_should_return_None(self):
++        """
++        Test fetchUrl(self, url, fatal=False, cookies=None, timeout=30,
++                 useragent="SpiderFoot", headers=None, noLog=False,
++                 postData=None, disableContentEncoding=False, sizeLimit=None,
++                 headOnly=False, verify=False)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        return False
++        res = sf.fetchUrl("")
++        self.assertEqual(None, res)
+ 
+-    def useProxyForUrl(self, url: str) -> bool:
+-        """Check if the configured proxy should be used to connect to a specified URL.
++        res = sf.fetchUrl("://spiderfoot.net/")
++        self.assertEqual(None, res)
+ 
+-        Args:
+-            url (str): The URL to check
++        res = sf.fetchUrl("file:///etc/hosts")
++        self.assertEqual(None, res)
+ 
+-        Returns:
+-            bool: should the configured proxy be used?
++        res = sf.fetchUrl("irc://spiderfoot.net:6697/")
++        self.assertEqual(None, res)
+ 
+-        Todo:
+-            Allow using TOR only for .onion addresses
++    def test_check_dns_wildcard_invalid_target_should_return_none(self):
+         """
+-        host = self.urlFQDN(url).lower()
++        Test checkDnsWildcard(self, target)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        if not self.opts['_socks1type']:
+-            return False
++        invalid_types = [None, "", list(), dict()]
++        for invalid_type in invalid_types:
++            with self.subTest(invalid_type=invalid_type):
++                check_dns_wildcard = sf.checkDnsWildcard(invalid_type)
++                self.assertIsInstance(check_dns_wildcard, bool)
+ 
+-        proxy_host = self.opts['_socks2addr']
+-
+-        if not proxy_host:
+-            return False
+-
+-        proxy_port = self.opts['_socks3port']
+-
+-        if not proxy_port:
+-            return False
+-
+-        # Never proxy requests to the proxy host
+-        if host == proxy_host.lower():
+-            return False
+-
+-        # Never proxy RFC1918 addresses on the LAN or the local network interface
+-        if self.validIP(host):
+-            if netaddr.IPAddress(host).is_private():
+-                return False
+-            if netaddr.IPAddress(host).is_loopback():
+-                return False
+-
+-        # Never proxy local hostnames
+-        else:
+-            neverProxyNames = ['local', 'localhost']
+-            if host in neverProxyNames:
+-                return False
+-
+-            for s in neverProxyNames:
+-                if host.endswith(s):
+-                    return False
+-
+-        return True
+-
+-    def fetchUrl(
+-        self,
+-        url: str,
+-        cookies: str = None,
+-        timeout: int = 30,
+-        useragent: str = "SpiderFoot",
+-        headers: dict = None,
+-        noLog: bool = False,
+-        postData: str = None,
+-        disableContentEncoding: bool = False,
+-        sizeLimit: int = None,
+-        headOnly: bool = False,
+-        verify: bool = True
+-    ) -> dict:
+-        """Fetch a URL and return the HTTP response as a dictionary.
+-
+-        Args:
+-            url (str): URL to fetch
+-            cookies (str): cookies
+-            timeout (int): timeout
+-            useragent (str): user agent header
+-            headers (dict): headers
+-            noLog (bool): do not log request
+-            postData (str): HTTP POST data
+-            disableContentEncoding (bool): do not UTF-8 encode response body
+-            sizeLimit (int): size threshold
+-            headOnly (bool): use HTTP HEAD method
+-            verify (bool): use HTTPS SSL/TLS verification
+-
+-        Returns:
+-            dict: HTTP response
++    def test_check_dns_wildcard_should_return_a_boolean(self):
+         """
+-        if not url:
+-            return None
++        Test checkDnsWildcard(self, target)
++        """
++        sf = SpiderFoot(self.default_options)
+ 
+-        result = {
+-            'code': None,
+-            'status': None,
+-            'content': None,
+-            'headers': None,
+-            'realurl': url
+-        }
++        check_dns_wildcard = sf.checkDnsWildcard('local')
++        self.assertIsInstance(check_dns_wildcard, bool)
+ 
+-        url = url.strip()
+-
+-        try:
+-            parsed_url = urllib.parse.urlparse(url)
+-        except Exception:
+-            self.debug(f"Could not parse URL: {url}")
+-            return None
+-
+-        if parsed_url.scheme != 'http' and parsed_url.scheme != 'https':
+-            self.debug(f"Invalid URL scheme for URL: {url}")
+-            return None
+-
+-        request_log = []
+-
+-        proxies = dict()
+-        if self.useProxyForUrl(url):
+-            proxies = {
+-                'http': self.socksProxy,
+-                'https': self.socksProxy,
+-            }
+-
+-        header = dict()
+-        btime = time.time()
+-
+-        if isinstance(useragent, list):
+-            header['User-Agent'] = random.SystemRandom().choice(useragent)
+-        else:
+-            header['User-Agent'] = useragent
+-
+-        # Add custom headers
+-        if isinstance(headers, dict):
+-            for k in list(headers.keys()):
+-                header[k] = str(headers[k])
+-
+-        request_log.append(f"proxy={self.socksProxy}")
+-        request_log.append(f"user-agent={header['User-Agent']}")
+-        request_log.append(f"timeout={timeout}")
+-        request_log.append(f"cookies={cookies}")
+-
+-        if sizeLimit or headOnly:
+-            if noLog:
+-                self.debug(f"Fetching (HEAD): {self.removeUrlCreds(url)} ({', '.join(request_log)})")
+-            else:
+-                self.info(f"Fetching (HEAD): {self.removeUrlCreds(url)} ({', '.join(request_log)})")
+-
+-            try:
+-                hdr = self.getSession().head(
+-                    url,
+-                    headers=header,
+-                    proxies=proxies,
+-                    verify=verify,
+-                    timeout=timeout
+-                )
+-            except Exception as e:
+-                if noLog:
+-                    self.debug(f"Unexpected exception ({e}) occurred fetching (HEAD only) URL: {url}", exc_info=True)
+-                else:
+-                    self.error(f"Unexpected exception ({e}) occurred fetching (HEAD only) URL: {url}", exc_info=True)
+-
+-                return result
+-
+-            size = int(hdr.headers.get('content-length', 0))
+-            newloc = hdr.headers.get('location', url).strip()
+-
+-            # Relative re-direct
+-            if newloc.startswith("/") or newloc.startswith("../"):
+-                newloc = SpiderFootHelpers.urlBaseUrl(url) + newloc
+-            result['realurl'] = newloc
+-            result['code'] = str(hdr.status_code)
+-
+-            if headOnly:
+-                return result
+-
+-            if size > sizeLimit:
+-                return result
+-
+-            if result['realurl'] != url:
+-                if noLog:
+-                    self.debug(f"Fetching (HEAD): {self.removeUrlCreds(result['realurl'])} ({', '.join(request_log)})")
+-                else:
+-                    self.info(f"Fetching (HEAD): {self.removeUrlCreds(result['realurl'])} ({', '.join(request_log)})")
+-
+-                try:
+-                    hdr = self.getSession().head(
+-                        result['realurl'],
+-                        headers=header,
+-                        proxies=proxies,
+-                        verify=verify,
+-                        timeout=timeout
+-                    )
+-                    size = int(hdr.headers.get('content-length', 0))
+-                    result['realurl'] = hdr.headers.get('location', result['realurl'])
+-                    result['code'] = str(hdr.status_code)
+-
+-                    if size > sizeLimit:
+-                        return result
+-
+-                except Exception as e:
+-                    if noLog:
+-                        self.debug(f"Unexpected exception ({e}) occurred fetching (HEAD only) URL: {result['realurl']}", exc_info=True)
+-                    else:
+-                        self.error(f"Unexpected exception ({e}) occurred fetching (HEAD only) URL: {result['realurl']}", exc_info=True)
+-
+-                    return result
+-
+-        try:
+-            if postData:
+-                if noLog:
+-                    self.debug(f"Fetching (POST): {self.removeUrlCreds(url)} ({', '.join(request_log)})")
+-                else:
+-                    self.info(f"Fetching (POST): {self.removeUrlCreds(url)} ({', '.join(request_log)})")
+-                res = self.getSession().post(
+-                    url,
+-                    data=postData,
+-                    headers=header,
+-                    proxies=proxies,
+-                    allow_redirects=True,
+-                    cookies=cookies,
+-                    timeout=timeout,
+-                    verify=verify
+-                )
+-            else:
+-                if noLog:
+-                    self.debug(f"Fetching (GET): {self.removeUrlCreds(url)} ({', '.join(request_log)})")
+-                else:
+-                    self.info(f"Fetching (GET): {self.removeUrlCreds(url)} ({', '.join(request_log)})")
+-                res = self.getSession().get(
+-                    url,
+-                    headers=header,
+-                    proxies=proxies,
+-                    allow_redirects=True,
+-                    cookies=cookies,
+-                    timeout=timeout,
+-                    verify=verify
+-                )
+-        except requests.exceptions.RequestException as e:
+-            self.error(f"Failed to connect to {url}: {e}")
+-            return result
+-        except Exception as e:
+-            if noLog:
+-                self.debug(f"Unexpected exception ({e}) occurred fetching URL: {url}", exc_info=True)
+-            else:
+-                self.error(f"Unexpected exception ({e}) occurred fetching URL: {url}", exc_info=True)
+-
+-            return result
+-
+-        try:
+-            result['headers'] = dict()
+-            result['realurl'] = res.url
+-            result['code'] = str(res.status_code)
+-
+-            for header, value in res.headers.items():
+-                result['headers'][str(header).lower()] = str(value)
+-
+-            # Sometimes content exceeds the size limit after decompression
+-            if sizeLimit and len(res.content) > sizeLimit:
+-                self.debug(f"Content exceeded size limit ({sizeLimit}), so returning no data just headers")
+-                return result
+-
+-            refresh_header = result['headers'].get('refresh')
+-            if refresh_header:
+-                try:
+-                    newurl = refresh_header.split(";url=")[1]
+-                except Exception as e:
+-                    self.debug(f"Refresh header '{refresh_header}' found, but not parsable: {e}")
+-                    return result
+-
+-                self.debug(f"Refresh header '{refresh_header}' found, re-directing to {self.removeUrlCreds(newurl)}")
+-
+-                return self.fetchUrl(
+-                    newurl,
+-                    cookies,
+-                    timeout,
+-                    useragent,
+-                    headers,
+-                    noLog,
+-                    postData,
+-                    disableContentEncoding,
+-                    sizeLimit,
+-                    headOnly
+-                )
+-
+-            if disableContentEncoding:
+-                result['content'] = res.content
+-            else:
+-                for encoding in ("utf-8", "ascii"):
+-                    try:
+-                        result["content"] = res.content.decode(encoding)
+-                    except UnicodeDecodeError:
+-                        pass
+-                    else:
+-                        break
+-                else:
+-                    result["content"] = res.content
+-
+-        except Exception as e:
+-            self.error(f"Unexpected exception ({e}) occurred parsing response for URL: {url}", exc_info=True)
+-            result['content'] = None
+-            result['status'] = str(e)
+-
+-        atime = time.time()
+-        t = str(atime - btime)
+-        self.info(f"Fetched {self.removeUrlCreds(url)} ({len(result['content'] or '')} bytes in {t}s)")
+-        return result
+-
+-    def checkDnsWildcard(self, target: str) -> bool:
+-        """Check if wildcard DNS is enabled for a domain by looking up a random subdomain.
+-
+-        Args:
+-            target (str): domain
+-
+-        Returns:
+-            bool: Domain returns DNS records for any subdomains
++    @unittest.skip("todo")
++    def test_google_iterate(self):
+         """
+-        if not target:
+-            return False
+-
+-        randpool = 'bcdfghjklmnpqrstvwxyz3456789'
+-        randhost = ''.join([random.SystemRandom().choice(randpool) for x in range(10)])
+-
+-        if not self.resolveHost(randhost + "." + target):
+-            return False
+-
+-        return True
+-
+-    def cveInfo(self, cveId: str, sources: str = "circl,nist") -> (str, str):
+-        """Look up a CVE ID for more information in the first available source.
+-
+-        Args:
+-            cveId (str): CVE ID, e.g. CVE-2018-15473
+-            sources (str): Comma-separated list of sources to query. Options available are circl and nist
+-
+-        Returns:
+-            (str, str): Appropriate event type and descriptive text
++        Test googleIterate(self, searchString, opts=dict())
+         """
+-        sources = sources.split(",")
+-        # VULNERABILITY_GENERAL is the generic type in case we don't have
+-        # a real/mappable CVE.
+-        eventType = "VULNERABILITY_GENERAL"
++        sf = SpiderFoot(self.default_options)
+ 
+-        def cveRating(score: int) -> str:
+-            if score == "Unknown":
+-                return None
+-            if score >= 0 and score <= 3.9:
+-                return "LOW"
+-            if score >= 4.0 and score <= 6.9:
+-                return "MEDIUM"
+-            if score >= 7.0 and score <= 8.9:
+-                return "HIGH"
+-            if score >= 9.0:
+-                return "CRITICAL"
+-            return None
++        sf.googleIterate(None, None)
++        self.assertEqual('TBD', 'TBD')
+ 
+-        for source in sources:
+-            jsondata = self.cacheGet(f"{source}-{cveId}", 86400)
+-
+-            if not jsondata:
+-                # Fetch data from source
+-                if source == "nist":
+-                    ret = self.fetchUrl(f"https://services.nvd.nist.gov/rest/json/cve/1.0/{cveId}", timeout=5)
+-                if source == "circl":
+-                    ret = self.fetchUrl(f"https://cve.circl.lu/api/cve/{cveId}", timeout=5)
+-
+-                if not ret:
+-                    continue
+-
+-                if not ret['content']:
+-                    continue
+-
+-                self.cachePut(f"{source}-{cveId}", ret['content'])
+-                jsondata = ret['content']
+-
+-            try:
+-                data = json.loads(jsondata)
+-
+-                if source == "circl":
+-                    score = data.get('cvss', 'Unknown')
+-                    rating = cveRating(score)
+-                    if rating:
+-                        eventType = f"VULNERABILITY_CVE_{rating}"
+-                        return (eventType, f"{cveId}\n<SFURL>https://nvd.nist.gov/vuln/detail/{cveId}</SFURL>\n"
+-                                f"Score: {score}\nDescription: {data.get('summary', 'Unknown')}")
+-
+-                if source == "nist":
+-                    try:
+-                        if data['result']['CVE_Items'][0]['impact'].get('baseMetricV3'):
+-                            score = data['result']['CVE_Items'][0]['impact']['baseMetricV3']['cvssV3']['baseScore']
+-                        else:
+-                            score = data['result']['CVE_Items'][0]['impact']['baseMetricV2']['cvssV2']['baseScore']
+-                        rating = cveRating(score)
+-                        if rating:
+-                            eventType = f"VULNERABILITY_CVE_{rating}"
+-                    except Exception:
+-                        score = "Unknown"
+-
+-                    try:
+-                        descr = data['result']['CVE_Items'][0]['cve']['description']['description_data'][0]['value']
+-                    except Exception:
+-                        descr = "Unknown"
+-
+-                    return (eventType, f"{cveId}\n<SFURL>https://nvd.nist.gov/vuln/detail/{cveId}</SFURL>\n"
+-                            f"Score: {score}\nDescription: {descr}")
+-            except BaseException as e:
+-                self.debug(f"Unable to parse CVE response from {source.upper()}: {e}")
+-                continue
+-
+-        return (eventType, f"{cveId}\nScore: Unknown\nDescription: Unknown")
+-
+-    def googleIterate(self, searchString: str, opts: dict = None) -> dict:
+-        """Request search results from the Google API.
+-
+-        Will return a dict:
+-        {
+-          "urls": a list of urls that match the query string,
+-          "webSearchUrl": url for Google results page,
+-        }
+-
+-        Options accepted:
+-            useragent: User-Agent string to use
+-            timeout: API call timeout
+-
+-        Args:
+-            searchString (str): Google search query
+-            opts (dict): TBD
+-
+-        Returns:
+-            dict: Search results as {"webSearchUrl": "URL", "urls": [results]}
++    @unittest.skip("todo")
++    def test_bing_iterate(self):
+         """
+-        if not searchString:
+-            return None
+-
+-        if opts is None:
+-            opts = {}
+-
+-        search_string = searchString.replace(" ", "%20")
+-        params = urllib.parse.urlencode({
+-            "cx": opts["cse_id"],
+-            "key": opts["api_key"],
+-        })
+-
+-        response = self.fetchUrl(
+-            f"https://www.googleapis.com/customsearch/v1?q={search_string}&{params}",
+-            timeout=opts["timeout"],
+-        )
+-
+-        if response['code'] != '200':
+-            self.error("Failed to get a valid response from the Google API")
+-            return None
+-
+-        try:
+-            response_json = json.loads(response['content'])
+-        except ValueError:
+-            self.error("The key 'content' in the Google API response doesn't contain valid JSON.")
+-            return None
+-
+-        if "items" not in response_json:
+-            return None
+-
+-        # We attempt to make the URL params look as authentically human as possible
+-        params = urllib.parse.urlencode({
+-            "ie": "utf-8",
+-            "oe": "utf-8",
+-            "aq": "t",
+-            "rls": "org.mozilla:en-US:official",
+-            "client": "firefox-a",
+-        })
+-
+-        return {
+-            "urls": [str(k['link']) for k in response_json['items']],
+-            "webSearchUrl": f"https://www.google.com/search?q={search_string}&{params}"
+-        }
+-
+-    def bingIterate(self, searchString: str, opts: dict = None) -> dict:
+-        """Request search results from the Bing API.
+-
+-        Will return a dict:
+-        {
+-          "urls": a list of urls that match the query string,
+-          "webSearchUrl": url for bing results page,
+-        }
+-
+-        Options accepted:
+-            count: number of search results to request from the API
+-            useragent: User-Agent string to use
+-            timeout: API call timeout
+-
+-        Args:
+-            searchString (str): Bing search query
+-            opts (dict): TBD
+-
+-        Returns:
+-            dict: Search results as {"webSearchUrl": "URL", "urls": [results]}
++        Test bingIterate(self, searchString, opts=dict())
+         """
+-        if not searchString:
+-            return None
++        sf = SpiderFoot(self.default_options)
+ 
+-        if opts is None:
+-            opts = {}
+-
+-        search_string = searchString.replace(" ", "%20")
+-        params = urllib.parse.urlencode({
+-            "responseFilter": "Webpages",
+-            "count": opts["count"],
+-        })
+-
+-        response = self.fetchUrl(
+-            f"https://api.cognitive.microsoft.com/bing/v7.0/search?q={search_string}&{params}",
+-            timeout=opts["timeout"],
+-            useragent=opts["useragent"],
+-            headers={"Ocp-Apim-Subscription-Key": opts["api_key"]},
+-        )
+-
+-        if response['code'] != '200':
+-            self.error("Failed to get a valid response from the Bing API")
+-            return None
+-
+-        try:
+-            response_json = json.loads(response['content'])
+-        except ValueError:
+-            self.error("The key 'content' in the bing API response doesn't contain valid JSON.")
+-            return None
+-
+-        if ("webPages" in response_json and "value" in response_json["webPages"] and "webSearchUrl" in response_json["webPages"]):
+-            return {
+-                "urls": [result["url"] for result in response_json["webPages"]["value"]],
+-                "webSearchUrl": response_json["webPages"]["webSearchUrl"],
+-            }
+-
+-        return None
+-
+-# end of SpiderFoot class
++        sf.bingIterate(None, None)
++        self.assertEqual('TBD', 'TBD')
+\ No newline at end of file

@@ -1,0 +1,18 @@
+--- cases/repo_d909ae2_7e7cf0b/merge_adjust.py	2026-03-28 15:32:23
++++ cases/repo_d909ae2_7e7cf0b/llm_adjust.py	2026-03-28 15:36:59
+@@ -8,7 +8,7 @@
+ class Convert(object):
+     def __init__(self, encoder, smooth_mask=True, avg_color_adjust=True, **kwargs):
+         self.encoder = encoder
+-        
++         
+         self.use_smooth_mask = smooth_mask
+         self.use_avg_color_adjust = avg_color_adjust
+ 
+@@ -61,4 +61,4 @@
+     def superpose(self,image, new_face, crop):
+         new_image = image.copy()
+         new_image[crop, crop] = new_face
+-        return new_image
++        return new_image
+\ No newline at end of file

@@ -1,0 +1,68 @@
+--- cases/repo_88a3153_a3d7af6/merge_tiktok.py	2026-03-04 20:18:22
++++ cases/repo_88a3153_a3d7af6/llm_tiktok.py	2026-03-04 20:28:51
+@@ -41,13 +41,13 @@
+     def items(self):
+         for tiktok_url in self.posts():
+             tiktok_url = self._sanitize_url(tiktok_url)
+-            data = self._extract_rehydration_data(tiktok_url)
++            data = self._extract_rehydration_data_url(tiktok_url)
+             if "webapp.video-detail" not in data:
+                 # Only /video/ links result in the video-detail dict we need.
+                 # Try again using that form of link.
+                 tiktok_url = self._sanitize_url(
+                     data["seo.abtest"]["canonical"])
+-                data = self._extract_rehydration_data(tiktok_url)
++                data = self._extract_rehydration_data_url(tiktok_url)
+             video_detail = data["webapp.video-detail"]
+ 
+             if not self._check_status_code(video_detail, tiktok_url, "post"):
+@@ -118,8 +118,8 @@
+     def _sanitize_url(self, url):
+         return text.ensure_http_scheme(url.replace("/photo/", "/video/", 1))
+ 
+-    def _extract_rehydration_data(self, url, additional_keys=[], *,
+-                                  has_keys=[]):
++    def _extract_rehydration_data_url(self, url, additional_keys=[], *,
++                                      has_keys=[]):
+         tries = 0
+         while True:
+             try:
+@@ -151,11 +151,11 @@
+                                  self._retries)
+                 self.sleep(self._timeout, "retry")
+ 
+-    def _extract_rehydration_data_user(self, profile_url, additional_keys=()):
++    def _extract_rehydration_data(self, profile_url, additional_keys=()):
+         if profile_url in self.rehydration_data_cache:
+             data = self.rehydration_data_cache[profile_url]
+         else:
+-            data = self._extract_rehydration_data(
++            data = self._extract_rehydration_data_url(
+                 profile_url,
+                 has_keys=["webapp.user-detail", "webapp.app-context"]
+             )
+@@ -207,7 +207,7 @@
+             # from the rehydration data.
+             return user_name
+ 
+-        id = self._extract_rehydration_data_user(
++        id = self._extract_rehydration_data(
+             profile_url, ("userInfo", "user", id_key))
+         return None if match(id) is None else id
+ 
+@@ -415,7 +415,7 @@
+         user_name = self.groups[0]
+         profile_url = f"{self.root}/@{user_name}"
+ 
+-        data = self._extract_rehydration_data_user(
++        data = self._extract_rehydration_data(
+             profile_url, ("userInfo", "user"))
+         data["user"] = data.get("uniqueId", user_name)
+         avatar_url = data.get("avatarLarger") or data.get("avatarMedium") \
+@@ -1383,4 +1383,4 @@
+ 
+     def generate_urls(self):
+         return [(id, f"https://www.tiktok.com/@{name}")
+-                for id, name in self.items.items()]
++                for id, name in self.items.items()]
+\ No newline at end of file

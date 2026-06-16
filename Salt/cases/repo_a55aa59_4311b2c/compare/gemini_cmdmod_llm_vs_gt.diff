@@ -1,0 +1,97 @@
+--- cases/repo_a55aa59_4311b2c/merge_cmdmod.py	2026-02-26 20:30:01
++++ cases/repo_a55aa59_4311b2c/llm_gemini_cmdmod.py	2026-06-02 16:11:30
+@@ -631,7 +631,7 @@
+                output_loglevel=output_loglevel,
+                timeout=timeout,
+                reset_system_locale=reset_system_locale,
+-               ignore_retcode=ignore_retcode,
++               ignore_retcode=False,
+                saltenv=saltenv,
+                use_vt=use_vt)
+ 
+@@ -810,40 +810,40 @@
+             python_shell = True
+     except NameError:
+         pass
+-    ret = _run(cmd,
+-               runas=runas,
+-               cwd=cwd,
+-               stdin=stdin,
+-               shell=shell,
+-               python_shell=python_shell,
+-               env=env,
+-               clean_env=clean_env,
+-               template=template,
+-               rstrip=rstrip,
+-               umask=umask,
+-               output_loglevel=output_loglevel,
+-               timeout=timeout,
+-               reset_system_locale=reset_system_locale,
+-               ignore_retcode=ignore_retcode,
+-               saltenv=saltenv,
+-               use_vt=use_vt)
++    stdout = _run(cmd,
++                  runas=runas,
++                  cwd=cwd,
++                  stdin=stdin,
++                  shell=shell,
++                  python_shell=python_shell,
++                  env=env,
++                  clean_env=clean_env,
++                  template=template,
++                  rstrip=rstrip,
++                  umask=umask,
++                  output_loglevel=output_loglevel,
++                  timeout=timeout,
++                  reset_system_locale=reset_system_locale,
++                  ignore_retcode=ignore_retcode,
++                  saltenv=saltenv,
++                  use_vt=use_vt)
+ 
+     lvl = _check_loglevel(output_loglevel)
+     if lvl is not None:
+-        if not ignore_retcode and ret['retcode'] != 0:
++        if not ignore_retcode and stdout['retcode'] != 0:
+             if lvl < LOG_LEVELS['error']:
+                 lvl = LOG_LEVELS['error']
+             log.error(
+                 'Command {0!r} failed with return code: {1}'
+-                .format(cmd, ret['retcode'])
++                .format(cmd, stdout['retcode'])
+             )
+-        if ret['stdout']:
+-            log.log(lvl, 'stdout: {0}'.format(ret['stdout']))
+-        if ret['stderr']:
+-            log.log(lvl, 'stderr: {0}'.format(ret['stderr']))
+-        if ret['retcode']:
+-            log.log(lvl, 'retcode: {0}'.format(ret['retcode']))
+-    return ret['stdout']
++        if stdout['stdout']:
++            log.log(lvl, 'stdout: {0}'.format(stdout['stdout']))
++        if stdout['stderr']:
++            log.log(lvl, 'stderr: {0}'.format(stdout['stderr']))
++        if stdout['retcode']:
++            log.log(lvl, 'retcode: {0}'.format(stdout['retcode']))
++    return stdout['stdout']
+ 
+ 
+ def run_stderr(cmd,
+@@ -1388,9 +1388,9 @@
+     with salt.utils.fopen(codefile, 'w+t') as fp_:
+         fp_.write(code)
+     cmd = [lang, codefile]
+-    stdout = run(cmd, cwd=cwd, python_shell=False)
++    ret = run(cmd, cwd=cwd, python_shell=False)
+     os.remove(codefile)
+-    return stdout
++    return ret
+ 
+ 
+ def tty(device, echo=None):
+@@ -1519,4 +1519,4 @@
+     if shell in available_shells:
+         return True
+     else:
+-        return False
++        return False
+\ No newline at end of file

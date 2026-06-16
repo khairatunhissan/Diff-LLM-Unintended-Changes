@@ -1,0 +1,18 @@
+--- cases/repo_9e694dd_d2507e1/merge_sfbui.py	2026-03-18 19:07:44
++++ cases/repo_9e694dd_d2507e1/llm_gemini_sfbui.py	2026-06-08 14:56:45
+@@ -1384,7 +1384,7 @@
+         except Exception:
+             return retdata
+ 
+-        for row in scandata:
++        for row in statusdata:
+             if row[0] == "ROOT":
+                 continue
+             lastseen = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(row[2]))
+@@ -1527,4 +1527,4 @@
+         retdata['tree'] = SpiderFootHelpers.dataParentChildToTree(pc)
+         retdata['data'] = datamap
+ 
+-        return retdata
++        return retdata
+\ No newline at end of file

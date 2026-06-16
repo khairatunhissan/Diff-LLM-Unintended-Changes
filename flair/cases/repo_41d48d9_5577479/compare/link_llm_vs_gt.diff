@@ -1,0 +1,1612 @@
+--- cases/repo_41d48d9_5577479/merge_link.py	2026-03-03 00:05:46
++++ cases/repo_41d48d9_5577479/llm_link.py	2026-03-03 00:13:15
+@@ -25,21 +25,26 @@
+         **corpusargs,
+     ):
+         """
+-        Initialize Aquaint Entity Linking corpus introduced in: D. Milne and I. H. Witten.
+-        Learning to link with wikipedia
++        Initialize Aquaint Entity Linking corpus introduced in:
++        D. Milne and I. H. Witten. Learning to link with wikipedia
+         (https://www.cms.waikato.ac.nz/~ihw/papers/08-DNM-IHW-LearningToLinkWithWikipedia.pdf).
+-        If you call the constructor the first time the dataset gets automatically downloaded and transformed in
+-        tab-separated column format (aquaint.txt).
+ 
++        If you call the constructor the first time the dataset gets automatically downloaded and
++        transformed in tab-separated column format (aquaint.txt).
++
+         Parameters
+         ----------
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
+-        in_memory: If True, keeps dataset in memory giving speedups in training.
+-        agreement_threshold: Some link annotations come with an agreement_score representing the agreement from the human annotators. The score ranges from lowest 0.2
+-                             to highest 1.0. The lower the score, the less "important" is the entity because fewer annotators thought it was worth linking.
+-                             Default is 0.5 which means the majority of annotators must have annoteted the respective entity mention.
++        in_memory:
++            If True, keeps dataset in memory giving speedups in training.
++        agreement_threshold:
++            Some link annotations come with an agreement_score representing the agreement from the
++            human annotators. The score ranges from lowest 0.2 to highest 1.0. The lower the score,
++            the less "important" is the entity because fewer annotators thought it was worth linking.
++            Default is 0.5 which means the majority of annotators must have annoteted the respective
++            entity mention.
+         """
+         if not base_path:
+             base_path = flair.cache_root / "datasets"
+@@ -52,11 +57,11 @@
+         dataset_name = self.__class__.__name__.lower() + "_" + type(sentence_splitter).__name__
+ 
+         # default dataset folder is the cache root
+-
+         data_folder = base_path / dataset_name
+ 
+         aquaint_el_path = "https://www.nzdl.org/wikification/data/wikifiedStories.zip"
+         corpus_file_name = "aquaint.txt"
++
+         parsed_dataset = data_folder / corpus_file_name
+ 
+         # download and parse data if necessary
+@@ -78,11 +83,10 @@
+ 
+                         # get rid of html syntax, we only need the text
+                         strings = text.split("<p> ")
+-                        strings[0] = strings[0].split('<h1 id="header">')[1][:-7]
+ 
++                        strings[0] = strings[0].split('<h1 id="header">')[1][:-7]
+                         for i in range(1, len(strings) - 1):
+                             strings[i] = strings[i][:-7]
+-
+                         strings[-1] = strings[-1][:-23]
+ 
+                         # between all documents we write a separator symbol
+@@ -94,35 +98,46 @@
+                             if not string:
+                                 continue
+ 
+-                            # process the annotation format in the text and collect triples (begin_mention, length_mention, wikiname)
++                            # process the annotation format in the text and collect triples
++                            # (begin_mention, length_mention, wikiname)
+                             indices = []
+                             lengths = []
+                             wikinames = []
+ 
+-                            current_entity = string.find("[[")  # each annotation starts with '[['
++                            current_entity = string.find("[[")
++
++                            # each annotation starts with '[['
+                             while current_entity != -1:
++
+                                 wikiname = ""
+                                 surface_form = ""
+-                                j = current_entity + 2
+ 
++                                j = current_entity + 2
+                                 while string[j] not in ["]", "|"]:
+                                     wikiname += string[j]
+                                     j += 1
+ 
+-                                if string[j] == "]":  # entity mention ends, i.e. looks like this [[wikiname]]
++                                if string[j] == "]":
++                                    # entity mention ends, i.e. looks like this [[wikiname]]
+                                     surface_form = wikiname  # in this case entity mention = wiki-page name
+-                                else:  # string[j] == '|'
++
++                                else:
++                                    # string[j] == '|'
+                                     j += 1
++
+                                     while string[j] not in ["]", "|"]:
+                                         surface_form += string[j]
+                                         j += 1
+ 
+-                                    if (
+-                                        string[j] == "|"
+-                                    ):  # entity has a score, i.e. looks like this [[wikiname|surface_form|agreement_score]]
++                                    if string[j] == "|":
++                                        # entity has a score, i.e. looks like this
++                                        # [[wikiname|surface_form|agreement_score]]
+                                         agreement_score = float(string[j + 1 : j + 4])
+                                         j += 4  # points to first ']' of entity now
+-                                        if agreement_score < self.agreement_threshold:  # discard entity
++
++                                        if agreement_score < self.agreement_threshold:
++
++                                            # discard entity
+                                             string = string[:current_entity] + surface_form + string[j + 2 :]
+                                             current_entity = string.find("[[")
+                                             continue
+@@ -133,7 +148,6 @@
+                                 wikinames.append(wikiname[0].upper() + wikiname.replace(" ", "_")[1:])
+ 
+                                 string = string[:current_entity] + surface_form + string[j + 2 :]
+-
+                                 current_entity = string.find("[[")
+ 
+                             # sentence splitting and tokenization
+@@ -145,6 +159,7 @@
+ 
+                                 # find sentence to which annotation belongs
+                                 sentence_index = 0
++
+                                 for i in range(1, len(sentences)):
+                                     if mention_start < sentence_offsets[i]:
+                                         break
+@@ -160,9 +175,9 @@
+                                 for token in sentences[sentence_index].tokens:
+                                     assert token.start_pos is not None
+                                     assert token.end_pos is not None
+-                                    if (
+-                                        token.start_pos >= mention_start and token.end_pos <= mention_end
+-                                    ):  # token belongs to entity mention
++
++                                    if token.start_pos >= mention_start and token.end_pos <= mention_end:
++                                        # token belongs to entity mention
+                                         if first:
+                                             token.set_label(typename="nel", value="B-" + wikiname)
+                                             first = False
+@@ -173,13 +188,13 @@
+                             for sentence in sentences:
+ 
+                                 for token in sentence.tokens:
+-
+                                     labels = token.get_labels("nel")
+ 
+-                                    if len(labels) == 0:  # no entity
++                                    if len(labels) == 0:
++                                        # no entity
+                                         txt_out.write(token.text + "\tO\n")
+-
+-                                    else:  # annotation
++                                    else:
++                                        # annotation
+                                         txt_out.write(token.text + "\t" + labels[0].value + "\n")
+ 
+                                 txt_out.write("\n")  # empty line after each sentence
+@@ -207,9 +222,10 @@
+         **corpusargs,
+     ):
+         """
+-        Initialize a sentence-segmented version of the HIPE entity linking corpus for historical German (see description
+-        of HIPE at https://impresso.github.io/CLEF-HIPE-2020/). This version was segmented by @stefan-it and is hosted
+-        at https://github.com/stefan-it/clef-hipe.
++        Initialize a sentence-segmented version of the HIPE entity linking corpus for historical German
++        (see description of HIPE at https://impresso.github.io/CLEF-HIPE-2020/). This version was segmented by
++        @stefan-it and is hosted at https://github.com/stefan-it/clef-hipe.
++
+         If you call the constructor the first time the dataset gets automatically downloaded and transformed in
+         tab-separated column format.
+ 
+@@ -218,11 +234,14 @@
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
+-        in_memory: If True, keeps dataset in memory giving speedups in training.
+-        wiki_language : specify the language of the names of the wikipedia pages, i.e. which language version of
+-        Wikipedia URLs to use. Since the text is in german the default language is German.
++        in_memory:
++            If True, keeps dataset in memory giving speedups in training.
++        wiki_language :
++            specify the language of the names of the wikipedia pages, i.e. which language version of Wikipedia URLs to use.
++            Since the text is in german the default language is German.
+         """
+         self.wiki_language = wiki_language
++
+         if not base_path:
+             base_path = flair.cache_root / "datasets"
+         else:
+@@ -230,13 +249,14 @@
+ 
+         # this dataset name
+         dataset_name = self.__class__.__name__.lower()
+-
+         data_folder = base_path / dataset_name
+ 
+         dev_raw_url = "https://raw.githubusercontent.com/stefan-it/clef-hipe/main/data/future/dev-v1.2/de/HIPE-data-v1.2-dev-de-normalized-manual-eos.tsv"
+         test_raw_url = "https://raw.githubusercontent.com/stefan-it/clef-hipe/main/data/future/test-v1.3/de/HIPE-data-v1.3-test-de-normalized-manual-eos.tsv"
+         train_raw_url = "https://raw.githubusercontent.com/stefan-it/clef-hipe/main/data/future/training-v1.2/de/HIPE-data-v1.2-train-de-normalized-manual-eos.tsv"
++
+         train_file_name = wiki_language + "_train.tsv"
++
+         parsed_dataset = data_folder / train_file_name
+ 
+         # download and parse data if necessary
+@@ -250,9 +270,11 @@
+ 
+             # generate qid wikiname dictionaries
+             log.info("Get wikinames from wikidata...")
++
+             train_dict = self._get_qid_wikiname_dict(path=original_train_path)
+             test_dict = self._get_qid_wikiname_dict(original_test_path)
+             dev_dict = self._get_qid_wikiname_dict(original_dev_path)
++
+             log.info("...done!")
+ 
+             # merge dictionaries
+@@ -276,10 +298,13 @@
+                     last_eos = True
+ 
+                     while line:
++
+                         # commented and empty lines
+                         if line[0] == "#" or line == "\n":
+-                            if line[2:13] == "document_id":  # beginning of new document
+ 
++                            if line[2:13] == "document_id":
++
++                                # beginning of new document
+                                 if last_eos:
+                                     write.write("-DOCSTART-\n\n")
+                                     last_eos = False
+@@ -288,27 +313,30 @@
+ 
+                         else:
+                             line_list = line.split("\t")
++
+                             if not line_list[7] in [
+                                 "_",
+                                 "NIL",
+-                            ]:  # line has wikidata link
+-
++                            ]:
++                                # line has wikidata link
+                                 wikiname = qid_wikiname_dict[line_list[7]]
+ 
+                                 if wikiname != "O":
+                                     annotation = line_list[1][:2] + wikiname
+-                                else:  # no entry in chosen language
++                                else:
++                                    # no entry in chosen language
+                                     annotation = "O"
+ 
+                             else:
+-
+                                 annotation = "O"
+ 
+                             write.write(line_list[0] + "\t" + annotation + "\n")
+ 
+-                            if line_list[-1][-4:-1] == "EOS":  # end of sentence
++                            if line_list[-1][-4:-1] == "EOS":
++                                # end of sentence
+                                 write.write("\n")
+                                 last_eos = True
++
+                             else:
+                                 last_eos = False
+ 
+@@ -325,8 +353,8 @@
+         )
+ 
+     def _get_qid_wikiname_dict(self, path):
+-
+         qid_set = set()
++
+         with open(path, mode="r", encoding="utf-8") as read:
+             # read all Q-IDs
+ 
+@@ -335,11 +363,12 @@
+             line = read.readline()
+ 
+             while line:
+-
+-                if not (line[0] == "#" or line == "\n"):  # commented or empty lines
++                if not (line[0] == "#" or line == "\n"):
++                    # commented or empty lines
+                     line_list = line.split("\t")
+-                    if not line_list[7] in ["_", "NIL"]:  # line has wikidata link
+ 
++                    if not line_list[7] in ["_", "NIL"]:
++                        # line has wikidata link
+                         qid_set.add(line_list[7])
+ 
+                 line = read.readline()
+@@ -353,23 +382,25 @@
+         qid_list = list(qid_set)
+         ids = ""
+         length = len(qid_list)
++
+         qid_wikiname_dict = {}
+-        for i in range(length):
+-            if (
+-                i + 1
+-            ) % 50 == 0 or i == length - 1:  # there is a limit to the number of ids in one request in the wikidata api
+ 
++        for i in range(length):
++            if (i + 1) % 50 == 0 or i == length - 1:
++                # there is a limit to the number of ids in one request in the wikidata api
+                 ids += qid_list[i]
++
+                 # request
+                 response_json = requests.get(base_url + ids).json()
+ 
+                 for qid in response_json["entities"]:
+-
+                     try:
+                         wikiname = response_json["entities"][qid]["sitelinks"][self.wiki_language]["title"].replace(
+                             " ", "_"
+                         )
+-                    except KeyError:  # language not available for specific wikiitem
++
++                    except KeyError:
++                        # language not available for specific wikiitem
+                         wikiname = "O"
+ 
+                     qid_wikiname_dict[qid] = wikiname
+@@ -392,18 +423,24 @@
+         **corpusargs,
+     ):
+         """
+-        Initialize AIDA CoNLL-YAGO Entity Linking corpus introduced here https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/research/ambiverse-nlu/aida/downloads.
++        Initialize AIDA CoNLL-YAGO Entity Linking corpus introduced here
++        https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/research/ambiverse-nlu/aida/downloads.
+         License: https://creativecommons.org/licenses/by-sa/3.0/deed.en_US
+-        If you call the constructor the first time the dataset gets automatically downloaded and transformed in tab-separated column format.
+ 
++        If you call the constructor the first time the dataset gets automatically downloaded and transformed in tab-separated
++        column format.
++
+         Parameters
+         ----------
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
+-        in_memory: If True, keeps dataset in memory giving speedups in training.
+-        use_ids_and_check_existence: If True the existence of the given wikipedia ids/pagenames is checked and non existent ids/names will be ignored. This also means that one works with
+-            current wikipedia-arcticle names and possibly alter some of the out-dated ones in the original dataset
++        in_memory:
++            If True, keeps dataset in memory giving speedups in training.
++        use_ids_and_check_existence:
++            If True the existence of the given wikipedia ids/pagenames is checked and non existent ids/names will be ignored.
++            This also means that one works with current wikipedia-arcticle names and possibly alter some of the out-dated ones
++            in the original dataset
+         """
+         if not base_path:
+             base_path = flair.cache_root / "datasets"
+@@ -413,7 +450,6 @@
+         # this dataset name
+         dataset_name = self.__class__.__name__.lower()
+         dataset_name = dataset_name + "_ids" if use_ids_and_check_existence else dataset_name + "_raw"
+-
+         data_folder = base_path / dataset_name
+ 
+         conll_yago_path = "https://nlp.informatik.hu-berlin.de/resources/datasets/conll_entity_linking/"
+@@ -442,37 +478,51 @@
+                     testb_unprocessed_path,
+                 ],
+             ):
+-                with open(data_folder / name, "w", encoding="utf-8") as write, open(
+-                    path, "r", encoding="utf-8"
+-                ) as read:
+ 
++                with open(data_folder / name, "w", encoding="utf-8") as write, open(path, "r", encoding="utf-8") as read:
+                     for line in read:
+ 
+                         line_list = line.split("\t")
++
+                         if len(line_list) <= 4:
+-                            if line_list[0][:10] == "-DOCSTART-":  # Docstart
++
++                            if line_list[0][:10] == "-DOCSTART-":
++                                # Docstart
+                                 write.write("-DOCSTART-\n\n")
+-                            elif line_list[0] == "\n":  # empty line
++
++                            elif line_list[0] == "\n":
++                                # empty line
+                                 write.write("\n")
+-                            else:  # text without annotation or marked '--NME--' (no matching entity)
++
++                            else:
++                                # text without annotation or marked '--NME--' (no matching entity)
+                                 if len(line_list) == 1:
+                                     write.write(line_list[0][:-1] + "\tO\n")
+                                 else:
+                                     write.write(line_list[0] + "\tO\n")
+-                        else:  # line with annotation
++
++                        else:
++                            # line with annotation
+                             if use_ids_and_check_existence:
++
+                                 wikiname = wikiid_wikiname_dict[line_list[5].strip()]
+                                 if wikiname != "O":
+                                     write.write(line_list[0] + "\t" + line_list[1] + "-" + wikiname + "\n")
++
+                                 else:
+                                     # if there is a bad wikiid we can check if the given url in the data exists using wikipediaapi
+                                     wikiname = line_list[4].split("/")[-1]
+                                     page = wiki_wiki.page(wikiname)
++
+                                     if page.exists():
+                                         write.write(line_list[0] + "\t" + line_list[1] + "-" + wikiname + "\n")
+-                                    else:  # neither the wikiid nor the url exist
++
++                                    else:
++                                        # neither the wikiid nor the url exist
+                                         write.write(line_list[0] + "\tO\n")
+-                            else:  # write wikipedia names as given in the file
++
++                            else:
++                                # write wikipedia names as given in the file
+                                 wikiname = line_list[4].split("/")[-1]
+                                 write.write(line_list[0] + "\t" + line_list[1] + "-" + wikiname + "\n")
+ 
+@@ -490,16 +540,20 @@
+         )
+ 
+     def _get_wikiid_wikiname_dict(self, base_folder):
+-
+         # collect all wikiids
+         wikiid_set = set()
++
+         for data_file in ["aida_conll_testa", "aida_conll_testb", "aida_conll_train"]:
+             with open(base_folder / data_file, mode="r", encoding="utf-8") as read:
+                 line = read.readline()
++
+                 while line:
+                     row = line.split("\t")
+-                    if len(row) > 4:  # line has a wiki annotation
++
++                    if len(row) > 4:
++                        # line has a wiki annotation
+                         wikiid_set.add(row[5].strip())
++
+                     line = read.readline()
+ 
+         # create the dictionary
+@@ -509,11 +563,10 @@
+         length = len(wikiid_list)
+ 
+         for i in range(length):
+-            if (
+-                i + 1
+-            ) % 50 == 0 or i == length - 1:  # there is a limit to the number of ids in one request in the wikimedia api
+-
++            if (i + 1) % 50 == 0 or i == length - 1:
++                # there is a limit to the number of ids in one request in the wikimedia api
+                 ids += wikiid_list[i]
++
+                 # request
+                 resp = requests.get(
+                     "https://en.wikipedia.org/w/api.php",
+@@ -528,9 +581,13 @@
+                 for wikiid in resp["query"]["pages"]:
+                     try:
+                         wikiname = resp["query"]["pages"][wikiid]["title"].replace(" ", "_")
+-                    except KeyError:  # bad wikiid
++
++                    except KeyError:
++                        # bad wikiid
+                         wikiname = "O"
++
+                     wikiid_wikiname_dict[wikiid] = wikiname
++
+                 ids = ""
+ 
+             else:
+@@ -550,16 +607,21 @@
+         **corpusargs,
+     ):
+         """
+-        Initialize ITTB Entity Linking corpus introduced in "Collective Annotation of Wikipedia Entities in Web Text" Sayali Kulkarni, Amit Singh, Ganesh Ramakrishnan, and Soumen Chakrabarti.
+-        If you call the constructor the first time the dataset gets automatically downloaded and transformed in tab-separated column format.
++        Initialize ITTB Entity Linking corpus introduced in "Collective Annotation of Wikipedia Entities in Web Text"
++        Sayali Kulkarni, Amit Singh, Ganesh Ramakrishnan, and Soumen Chakrabarti.
+ 
++        If you call the constructor the first time the dataset gets automatically downloaded and transformed in tab-separated
++        column format.
++
+         Parameters
+         ----------
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
+-        in_memory: If True, keeps dataset in memory giving speedups in training.
+-        ignore_disagreements: If True annotations with annotator disagreement will be ignored.
++        in_memory:
++            If True, keeps dataset in memory giving speedups in training.
++        ignore_disagreements:
++            If True annotations with annotator disagreement will be ignored.
+         """
+         if not base_path:
+             base_path = flair.cache_root / "datasets"
+@@ -568,16 +630,15 @@
+ 
+         # this dataset name
+         dataset_name = self.__class__.__name__.lower() + "_" + type(sentence_splitter).__name__
+-
+         data_folder = base_path / dataset_name
+ 
+         iitb_el_docs_path = "https://www.cse.iitb.ac.in/~soumen/doc/CSAW/Annot/CSAW_crawledDocs.tar.gz"
+         iitb_el_annotations_path = "https://www.cse.iitb.ac.in/~soumen/doc/CSAW/Annot/CSAW_Annotations.xml"
++
+         corpus_file_name = "iitb.txt"
+         parsed_dataset = data_folder / corpus_file_name
+ 
+         if not parsed_dataset.exists():
+-
+             docs_zip_path = cached_path(f"{iitb_el_docs_path}", Path("datasets") / dataset_name)
+             annotations_xml_path = cached_path(f"{iitb_el_annotations_path}", Path("datasets") / dataset_name)
+ 
+@@ -596,89 +657,92 @@
+ 
+             # open output_file
+             with open(parsed_dataset, "w", encoding="utf-8") as write:
++
+                 # iterate through all documents
+                 for doc_name in doc_names:
++
+                     with open(data_folder / "crawledDocs" / doc_name, "r", encoding="utf-8") as read:
+                         text = read.read()
+ 
+-                        # split sentences and tokenize
+-                        sentences = sentence_splitter.split(text)
+-                        sentence_offsets = [sentence.start_pos or 0 for sentence in sentences]
++                    # split sentences and tokenize
++                    sentences = sentence_splitter.split(text)
++                    sentence_offsets = [sentence.start_pos or 0 for sentence in sentences]
+ 
+-                        # iterate through all annotations and add to corresponding tokens
+-                        for elem in root:
++                    # iterate through all annotations and add to corresponding tokens
++                    for elem in root:
++                        if elem[0].text == doc_name and elem[2].text:
++                            # annotation belongs to current document
+ 
+-                            if elem[0].text == doc_name and elem[2].text:  # annotation belongs to current document
++                            wikiname = elem[2].text.replace(" ", "_")
+ 
+-                                wikiname = elem[2].text.replace(" ", "_")
+-                                assert elem[3].text is not None
+-                                assert elem[4].text is not None
+-                                mention_start = int(elem[3].text)
+-                                mention_length = int(elem[4].text)
++                            assert elem[3].text is not None
++                            assert elem[4].text is not None
++                            mention_start = int(elem[3].text)
++                            mention_length = int(elem[4].text)
+ 
+-                                # find sentence to which annotation belongs
+-                                sentence_index = 0
+-                                for i in range(1, len(sentences)):
+-                                    if mention_start < sentence_offsets[i]:
+-                                        break
+-                                    else:
+-                                        sentence_index += 1
++                            # find sentence to which annotation belongs
++                            sentence_index = 0
+ 
+-                                # position within corresponding sentence
+-                                mention_start -= sentence_offsets[sentence_index]
+-                                mention_end = mention_start + mention_length
++                            for i in range(1, len(sentences)):
++                                if mention_start < sentence_offsets[i]:
++                                    break
++                                else:
++                                    sentence_index += 1
+ 
+-                                # set annotation for tokens of entity mention
+-                                first = True
+-                                for token in sentences[sentence_index].tokens:
+-                                    assert token.start_pos is not None
+-                                    assert token.end_pos is not None
+-                                    if (
+-                                        token.start_pos >= mention_start and token.end_pos <= mention_end
+-                                    ):  # token belongs to entity mention
+-                                        assert elem[1].text is not None
+-                                        if first:
+-                                            token.set_label(
+-                                                typename=elem[1].text,
+-                                                value="B-" + wikiname,
+-                                            )
+-                                            first = False
+-                                        else:
+-                                            token.set_label(
+-                                                typename=elem[1].text,
+-                                                value="I-" + wikiname,
+-                                            )
++                            # position within corresponding sentence
++                            mention_start -= sentence_offsets[sentence_index]
++                            mention_end = mention_start + mention_length
+ 
+-                        # write to out file
+-                        write.write("-DOCSTART-\n\n")  # each file is one document
++                            # set annotation for tokens of entity mention
++                            first = True
++                            for token in sentences[sentence_index].tokens:
++                                assert token.start_pos is not None
++                                assert token.end_pos is not None
+ 
+-                        for sentence in sentences:
++                                if token.start_pos >= mention_start and token.end_pos <= mention_end:
++                                    # token belongs to entity mention
++                                    assert elem[1].text is not None
++                                    if first:
++                                        token.set_label(
++                                            typename=elem[1].text,
++                                            value="B-" + wikiname,
++                                        )
++                                        first = False
++                                    else:
++                                        token.set_label(
++                                            typename=elem[1].text,
++                                            value="I-" + wikiname,
++                                        )
+ 
+-                            for token in sentence.tokens:
++                    # write to out file
++                    write.write("-DOCSTART-\n\n")  # each file is one document
++                    for sentence in sentences:
+ 
+-                                labels = token.labels
++                        for token in sentence.tokens:
++                            labels = token.labels
+ 
+-                                if len(labels) == 0:  # no entity
+-                                    write.write(token.text + "\tO\n")
++                            if len(labels) == 0:
++                                # no entity
++                                write.write(token.text + "\tO\n")
+ 
+-                                elif len(labels) == 1:  # annotation from one annotator
+-                                    write.write(token.text + "\t" + labels[0].value + "\n")
++                            elif len(labels) == 1:
++                                # annotation from one annotator
++                                write.write(token.text + "\t" + labels[0].value + "\n")
+ 
+-                                else:  # annotations from two annotators
+-
+-                                    if labels[0].value == labels[1].value:  # annotators agree
++                            else:
++                                # annotations from two annotators
++                                if labels[0].value == labels[1].value:
++                                    # annotators agree
++                                    write.write(token.text + "\t" + labels[0].value + "\n")
++                                else:
++                                    # annotators disagree: ignore or arbitrarily take first annotation
++                                    if ignore_disagreements:
++                                        write.write(token.text + "\tO\n")
++                                    else:
+                                         write.write(token.text + "\t" + labels[0].value + "\n")
+ 
+-                                    else:  # annotators disagree: ignore or arbitrarily take first annotation
+-
+-                                        if ignore_disagreements:
+-                                            write.write(token.text + "\tO\n")
++                        write.write("\n")  # empty line after each sentence
+ 
+-                                        else:
+-                                            write.write(token.text + "\t" + labels[0].value + "\n")
+-
+-                            write.write("\n")  # empty line after each sentence
+-
+         super(NEL_ENGLISH_IITB, self).__init__(
+             data_folder,
+             column_format={0: "text", 1: "nel"},
+@@ -696,16 +760,19 @@
+         **corpusargs,
+     ):
+         """
+-        Initialize Tweeki Entity Linking corpus introduced in "Tweeki: Linking Named Entities on Twitter to a Knowledge Graph" Harandizadeh, Singh.
+-        The data consits of tweets with manually annotated wikipedia links.
+-        If you call the constructor the first time the dataset gets automatically downloaded and transformed in tab-separated column format.
++        Initialize Tweeki Entity Linking corpus introduced in "Tweeki: Linking Named Entities on Twitter to a Knowledge Graph"
++        Harandizadeh, Singh. The data consits of tweets with manually annotated wikipedia links.
+ 
++        If you call the constructor the first time the dataset gets automatically downloaded and transformed in tab-separated
++        column format.
++
+         Parameters
+         ----------
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
+-        in_memory: If True, keeps dataset in memory giving speedups in training.
++        in_memory:
++            If True, keeps dataset in memory giving speedups in training.
+         """
+         if not base_path:
+             base_path = flair.cache_root / "datasets"
+@@ -714,7 +781,6 @@
+ 
+         # this dataset name
+         dataset_name = self.__class__.__name__.lower()
+-
+         data_folder = base_path / dataset_name
+ 
+         tweeki_gold_el_path = "https://raw.githubusercontent.com/ucinlp/tweeki/main/data/Tweeki_gold/Tweeki_gold"
+@@ -723,25 +789,26 @@
+ 
+         # download and parse data if necessary
+         if not parsed_dataset.exists():
+-
+             original_file_path = cached_path(f"{tweeki_gold_el_path}", Path("datasets") / dataset_name)
+ 
+-            with open(original_file_path, "r", encoding="utf-8") as read, open(
+-                parsed_dataset, "w", encoding="utf-8"
+-            ) as write:
++            with open(original_file_path, "r", encoding="utf-8") as read, open(parsed_dataset, "w", encoding="utf-8") as write:
+                 line = read.readline()
++
+                 while line:
+                     if line.startswith("#"):
+                         out_line = ""
+-                    elif line == "\n":  # tweet ends
++                    elif line == "\n":
++                        # tweet ends
+                         out_line = "\n-DOCSTART-\n\n"
+                     else:
+                         line_list = line.split("\t")
+                         out_line = line_list[1] + "\t"
+-                        if line_list[3] == "-\n":  # no wiki name
++                        if line_list[3] == "-\n":
++                            # no wiki name
+                             out_line += "O\n"
+                         else:
+                             out_line += line_list[2][:2] + line_list[3].split("|")[0].replace(" ", "_") + "\n"
++
+                     write.write(out_line)
+                     line = read.readline()
+ 
+@@ -764,10 +831,11 @@
+         **corpusargs,
+     ):
+         """
+-        Initialize the Reddit Entity Linking corpus containing gold annotations only (https://arxiv.org/abs/2101.01228v2) in the NER-like column format.
+-        The first time you call this constructor it will automatically download the dataset.
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
++        Initialize the Reddit Entity Linking corpus containing gold annotations only (https://arxiv.org/abs/2101.01228v2)
++        in the NER-like column format. The first time you call this constructor it will automatically download the dataset.
++
++        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this to point
++            to a different folder but typically this should not be necessary.
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -778,7 +846,6 @@
+ 
+         # this dataset name
+         dataset_name = self.__class__.__name__.lower()
+-
+         data_folder = base_path / dataset_name
+ 
+         # download and parse data if necessary
+@@ -791,26 +858,24 @@
+             unpack_file(reddit_el_zip, data_folder, "zip", False)
+ 
+             with open(data_folder / corpus_file_name, "w", encoding="utf-8") as txtout:
+-
+                 # First parse the post titles
+                 with open(data_folder / "posts.tsv", "r", encoding="utf-8") as tsvin1, open(
+                     data_folder / "gold_post_annotations.tsv", "r", encoding="utf-8"
+                 ) as tsvin2:
+-
+                     posts = csv.reader(tsvin1, delimiter="\t")
+                     self.post_annotations = csv.reader(tsvin2, delimiter="\t")
+                     self.curr_annot = next(self.post_annotations)
+ 
+-                    for row in posts:  # Go through all the post titles
+-
++                    for row in posts:
++                        # Go through all the post titles
+                         txtout.writelines("-DOCSTART-\n\n")  # Start each post with a -DOCSTART- token
+ 
+                         # Keep track of how many and which entity mentions does a given post title have
+-                        link_annots = []  # [start pos, end pos, wiki page title] of an entity mention
++                        # link_annots = []  # [start pos, end pos, wiki page title] of an entity mention
++                        link_annots = []
+ 
+                         # Check if the current post title has an entity link and parse accordingly
+                         if row[0] == self.curr_annot[0]:
+-
+                             link_annots.append(
+                                 (
+                                     int(self.curr_annot[4]),
+@@ -826,6 +891,7 @@
+                                 link_annots,
+                                 txtout,
+                             )
++
+                         else:
+                             self._text_to_cols(
+                                 Sentence(row[2], use_tokenizer=True),
+@@ -837,16 +903,15 @@
+                 with open(data_folder / "comments.tsv", "r", encoding="utf-8") as tsvin3, open(
+                     data_folder / "gold_comment_annotations.tsv", "r", encoding="utf-8"
+                 ) as tsvin4:
+-
+                     self.comments = csv.reader(tsvin3, delimiter="\t")
+                     self.comment_annotations = csv.reader(tsvin4, delimiter="\t")
+                     self.curr_annot = next(self.comment_annotations)
++
+                     self.curr_row: Optional[List[str]] = next(self.comments)
+                     self.stop_iter = False
+ 
+                     # Iterate over the comments.tsv file, until the end is reached
+                     while not self.stop_iter:
+-
+                         txtout.writelines("-DOCSTART-\n")  # Start each comment thread with a -DOCSTART- token
+ 
+                         # Keep track of the current comment thread and its corresponding key, on which the annotations are matched.
+@@ -861,6 +926,7 @@
+                                 self.parsed_row = (r.split("\t") for r in self.curr_row[4].split("\n"))
+                                 self.curr_comm = next(self.parsed_row)  # type: ignore
+                             self._fill_curr_comment(fix_flag=True)
++
+                         # In case we are dealing with properly parsed rows, proceed with a regular parsing procedure
+                         else:
+                             self._fill_curr_comment(fix_flag=False)
+@@ -877,19 +943,19 @@
+                                 )
+                             )
+                             link_annots = self._fill_annot_array(link_annots, comm_key, post_flag=False)
++
+                             self._text_to_cols(
+                                 Sentence(self.curr_comm, use_tokenizer=True),
+                                 link_annots,
+                                 txtout,
+                             )
++
+                         else:
+                             # In two of the comment thread a case of capital letter spacing occurs, which the SegtokTokenizer cannot properly handle.
+                             # The following if-elif condition handles these two cases and as result writes full capitalized words in each corresponding row,
+                             # and not just single letters into single rows.
+                             if comm_key == "dv74ybb":
+-                                self.curr_comm = " ".join(
+-                                    [word.replace(" ", "") for word in self.curr_comm.split("  ")]
+-                                )
++                                self.curr_comm = " ".join([word.replace(" ", "") for word in self.curr_comm.split(" ")])
+                             elif comm_key == "eci2lut":
+                                 self.curr_comm = (
+                                     self.curr_comm[:18]
+@@ -918,18 +984,23 @@
+     def _text_to_cols(self, sentence: Sentence, links: list, outfile):
+         """
+         Convert a tokenized sentence into column format
++
+         :param sentence: Flair Sentence object containing a tokenized post title or comment thread
+-        :param links: array containing information about the starting and ending position of an entity mention, as well
+-        as its corresponding wiki tag
++        :param links: array containing information about the starting and ending position of an entity mention,
++            as well as its corresponding wiki tag
+         :param outfile: file, to which the output is written
+         """
+         for i in range(0, len(sentence)):
++
+             # If there are annotated entity mentions for given post title or a comment thread
+             if links:
+                 # Keep track which is the correct corresponding entity link, in cases where there is >1 link in a sentence
+                 link_index = [
+-                    j for j, v in enumerate(links) if (sentence[i].start_pos >= v[0] and sentence[i].end_pos <= v[1])
++                    j
++                    for j, v in enumerate(links)
++                    if (sentence[i].start_pos >= v[0] and sentence[i].end_pos <= v[1])
+                 ]
++
+                 # Write the token with a corresponding tag to file
+                 try:
+                     if any(sentence[i].start_pos == v[0] and sentence[i].end_pos == v[1] for j, v in enumerate(links)):
+@@ -944,6 +1015,7 @@
+                         outfile.writelines(sentence[i].text + "\tI-" + links[link_index[0]][2] + "\n")
+                     else:
+                         outfile.writelines(sentence[i].text + "\tO\n")
++
+                 # IndexError is raised in cases when there is exactly one link in a sentence, therefore can be dismissed
+                 except IndexError:
+                     pass
+@@ -973,45 +1045,55 @@
+     def _fill_annot_array(self, annot_array: list, key: str, post_flag: bool) -> list:
+         """
+         Fills the array containing information about the entity mention annotations, used in the _text_to_cols method
++
+         :param annot_array: array to be filled
+         :param key: reddit id, on which the post title/comment thread is matched with its corresponding annotation
+-        :param post_flag: flag indicating whether the annotations are collected for the post titles (=True)
+-        or comment threads (=False)
++        :param post_flag: flag indicating whether the annotations are collected for the post titles (=True) or comment
++            threads (=False)
+         """
+         next_annot = None
++
+         while True:
+             # Check if further annotations belong to the current post title or comment thread as well
+             try:
+                 next_annot = next(self.post_annotations) if post_flag else next(self.comment_annotations)
++
+                 if next_annot[0] == key:
+                     annot_array.append((int(next_annot[4]), int(next_annot[5]), next_annot[3]))
+                 else:
+                     self.curr_annot = next_annot
+                     break
++
+             # Stop when the end of an annotation file is reached
+             except StopIteration:
+                 break
++
+         return annot_array
+ 
+     def _fill_curr_comment(self, fix_flag: bool):
+         """
+-        Extends the string containing the current comment thread, which is passed to _text_to_cols method, when the
+-        comments are parsed.
++        Extends the string containing the current comment thread, which is passed to _text_to_cols method,
++        when the comments are parsed.
++
+         :param fix_flag: flag indicating whether the method is called when the incorrectly imported rows are parsed (=True)
+-        or regular rows (=False)
++            or regular rows (=False)
+         """
+         next_row = None
++
+         while True:
+             # Check if further annotations belong to the current sentence as well
+             try:
+                 next_row = next(self.comments) if not fix_flag else next(self.parsed_row)
++
+                 if len(next_row) < 2:
+-                    # 'else "  "' is needed to keep the proper token positions (for accordance with annotations)
+-                    self.curr_comm += next_row[0] if any(next_row) else "  "
++                    # 'else " "' is needed to keep the proper token positions (for accordance with annotations)
++                    self.curr_comm += next_row[0] if any(next_row) else " "
+                 else:
+                     self.curr_row = next_row
+                     break
+-            except StopIteration:  # When the end of the comments.tsv file is reached
++
++            except StopIteration:
++                # When the end of the comments.tsv file is reached
+                 self.curr_row = next_row
+                 self.stop_iter = not fix_flag
+                 break
+@@ -1026,6 +1108,7 @@
+ ):
+     """
+     Function that converts the UFSAC format into tab separated column format in a new file.
++
+     Parameters
+     ----------
+     xml_file : Union[str, Path]
+@@ -1038,24 +1121,22 @@
+         Encoding used in open function. The default is "utf8".
+     cut_multisense : bool, optional
+         Boolean that determines whether or not the wn30_key tag should be cut if it contains multiple possible senses.
+-        If True only the first listed sense will be used. Otherwise the whole list of senses will be detected
+-        as one new sense. The default is True.
+-
++        If True only the first listed sense will be used. Otherwise the whole list of senses will be detected as one
++        new sense. The default is True.
+     """
+ 
+     def make_line(word, begin_or_inside, attributes):
+         """
+         Function that creates an output line from a word.
++
+         Parameters
+         ----------
+-        word :
+-            String of the actual word.
+-        begin_or_inside:
+-            Either 'B-' or 'I-'
+-        attributes:
+-            List of attributes of the word (pos, lemma, wn30_key)
++        word : String of the actual word.
++        begin_or_inside: Either 'B-' or 'I-'
++        attributes: List of attributes of the word (pos, lemma, wn30_key)
+         """
+         line = word
++
+         if cut_multisense:
+             attributes[-1] = attributes[-1].split(";")[0]  # take only first sense
+ 
+@@ -1071,14 +1152,12 @@
+     def split_span(word_fields: List[str], datasetname: str):
+         """
+         Function that splits a word if necessary, i.e. if it is a multiple-word-span.
++
+         Parameters
+         ----------
+-        word_fields :
+-            list ['surface_form', 'lemma', 'pos', 'wn30_key'] of a word
+-        datasetname:
+-            name of corresponding dataset
++        word_fields : list ['surface_form', 'lemma', 'pos', 'wn30_key'] of a word
++        datasetname: name of corresponding dataset
+         """
+-
+         span = word_fields[0]
+ 
+         if datasetname in [
+@@ -1086,41 +1165,39 @@
+             "masc",
+         ]:  # splitting not sensible for these datasets
+             return [span]
++
+         elif datasetname == "omsti":
+-            if (
+-                word_fields[3] != "O" and not span == "_" and "__" not in span
+-            ):  # has annotation and does not consist only of '_' (still not 100% clean)
++            if word_fields[3] != "O" and not span == "_" and "__" not in span:
++                # has annotation and does not consist only of '_' (still not 100% clean)
+                 return span.split("_")
+             else:
+                 return [span]
+-        else:  # for all other datasets splitting at '_' is always sensible
++
++        else:
++            # for all other datasets splitting at '_' is always sensible
+             return span.split("_")
+ 
+     txt_out = open(file=conll_file, mode="w", encoding=encoding)
++
+     import xml.etree.ElementTree as ET
+ 
+     tree = ET.parse(xml_file)
+     corpus = tree.getroot()
+ 
+     number_of_docs = len(corpus.findall("document"))
+-
+     fields = ["surface_form", "lemma", "pos", "wn30_key"]
++
+     for document in corpus:
+         # Docstart
+         if number_of_docs > 1:
+             txt_out.write("-DOCSTART-\n\n")
+ 
+         for paragraph in document:
+-
+             for sentence in paragraph:
+-
+                 for word in sentence:
+-
+                     dictionary = word.attrib
+                     fields_of_word = [word.attrib[field] if (field in dictionary) else "O" for field in fields]
+-
+                     chunks = split_span(fields_of_word, datasetname)
+-
+                     txt_out.write(make_line(chunks[0], "B-", fields_of_word[1:]))
+ 
+                     # if there is more than one word in the chunk we write each in a separate line
+@@ -1137,6 +1214,7 @@
+ def determine_tsv_file(filename: str, data_folder: Path, cut_multisense: bool = True):
+     """
+     Checks if the converted .tsv file already exists and if not, creates it. Returns name of the file.
++
+     ----------
+     string : str
+         String that contains the name of the file.
+@@ -1144,27 +1222,24 @@
+         String that contains the name of the folder in which the CoNLL file should reside.
+     cut_multisense : bool, optional
+         Boolean that determines whether or not the wn30_key tag should be cut if it contains multiple possible senses.
+-        If True only the first listed sense will be used. Otherwise the whole list of senses will be detected
+-        as one new sense. The default is True.
++        If True only the first listed sense will be used. Otherwise the whole list of senses will be detected as one
++        new sense. The default is True.
+     """
+ 
+     if cut_multisense is True and filename not in [
+         "semeval2007task17",
+         "trainomatic",
+         "wngt",
+-    ]:  # these three datasets do not have multiple senses
+-
++    ]:
++        # these three datasets do not have multiple senses
+         conll_file_name = filename + "_cut.tsv"
+-
+     else:
+-
+         conll_file_name = filename + ".tsv"
+ 
+     path_to_conll_file = data_folder / conll_file_name
+ 
+     if not path_to_conll_file.exists():
+         # convert the file to CoNLL
+-
+         from_ufsac_to_tsv(
+             xml_file=Path(data_folder / "original_data" / (filename + ".xml")),
+             conll_file=Path(data_folder / conll_file_name),
+@@ -1190,30 +1265,37 @@
+         name: str = "multicorpus",
+     ):
+         """
+-        Initialize a custom corpus with any Word Sense Disambiguation (WSD) datasets in the UFSAC format from https://github.com/getalp/UFSAC.
+-        If the constructor is called for the first time the data is automatically downloaded and transformed from xml to a tab separated column format.
+-        Since only the WordNet 3.0 version for senses is consistently available for all provided datasets we will only consider this version.
+-        Also we ignore the id annotation used in datasets that were originally created for evaluation tasks
++        Initialize a custom corpus with any Word Sense Disambiguation (WSD) datasets in the UFSAC format from
++        https://github.com/getalp/UFSAC. If the constructor is called for the first time the data is automatically
++        downloaded and transformed from xml to a tab separated column format.
++
++        Since only the WordNet 3.0 version for senses is consistently available for all provided datasets we will only
++        consider this version. Also we ignore the id annotation used in datasets that were originally created for
++        evaluation tasks
++
+         :param filenames: Here you can pass a single datasetname or a list of ddatasetnames. The available names are:
+-            'masc', 'omsti', 'raganato_ALL', 'raganato_semeval2007', 'raganato_semeval2013', 'raganato_semeval2015', 'raganato_senseval2', 'raganato_senseval3',
+-            'semcor', 'semeval2007task17', 'semeval2007task7', 'semeval2013task12', 'semeval2015task13', 'senseval2', 'senseval2_lexical_sample_test',
+-            'senseval2_lexical_sample_train', 'senseval3task1', 'senseval3task6_test', 'senseval3task6_train', 'trainomatic', 'wngt'.
+-            So you can pass for example filenames = ['masc', 'omsti', 'wngt']. Default two mid-sized datasets 'masc' and 'semcor' are loaded.
++            'masc', 'omsti', 'raganato_ALL', 'raganato_semeval2007', 'raganato_semeval2013', 'raganato_semeval2015',
++            'raganato_senseval2', 'raganato_senseval3', 'semcor', 'semeval2007task17', 'semeval2007task7',
++            'semeval2013task12', 'semeval2015task13', 'senseval2', 'senseval2_lexical_sample_test',
++            'senseval2_lexical_sample_train', 'senseval3task1', 'senseval3task6_test', 'senseval3task6_train',
++            'trainomatic', 'wngt'. So you can pass for example filenames = ['masc', 'omsti', 'wngt'].
++            Default two mid-sized datasets 'masc' and 'semcor' are loaded.
+         :param base_path: You can override this to point to a specific folder but typically this should not be necessary.
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        :param cut_multisense: Boolean that determines whether or not the wn30_key tag should be cut if it contains
+-                               multiple possible senses. If True only the first listed sense will be used and the
+-                               suffix '_cut' will be added to the name of the CoNLL file. Otherwise the whole list of
+-                               senses will be detected as one new sense. The default is True.
+-        :param columns: Columns to consider when loading the dataset. You can add 1: "lemma" or 2: "pos" to the default dict {0: "text", 3: "sense"}
+-            if you want to use additional pos and/or lemma for the words.
+-        :param banned_sentences: Optionally remove sentences from the corpus. Works only if `in_memory` is true
+-        :param sample_missing_splits_in_multicorpus: Whether to sample missing splits when loading the multicorpus (this is redundant if
+-                                                                                                                    sample_missing_splits_in_each_corpus is True)
+-        :param sample_missing_splits_in_each_corpus: Whether to sample missing splits when loading each single corpus given in filenames.
+-        :param use_raganato_ALL_as_test_data: If True, the raganato_ALL dataset (Raganato et al. "Word Sense Disambiguation: A unified evaluation framework and empirical compariso")
+-            will be used as test data. Note that the sample_missing_splits parameters are set to 'only_dev' in this case if set to True.
++        :param cut_multisense: Boolean that determines whether or not the wn30_key tag should be cut if it contains multiple
++            possible senses. If True only the first listed sense will be used and the suffix '_cut' will be added to the name
++            of the CoNLL file. Otherwise the whole list of senses will be detected as one new sense. The default is True.
++        :param columns: Columns to consider when loading the dataset. You can add 1: "lemma" or 2: "pos" to the default dict
++            {0: "text", 3: "sense"} if you want to use additional pos and/or lemma for the words.
++        :param banned_sentences: Optionally remove sentences from the corpus. Works only if in_memory is true
++        :param sample_missing_splits_in_multicorpus: Whether to sample missing splits when loading the multicorpus (this is
++            redundant if sample_missing_splits_in_each_corpus is True)
++        :param sample_missing_splits_in_each_corpus: Whether to sample missing splits when loading each single corpus given in
++            filenames.
++        :param use_raganato_ALL_as_test_data: If True, the raganato_ALL dataset (Raganato et al. "Word Sense Disambiguation:
++            A unified evaluation framework and empirical compariso") will be used as test data. Note that the
++            sample_missing_splits parameters are set to 'only_dev' in this case if set to True.
+         :param name: Name of your (costum) corpus
+         """
+         if not base_path:
+@@ -1223,7 +1305,6 @@
+ 
+         # this dataset name
+         dataset_name = self.__class__.__name__.lower()
+-
+         data_folder = base_path / dataset_name
+         original_data_folder = data_folder / "original_data"
+ 
+@@ -1236,18 +1317,14 @@
+             import gdown
+ 
+             url = "https://drive.google.com/uc?id=1Oigo3kzRosz2VjyA44vpJZ58tDFyLRMO"
+-
+             output = data_folder / (dataset_name + ".tar")
+-
+             gdown.download(url, str(output), quiet=False)
+-
+             output = data_folder / (dataset_name + ".tar")
+-            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+ 
++            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+             os.rename(data_folder / "ufsac-public-2.1", original_data_folder)
+ 
+         # transform data into column format if necessary
+-
+         # if no filenames are specified we use all the data
+         if not filenames:
+             filenames = [name[:-4] for name in os.listdir(original_data_folder) if "raganato" not in name]
+@@ -1256,11 +1333,11 @@
+             filenames = [filenames]
+ 
+         corpora: List[Corpus] = []
+-
+         log.info("Transforming data into column format and creating corpora...")
+ 
+         if use_raganato_ALL_as_test_data:
+-            # in this case no test data should be generated by sampling from train data. But if the sample arguments are set to true, the dev set will be sampled
++            # in this case no test data should be generated by sampling from train data.
++            # But if the sample arguments are set to true, the dev set will be sampled
+             if sample_missing_splits_in_each_corpus:
+                 sample_missing_splits_in_each_corpus = "only_dev"
+             if sample_missing_splits_in_multicorpus:
+@@ -1288,11 +1365,11 @@
+                 autofind_splits=False,
+                 sample_missing_splits=sample_missing_splits_in_each_corpus,
+             )
++
+             corpora.append(corpus)
+ 
+         for filename in filenames:
+             # make column file and save to data_folder
+-
+             new_filename = determine_tsv_file(
+                 filename=filename,
+                 data_folder=data_folder,
+@@ -1310,7 +1387,9 @@
+                 autofind_splits=False,
+                 sample_missing_splits=sample_missing_splits_in_each_corpus,
+             )
++
+             corpora.append(corpus)
++
+         log.info("Done with transforming data into column format and creating corpora...")
+ 
+         super(WSD_UFSAC, self).__init__(
+@@ -1326,13 +1405,16 @@
+         base_path: Union[str, Path] = None,
+         in_memory: bool = True,
+         columns={0: "text", 3: "sense"},
++        tag_to_bioes=None,
+         label_name_map: Dict[str, str] = None,
+         banned_sentences: List[str] = None,
+         sample_missing_splits: bool = True,
+         cut_multisense: bool = True,
+     ):
+         """
+-        Initialize ragnato_ALL (concatenation of all SensEval and SemEval all-words tasks) provided in UFSAC https://github.com/getalp/UFSAC
++        Initialize ragnato_ALL (concatenation of all SensEval and SemEval all-words tasks) provided in UFSAC
++        https://github.com/getalp/UFSAC
++
+         When first initializing the corpus the whole UFSAC data is downloaded.
+         """
+         if not base_path:
+@@ -1341,12 +1423,12 @@
+             base_path = Path(base_path)
+ 
+         dataset_name = "wsd_ufsac"
+-
+         data_folder = base_path / dataset_name
+         original_data_folder = data_folder / "original_data"
+ 
+         # We check if the the UFSAC data has already been downloaded. If not, we download it.
+-        # Note that this downloads more datasets than just SemCor. But the size of the download is only around 190 Mb (around 4.5 Gb unpacked)
++        # Note that this downloads more datasets than just SemCor. But the size of the download is only around 190 Mb
++        # (around 4.5 Gb unpacked)
+         if not original_data_folder.exists():
+             # create folder
+             data_folder.mkdir(parents=True)
+@@ -1355,14 +1437,11 @@
+             import gdown
+ 
+             url = "https://drive.google.com/uc?id=1Oigo3kzRosz2VjyA44vpJZ58tDFyLRMO"
+-
+             output = data_folder / (dataset_name + ".tar")
+-
+             gdown.download(url, str(output), quiet=False)
+-
+             output = data_folder / (dataset_name + ".tar")
+-            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+ 
++            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+             os.rename(data_folder / "ufsac-public-2.1", original_data_folder)
+ 
+         train_file = determine_tsv_file(
+@@ -1379,6 +1458,7 @@
+             document_separator_token="-DOCSTART-",
+             column_delimiter="\t",
+             autofind_splits=False,
++            tag_to_bioes=tag_to_bioes,
+             label_name_map=label_name_map,
+             banned_sentences=banned_sentences,
+             sample_missing_splits=sample_missing_splits,
+@@ -1391,6 +1471,7 @@
+         base_path: Union[str, Path] = None,
+         in_memory: bool = True,
+         columns={0: "text", 3: "sense"},
++        tag_to_bioes=None,
+         label_name_map: Dict[str, str] = None,
+         banned_sentences: List[str] = None,
+         sample_missing_splits: Union[bool, str] = True,
+@@ -1407,12 +1488,12 @@
+             base_path = Path(base_path)
+ 
+         dataset_name = "wsd_ufsac"
+-
+         data_folder = base_path / dataset_name
+         original_data_folder = data_folder / "original_data"
+ 
+         # We check if the the UFSAC data has already been downloaded. If not, we download it.
+-        # Note that this downloads more datasets than just SemCor. But the size of the download is only around 190 Mb (around 4.5 Gb unpacked)
++        # Note that this downloads more datasets than just SemCor. But the size of the download is only around 190 Mb
++        # (around 4.5 Gb unpacked)
+         if not original_data_folder.exists():
+             # create folder
+             data_folder.mkdir(parents=True)
+@@ -1421,18 +1502,16 @@
+             import gdown
+ 
+             url = "https://drive.google.com/uc?id=1Oigo3kzRosz2VjyA44vpJZ58tDFyLRMO"
+-
+             output = data_folder / (dataset_name + ".tar")
+-
+             gdown.download(url, str(output), quiet=False)
+-
+             output = data_folder / (dataset_name + ".tar")
+-            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+ 
++            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+             os.rename(data_folder / "ufsac-public-2.1", original_data_folder)
+ 
+         if use_raganato_ALL_as_test_data:
+-            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true, the dev set will be sampled.
++            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true,
++            # the dev set will be sampled.
+             if sample_missing_splits:
+                 sample_missing_splits = "only_dev"
+ 
+@@ -1442,6 +1521,7 @@
+                 data_folder=data_folder,
+                 cut_multisense=cut_multisense,
+             )
++
+         else:
+             test_file = None
+ 
+@@ -1456,6 +1536,7 @@
+             document_separator_token="-DOCSTART-",
+             column_delimiter="\t",
+             autofind_splits=False,
++            tag_to_bioes=tag_to_bioes,
+             label_name_map=label_name_map,
+             banned_sentences=banned_sentences,
+             sample_missing_splits=sample_missing_splits,
+@@ -1468,6 +1549,7 @@
+         base_path: Union[str, Path] = None,
+         in_memory: bool = True,
+         columns={0: "text", 3: "sense"},
++        tag_to_bioes=None,
+         label_name_map: Dict[str, str] = None,
+         banned_sentences: List[str] = None,
+         sample_missing_splits: Union[bool, str] = True,
+@@ -1483,12 +1565,12 @@
+             base_path = Path(base_path)
+ 
+         dataset_name = "wsd_ufsac"
+-
+         data_folder = base_path / dataset_name
+         original_data_folder = data_folder / "original_data"
+ 
+         # We check if the the UFSAC data has already been downloaded. If not, we download it.
+-        # Note that this downloads more datasets than just WordNet Gloss Tagged. But the size of the download is only around 190 Mb (around 4.5 Gb unpacked)
++        # Note that this downloads more datasets than just WordNet Gloss Tagged. But the size of the download is only around
++        # 190 Mb (around 4.5 Gb unpacked)
+         if not original_data_folder.exists():
+             # create folder
+             data_folder.mkdir(parents=True)
+@@ -1497,18 +1579,16 @@
+             import gdown
+ 
+             url = "https://drive.google.com/uc?id=1Oigo3kzRosz2VjyA44vpJZ58tDFyLRMO"
+-
+             output = data_folder / (dataset_name + ".tar")
+-
+             gdown.download(url, str(output), quiet=False)
+-
+             output = data_folder / (dataset_name + ".tar")
+-            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+ 
++            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+             os.rename(data_folder / "ufsac-public-2.1", original_data_folder)
+ 
+         if use_raganato_ALL_as_test_data:
+-            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true, the dev set will be sampled.
++            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true,
++            # the dev set will be sampled.
+             if sample_missing_splits:
+                 sample_missing_splits = "only_dev"
+ 
+@@ -1518,7 +1598,9 @@
+             test_file = None
+ 
+         train_file = determine_tsv_file(
+-            filename="wngt", data_folder=data_folder, cut_multisense=False
++            filename="wngt",
++            data_folder=data_folder,
++            cut_multisense=False,
+         )  # does not have multisense!
+ 
+         super(WSD_WORDNET_GLOSS_TAGGED, self).__init__(
+@@ -1530,6 +1612,7 @@
+             document_separator_token="-DOCSTART-",
+             column_delimiter="\t",
+             autofind_splits=False,
++            tag_to_bioes=tag_to_bioes,
+             label_name_map=label_name_map,
+             banned_sentences=banned_sentences,
+             sample_missing_splits=sample_missing_splits,
+@@ -1542,6 +1625,7 @@
+         base_path: Union[str, Path] = None,
+         in_memory: bool = True,
+         columns={0: "text", 3: "sense"},
++        tag_to_bioes=None,
+         label_name_map: Dict[str, str] = None,
+         banned_sentences: List[str] = None,
+         sample_missing_splits: Union[bool, str] = True,
+@@ -1558,13 +1642,13 @@
+             base_path = Path(base_path)
+ 
+         dataset_name = "wsd_ufsac"
+-
+         # default dataset folder is the cache root
+         data_folder = base_path / dataset_name
+         original_data_folder = data_folder / "original_data"
+ 
+         # We check if the the UFSAC data has already been downloaded. If not, we download it.
+-        # Note that this downloads more datasets than just MASC. But the size of the download is only around 190 Mb (around 4.5 Gb unpacked)
++        # Note that this downloads more datasets than just MASC. But the size of the download is only around 190 Mb
++        # (around 4.5 Gb unpacked)
+         if not original_data_folder.exists():
+             # create folder
+             data_folder.mkdir(parents=True)
+@@ -1573,18 +1657,16 @@
+             import gdown
+ 
+             url = "https://drive.google.com/uc?id=1Oigo3kzRosz2VjyA44vpJZ58tDFyLRMO"
+-
+             output = data_folder / (dataset_name + ".tar")
+-
+             gdown.download(url, str(output), quiet=False)
+-
+             output = data_folder / (dataset_name + ".tar")
+-            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+ 
++            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+             os.rename(data_folder / "ufsac-public-2.1", original_data_folder)
+ 
+         if use_raganato_ALL_as_test_data:
+-            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true, the dev set will be sampled.
++            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true,
++            # the dev set will be sampled.
+             if sample_missing_splits:
+                 sample_missing_splits = "only_dev"
+ 
+@@ -1594,6 +1676,7 @@
+                 data_folder=data_folder,
+                 cut_multisense=cut_multisense,
+             )
++
+         else:
+             test_file = None
+ 
+@@ -1608,6 +1691,7 @@
+             document_separator_token="-DOCSTART-",
+             column_delimiter="\t",
+             autofind_splits=False,
++            tag_to_bioes=tag_to_bioes,
+             label_name_map=label_name_map,
+             banned_sentences=banned_sentences,
+             sample_missing_splits=sample_missing_splits,
+@@ -1620,6 +1704,7 @@
+         base_path: Union[str, Path] = None,
+         in_memory: bool = True,
+         columns={0: "text", 3: "sense"},
++        tag_to_bioes=None,
+         label_name_map: Dict[str, str] = None,
+         banned_sentences: List[str] = None,
+         sample_missing_splits: Union[bool, str] = True,
+@@ -1636,14 +1721,13 @@
+             base_path = Path(base_path)
+ 
+         dataset_name = "wsd_ufsac"
+-
+         # default dataset folder is the cache root
+-
+         data_folder = base_path / dataset_name
+         original_data_folder = data_folder / "original_data"
+ 
+         # We check if the the UFSAC data has already been downloaded. If not, we download it.
+-        # Note that this downloads more datasets than just OMSTI. But the size of the download is only around 190 Mb (around 4.5 Gb unpacked)
++        # Note that this downloads more datasets than just OMSTI. But the size of the download is only around 190 Mb
++        # (around 4.5 Gb unpacked)
+         if not original_data_folder.exists():
+             # create folder
+             data_folder.mkdir(parents=True)
+@@ -1652,18 +1736,16 @@
+             import gdown
+ 
+             url = "https://drive.google.com/uc?id=1Oigo3kzRosz2VjyA44vpJZ58tDFyLRMO"
+-
+             output = data_folder / (dataset_name + ".tar")
+-
+             gdown.download(url, str(output), quiet=False)
+-
+             output = data_folder / (dataset_name + ".tar")
+-            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+ 
++            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+             os.rename(data_folder / "ufsac-public-2.1", original_data_folder)
+ 
+         if use_raganato_ALL_as_test_data:
+-            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true, the dev set will be sampled.
++            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true,
++            # the dev set will be sampled.
+             if sample_missing_splits:
+                 sample_missing_splits = "only_dev"
+ 
+@@ -1673,6 +1755,7 @@
+                 data_folder=data_folder,
+                 cut_multisense=cut_multisense,
+             )
++
+         else:
+             test_file = None
+ 
+@@ -1687,6 +1770,7 @@
+             document_separator_token="-DOCSTART-",
+             column_delimiter="\t",
+             autofind_splits=False,
++            tag_to_bioes=tag_to_bioes,
+             label_name_map=label_name_map,
+             banned_sentences=banned_sentences,
+             sample_missing_splits=sample_missing_splits,
+@@ -1699,6 +1783,7 @@
+         base_path: Union[str, Path] = None,
+         in_memory: bool = True,
+         columns={0: "text", 3: "sense"},
++        tag_to_bioes=None,
+         label_name_map: Dict[str, str] = None,
+         banned_sentences: List[str] = None,
+         sample_missing_splits: Union[bool, str] = True,
+@@ -1714,14 +1799,13 @@
+             base_path = Path(base_path)
+ 
+         dataset_name = "wsd_ufsac"
+-
+         # default dataset folder is the cache root
+-
+         data_folder = base_path / dataset_name
+         original_data_folder = data_folder / "original_data"
+ 
+         # We check if the the UFSAC data has already been downloaded. If not, we download it.
+-        # Note that this downloads more datasets than just Train-O-Matic. But the size of the download is only around 190 Mb (around 4.5 Gb unpacked)
++        # Note that this downloads more datasets than just Train-O-Matic. But the size of the download is only around 190 Mb
++        # (around 4.5 Gb unpacked)
+         if not original_data_folder.exists():
+             # create folder
+             data_folder.mkdir(parents=True)
+@@ -1730,28 +1814,29 @@
+             import gdown
+ 
+             url = "https://drive.google.com/uc?id=1Oigo3kzRosz2VjyA44vpJZ58tDFyLRMO"
+-
+             output = data_folder / (dataset_name + ".tar")
+-
+             gdown.download(url, str(output), quiet=False)
+-
+             output = data_folder / (dataset_name + ".tar")
+-            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+ 
++            unpack_file(file=output, unpack_to=data_folder, mode="tar", keep=False)
+             os.rename(data_folder / "ufsac-public-2.1", original_data_folder)
+ 
+         if use_raganato_ALL_as_test_data:
+-            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true, the dev set will be sampled.
++            # in this case no test data should be generated by sampling from train data. But if sample_missing_splits is true,
++            # the dev set will be sampled.
+             if sample_missing_splits:
+                 sample_missing_splits = "only_dev"
+ 
+             # generate the test file
+             test_file = determine_tsv_file(filename="raganato_ALL", data_folder=data_folder, cut_multisense=True)
++
+         else:
+             test_file = None
+ 
+         train_file = determine_tsv_file(
+-            filename="trainomatic", data_folder=data_folder, cut_multisense=False
++            filename="trainomatic",
++            data_folder=data_folder,
++            cut_multisense=False,
+         )  # no multisenses
+ 
+         super(WSD_TRAINOMATIC, self).__init__(
+@@ -1763,7 +1848,8 @@
+             document_separator_token="-DOCSTART-",
+             column_delimiter="\t",
+             autofind_splits=False,
++            tag_to_bioes=tag_to_bioes,
+             label_name_map=label_name_map,
+             banned_sentences=banned_sentences,
+             sample_missing_splits=sample_missing_splits,
+-        )
++        )
+\ No newline at end of file

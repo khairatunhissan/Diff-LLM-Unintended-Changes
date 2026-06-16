@@ -1,0 +1,16 @@
+diff --git a/salt/modules/cmdmod.py b/salt/modules/cmdmod.py
+index 86e9d12bc8..fa3bdbfb19 100644
+--- a/salt/modules/cmdmod.py
++++ b/salt/modules/cmdmod.py
+@@ -1388,9 +1388,9 @@ def exec_code(lang, code, cwd=None):
+     with salt.utils.fopen(codefile, 'w+t') as fp_:
+         fp_.write(code)
+     cmd = [lang, codefile]
+-    ret = run(cmd, cwd=cwd, python_shell=False)
++    stdout = run(cmd, cwd=cwd, python_shell=False)
+     os.remove(codefile)
+-    return ret
++    return stdout
+ 
+ 
+ def tty(device, echo=None):

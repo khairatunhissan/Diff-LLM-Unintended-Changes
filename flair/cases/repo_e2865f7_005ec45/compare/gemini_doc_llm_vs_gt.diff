@@ -1,0 +1,52 @@
+--- cases/repo_e2865f7_005ec45/merge_doc.py	2026-03-03 00:27:28
++++ cases/repo_e2865f7_005ec45/llm_gemini_doc.py	2026-06-07 21:56:46
+@@ -350,7 +350,7 @@
+                 t = pre_allocated_zero_tensor[: self.embeddings.embedding_length * nb_padding_tokens]
+                 all_embs.append(t)
+ 
+-        sentence_tensor = torch.cat(all_embs).view(
++        all_embs_tensor = torch.cat(all_embs).view(
+             [
+                 len(sentences),
+                 longest_token_sequence_in_batch,
+@@ -360,18 +360,18 @@
+ 
+         # before-RNN dropout
+         if self.dropout:
+-            sentence_tensor = self.dropout(sentence_tensor)
+-        if self.locked_dropout:
+-            sentence_tensor = self.locked_dropout(sentence_tensor)
++            all_embs_tensor = self.dropout(all_embs_tensor)
++        if self.locked_dropout:
++            all_embs_tensor = self.locked_dropout(all_embs_tensor)
+         if self.word_dropout:
+-            sentence_tensor = self.word_dropout(sentence_tensor)
++            all_embs_tensor = self.word_dropout(all_embs_tensor)
+ 
+         # reproject if set
+         if self.reproject_words:
+-            sentence_tensor = self.word_reprojection_map(sentence_tensor)
++            all_embs_tensor = self.word_reprojection_map(all_embs_tensor)
+ 
+         # push through RNN
+-        packed = pack_padded_sequence(sentence_tensor, lengths, enforce_sorted=False, batch_first=True)
++        packed = pack_padded_sequence(all_embs_tensor, lengths, enforce_sorted=False, batch_first=True)
+         rnn_out, hidden = self.rnn(packed)
+         outputs, output_lengths = pad_packed_sequence(rnn_out, batch_first=True)
+ 
+@@ -438,7 +438,7 @@
+     @classmethod
+     def from_params(cls, params: dict[str, Any]) -> "DocumentRNNEmbeddings":
+         stacked_embeddings = load_embeddings(params["embeddings"])
+-        assert isinstance(stacked_embeddings, StackedEmbeddings)
++        assert isinstance(stacked_embeddings, StackedEmbedembeddings)
+         return cls(
+             embeddings=stacked_embeddings.embeddings,
+             hidden_size=params["hidden_size"],
+@@ -771,4 +771,4 @@
+             "word_dropout": 0.0 if self.word_dropout is None else self.word_dropout.p,
+             "locked_dropout": 0.0 if self.locked_dropout is None else self.locked_dropout.dropout_rate,
+             "fine_tune": not self.static_embeddings,
+-        }
++        }
+\ No newline at end of file

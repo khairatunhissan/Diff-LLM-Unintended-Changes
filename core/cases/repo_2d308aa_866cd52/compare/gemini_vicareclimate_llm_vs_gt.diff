@@ -1,0 +1,9 @@
+--- cases/repo_2d308aa_866cd52/merge_vicareclimate.py	2026-02-27 23:00:01
++++ cases/repo_2d308aa_866cd52/llm_gemini_vicareclimate.py	2026-06-03 14:48:23
+@@ -343,4 +343,4 @@
+         if vicare_mode not in self._attributes["vicare_modes"]:
+             raise ValueError(f"Cannot set invalid vicare mode: {vicare_mode}.")
+ 
+-        self._api.setMode(vicare_mode)
++        self._api.setMode(vicare_mode)
+\ No newline at end of file

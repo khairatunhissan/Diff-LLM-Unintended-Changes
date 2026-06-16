@@ -1,0 +1,18 @@
+--- cases/repo_f9d18a8_d5da743/merge_client.py	2026-03-28 17:30:57
++++ cases/repo_f9d18a8_d5da743/llm_gemini_client.py	2026-06-09 12:03:23
+@@ -60,7 +60,7 @@
+ 
+     ```
+     >>> client = httpx.Client()
+-    >>> response = client.get('https://example.org')
++    >>> response = client.get('[https://example.org](https://example.org)')
+     ```
+ 
+     **Parameters:**
+@@ -956,4 +956,4 @@
+     ) -> None:
+         await self.response.aclose()
+         if self.close_client:
+-            await self.client.aclose()
++            await self.client.aclose()
+\ No newline at end of file

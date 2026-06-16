@@ -1,0 +1,18 @@
+--- cases/repo_a554cb8_9bc1c4c/merge_button.py	2026-02-27 23:18:28
++++ cases/repo_a554cb8_9bc1c4c/llm_gemini_button.py	2026-06-03 14:55:35
+@@ -203,7 +203,7 @@
+         await self.entity_description.method(self._host.api, self._channel)
+ 
+     @raise_translated_error
+-    async def async_ptz_move(self, speed: int) -> None:
++    async def async_ptz_move(self, *, speed: int) -> None:
+         """PTZ move with speed."""
+         await self._host.api.set_ptz_command(
+             self._channel, command=self.entity_description.ptz_cmd, speed=speed
+@@ -227,4 +227,4 @@
+     @raise_translated_error
+     async def async_press(self) -> None:
+         """Execute the button action."""
+-        await self.entity_description.method(self._host.api)
++        await self.entity_description.method(self._host.api)
+\ No newline at end of file

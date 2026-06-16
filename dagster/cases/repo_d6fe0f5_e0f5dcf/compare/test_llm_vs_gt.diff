@@ -1,0 +1,21 @@
+--- cases/repo_d6fe0f5_e0f5dcf/merge_test.py	2026-04-04 18:58:38
++++ cases/repo_d6fe0f5_e0f5dcf/llm_test.py	2026-04-04 19:00:10
+@@ -52,7 +52,10 @@
+ def test_dbt_cli_manifest_argument(manifest: DbtManifestParam) -> None:
+     dbt = DbtCliResource(project_dir=TEST_PROJECT_DIR)
+ 
+-    assert dbt.cli(["run"]).is_successful()
++    if manifest is None:
++        assert dbt.cli(["run"]).is_successful()
++    else:
++        assert dbt.cli(["run"], manifest=manifest).is_successful()
+ 
+ 
+ def test_dbt_cli_project_dir_path() -> None:
+@@ -438,4 +441,4 @@
+     expected_event_type = AssetCheckResult if is_asset_check else AssetObservation
+ 
+     assert len(asset_events) == 1
+-    assert all(isinstance(e, expected_event_type) for e in asset_events)
++    assert all(isinstance(e, expected_event_type) for e in asset_events)
+\ No newline at end of file

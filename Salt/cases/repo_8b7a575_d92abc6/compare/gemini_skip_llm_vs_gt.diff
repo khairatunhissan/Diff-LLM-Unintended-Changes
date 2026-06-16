@@ -1,0 +1,18 @@
+--- cases/repo_8b7a575_d92abc6/merge_skip.py	2026-03-09 00:39:12
++++ cases/repo_8b7a575_d92abc6/llm_gemini_skip.py	2026-06-02 16:51:41
+@@ -210,7 +210,7 @@
+         self.assertEqual(ret["_last_run"], run_time)
+ 
+     @skipIf(True, "SLOWTEST skip")
+-    def test_run_after_skip_range(self):
++    def test_skip_run_after_skip_range(self):
+         """
+         verify that scheduled job is skipped during the specified range
+         """
+@@ -286,4 +286,4 @@
+         run_time = dateutil.parser.parse("11/29/2017 2:00:30pm")
+         self.schedule.eval(now=run_time)
+         ret = self.schedule.job_status(job_name)
+-        self.assertIn("_last_run", ret)
++        self.assertIn("_last_run", ret)
+\ No newline at end of file

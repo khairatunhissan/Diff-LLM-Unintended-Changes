@@ -1,0 +1,29 @@
+--- cases/repo_71e106f_d4ae8d1/merge_train.py	2026-03-03 19:49:27
++++ cases/repo_71e106f_d4ae8d1/llm_gemini_train.py	2026-06-05 12:29:35
+@@ -161,9 +161,9 @@
+     opt = tf.train.GradientDescentOptimizer(lr)
+ 
+     # Get images and labels for CIFAR-10.
+-    images, labels = cifar10.distorted_inputs()
++    image_batch, label_batch = cifar10.distorted_inputs()
+     batch_queue = tf.contrib.slim.prefetch_queue.prefetch_queue(
+-          [images, labels], capacity=2 * FLAGS.num_gpus)
++          [image_batch, label_batch], capacity=2 * FLAGS.num_gpus)
+     # Calculate the gradients for each model tower.
+     tower_grads = []
+     with tf.variable_scope(tf.get_variable_scope()):
+@@ -248,6 +248,7 @@
+       if step % 10 == 0:
+         num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
+         examples_per_sec = num_examples_per_step / duration
++        examples_per_sec = num_examples_per_step / duration
+         sec_per_batch = duration / FLAGS.num_gpus
+ 
+         format_str = ('%s: step %d, loss = %.2f (%.1f examples/sec; %.3f '
+@@ -274,4 +275,4 @@
+ 
+ 
+ if __name__ == '__main__':
+-  tf.app.run()
++  tf.app.run()
+\ No newline at end of file

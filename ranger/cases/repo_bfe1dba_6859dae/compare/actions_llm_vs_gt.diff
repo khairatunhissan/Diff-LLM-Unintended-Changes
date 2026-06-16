@@ -1,0 +1,166 @@
+--- cases/repo_bfe1dba_6859dae/merge_actions.py	2026-03-27 15:35:39
++++ cases/repo_bfe1dba_6859dae/llm_actions.py	2026-03-27 15:44:44
+@@ -841,8 +841,8 @@
+     def tag_remove(self, paths=None, movedown=None, tag=None):
+         self.tag_toggle(paths=paths, value=False, movedown=movedown, tag=tag)
+ 
+-    def tag_add(self, paths=None, movedown=None, tag=None):
+-        self.tag_toggle(paths=paths, value=True, movedown=movedown, tag=tag)
++    def tag_add(self, paths=None, movedown=None):
++        self.tag_toggle(paths=paths, value=True, movedown=movedown)
+ 
+     # --------------------------
+     # -- Bookmarks
+@@ -897,11 +897,6 @@
+     def hide_console_info(self):
+         self.ui.browser.draw_info = False
+ 
+-    # --------------------------
+-    # -- Pager
+-    # --------------------------
+-    # These commands open the built-in pager and set specific sources.
+-
+     def display_command_help(self, console_widget):
+         try:
+             command = console_widget.get_cmd_class()
+@@ -979,18 +974,9 @@
+         if not self.settings.preview_script or not self.settings.use_preview_script:
+             try:
+                 return codecs.open(path, 'r', errors='ignore')
+-            # IOError for Python2, OSError for Python3
+             except (IOError, OSError):
+                 return None
+ 
+-        # self.previews is a 2 dimensional dict:
+-        # self.previews['/tmp/foo.jpg'][(80, 24)] = "the content..."
+-        # self.previews['/tmp/foo.jpg']['loading'] = False
+-        # A -1 in tuples means "any"; (80, -1) = wid. of 80 and any hei.
+-        # The key 'foundpreview' is added later. Values in (True, False)
+-        # XXX: Previews can break when collapse_preview is on and the
+-        # preview column is popping out as you move the cursor on e.g. a
+-        # PDF file.
+         try:
+             data = self.previews[path]
+         except KeyError:
+@@ -1121,7 +1107,6 @@
+         try:
+             tab = self.tabs[name]
+         except KeyError:
+-            # create a new tab
+             tab = Tab(self.thistab.path)
+             self.tabs[name] = tab
+             self.thistab = tab
+@@ -1151,14 +1136,13 @@
+             previous = self.current_tab
+             self.tab_move(direction)
+             if previous == self.current_tab:
+-                return  # can't close last tab
++                return
+         if name in self.tabs:
+             del self.tabs[name]
+         self.restorable_tabs.append(tab)
+         self.signal_emit('tab.layoutchange')
+ 
+     def tab_restore(self):
+-        # NOTE: The name of the tab is not restored.
+         previous_tab = self.thistab
+         if self.restorable_tabs:
+             tab = self.restorable_tabs.pop()
+@@ -1192,10 +1176,6 @@
+         return None
+ 
+     def tab_switch(self, path, create_directory=False):
+-        """Switches to tab of given path, opening a new tab as necessary.
+-
+-        If path does not exist, it is treated as a directory.
+-        """
+         path = realpath(path)
+         if not os.path.exists(path):
+             file_selection = None
+@@ -1208,7 +1188,6 @@
+                     return
+                 target_directory = path
+             else:
+-                # Give benefit of the doubt.
+                 potential_parent = os.path.dirname(path)
+                 if os.path.exists(potential_parent) and os.path.isdir(potential_parent):
+                     target_directory = potential_parent
+@@ -1224,7 +1203,6 @@
+ 
+         for name in self.fm.tabs:
+             tab = self.fm.tabs[name]
+-            # Is a tab already open?
+             if tab.path == target_directory:
+                 self.fm.tab_open(name=name)
+                 if file_selection:
+@@ -1239,10 +1217,6 @@
+         assert self.tabs, "There must be at least 1 tab at all times"
+         return sorted(self.tabs)
+ 
+-    # --------------------------
+-    # -- Overview of internals
+-    # --------------------------
+-
+     def _run_pager(self, path):
+         self.run(shlex.split(os.environ.get('PAGER', ranger.DEFAULT_PAGER)) + [path])
+ 
+@@ -1252,7 +1226,7 @@
+ 
+         temporary_file = tempfile.NamedTemporaryFile()
+ 
+-        def write(string):  # pylint: disable=redefined-outer-name
++        def write(string):
+             temporary_file.write(string.encode('utf-8'))
+ 
+         def recurse(before, pointer):
+@@ -1277,7 +1251,7 @@
+     def dump_commands(self):
+         temporary_file = tempfile.NamedTemporaryFile()
+ 
+-        def write(string):  # pylint: disable=redefined-outer-name
++        def write(string):
+             temporary_file.write(string.encode('utf-8'))
+ 
+         undocumented = []
+@@ -1302,7 +1276,7 @@
+     def dump_settings(self):
+         temporary_file = tempfile.NamedTemporaryFile()
+ 
+-        def write(string):  # pylint: disable=redefined-outer-name
++        def write(string):
+             temporary_file.write(string.encode('utf-8'))
+ 
+         for setting in sorted(ALLOWED_SETTINGS):
+@@ -1311,10 +1285,6 @@
+         temporary_file.flush()
+         self._run_pager(temporary_file.name)
+ 
+-    # --------------------------
+-    # -- File System Operations
+-    # --------------------------
+-
+     def uncut(self):
+         """:uncut
+ 
+@@ -1422,14 +1392,11 @@
+         self.do_cut = False
+ 
+     def delete(self, files=None):
+-        # XXX: warn when deleting mount points/unseen marked files?
+         self.notify("Deleting!")
+-        # COMPAT: old command.py use fm.delete() without arguments
+         if files is None:
+             files = (fobj.path for fobj in self.thistab.get_selection())
+         files = [os.path.abspath(path) for path in files]
+         for path in files:
+-            # Untag the deleted files.
+             for tag in self.fm.tags.tags:
+                 if str(tag).startswith(path):
+                     self.fm.tags.remove(tag)
+@@ -1466,4 +1433,4 @@
+         except OSError as err:
+             self.notify(err)
+             return False
+-        return True
++        return True
+\ No newline at end of file

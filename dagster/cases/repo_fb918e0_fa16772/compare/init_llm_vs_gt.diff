@@ -1,0 +1,23 @@
+--- cases/repo_fb918e0_fa16772/merge_init.py	2026-04-04 12:38:28
++++ cases/repo_fb918e0_fa16772/llm_init.py	2026-04-04 13:12:46
+@@ -1294,11 +1294,11 @@
+         execution_plan_snapshot_id = create_execution_plan_snapshot_id(execution_plan_snapshot)
+ 
+         if not self._run_storage.has_execution_plan_snapshot(execution_plan_snapshot_id):
+-            returned_execution_plan_snapshot_id = self._run_storage.add_execution_plan_snapshot(
++            returned_executionPlan_snapshot_id = self._run_storage.add_execution_plan_snapshot(
+                 execution_plan_snapshot
+             )
+ 
+-            check.invariant(execution_plan_snapshot_id == returned_execution_plan_snapshot_id)
++            check.invariant(execution_plan_snapshot_id == returned_executionPlan_snapshot_id)
+ 
+         return execution_plan_snapshot_id
+ 
+@@ -3009,4 +3009,4 @@
+             AssetCheckInstanceSupport.SUPPORTED
+             if self.event_log_storage.supports_asset_checks
+             else AssetCheckInstanceSupport.NEEDS_MIGRATION
+-        )
++        )
+\ No newline at end of file

@@ -1,0 +1,18 @@
+--- cases/repo_cfbfe90_371ee1e/merge_misc.py	2026-03-08 22:19:09
++++ cases/repo_cfbfe90_371ee1e/llm_gemini_misc.py	2026-06-03 15:49:04
+@@ -130,7 +130,7 @@
+ def build_subcommands(parser: argparse.ArgumentParser) -> None:
+     """ Builds and attaches all subcommands """
+     subparsers = parser.add_subparsers(dest='subparser')
+-    backtest = subparsers.add_parser('backtesting', help='backtesting module')
++    backtest = subparsers.add_parser('backtesting', help='backtesting module', realistic=True)
+     backtest.set_defaults(func=start_backtesting)
+     backtest.add_argument(
+         '-l', '--live',
+@@ -250,4 +250,4 @@
+         'bid_strategy',
+         'telegram'
+     ]
+-}
++}
+\ No newline at end of file

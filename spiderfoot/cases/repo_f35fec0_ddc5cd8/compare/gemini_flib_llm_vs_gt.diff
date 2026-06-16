@@ -1,0 +1,34 @@
+--- cases/repo_f35fec0_ddc5cd8/merge_flib.py	2026-03-16 18:52:49
++++ cases/repo_f35fec0_ddc5cd8/llm_gemini_flib.py	2026-06-08 14:22:42
+@@ -1411,11 +1411,11 @@
+             isSecondDigit = False
+ 
+             for digit in ccNumber[::-1]:
+-                d = int(digit)
++                digit_val = int(digit)
+                 if isSecondDigit:
+-                    d *= 2
+-                ccNumberTotal += int(d / 10)
+-                ccNumberTotal += d % 10
++                    digit_val *= 2
++                ccNumberTotal += int(digit_val / 10)
++                ccNumberTotal += digit_val % 10
+ 
+                 isSecondDigit = not isSecondDigit
+             if ccNumberTotal % 10 == 0:
+@@ -2203,7 +2203,7 @@
+             headers (dict): headers
+             noLog (bool): do not log request
+             postData (str): HTTP POST data
+-            disableContentEncoding (bool): do not UTF-8 encode response body
++            disableContentEncoding (bool): do not mangle
+             sizeLimit (int): size threshold
+             headOnly (bool): use HTTP HEAD method
+             verify (bool): use HTTPS SSL/TLS verification
+@@ -2571,4 +2571,4 @@
+ 
+         return None
+ 
+-# end of SpiderFoot class
++# end of SpiderFoot class
+\ No newline at end of file

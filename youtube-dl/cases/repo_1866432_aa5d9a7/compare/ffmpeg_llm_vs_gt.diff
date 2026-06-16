@@ -1,0 +1,9 @@
+--- cases/repo_1866432_aa5d9a7/merge_ffmpeg.py	2026-03-19 14:58:56
++++ cases/repo_1866432_aa5d9a7/llm_ffmpeg.py	2026-03-19 15:05:29
+@@ -709,4 +709,4 @@
+                     'data': f.read(),
+                 }
+ 
+-        return [], info
++        return [], info
+\ No newline at end of file

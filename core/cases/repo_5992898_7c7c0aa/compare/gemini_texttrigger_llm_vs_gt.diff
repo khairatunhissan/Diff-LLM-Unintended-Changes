@@ -1,0 +1,23 @@
+--- cases/repo_5992898_7c7c0aa/merge_texttrigger.py	2026-02-27 20:25:16
++++ cases/repo_5992898_7c7c0aa/llm_gemini_texttrigger.py	2026-06-03 14:15:05
+@@ -18,11 +18,11 @@
+     _schema = ENTITY_STATE_TRIGGER_SCHEMA
+ 
+     def is_valid_transition(self, from_state: State, to_state: State) -> bool:
+-        """Check if the old and new states are different."""
++        """Check if the state matches the origin state."""
+         return from_state.state != to_state.state
+ 
+     def is_valid_state(self, state: State) -> bool:
+-        """Check if the new state is not invalid."""
++        """Check if the state matches the target state."""
+         return state.state not in (STATE_UNAVAILABLE, STATE_UNKNOWN)
+ 
+ 
+@@ -33,4 +33,4 @@
+ 
+ async def async_get_triggers(hass: HomeAssistant) -> dict[str, type[Trigger]]:
+     """Return the triggers for texts."""
+-    return TRIGGERS
++    return TRIGGERS
+\ No newline at end of file

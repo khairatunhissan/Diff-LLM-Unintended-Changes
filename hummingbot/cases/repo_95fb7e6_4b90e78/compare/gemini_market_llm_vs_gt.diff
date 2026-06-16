@@ -1,0 +1,23 @@
+--- cases/repo_95fb7e6_4b90e78/merge_market.py	2026-02-28 22:51:15
++++ cases/repo_95fb7e6_4b90e78/llm_gemini_market.py	2026-06-04 22:29:35
+@@ -605,6 +605,13 @@
+                                                       f"Check API key and network connection.")
+                 await asyncio.sleep(0.5)
+ 
++    async def get_order(self, client_order_id: str) -> Dict[str, Any]:
++        order = self._in_flight_orders.get(client_order_id)
++        exchange_order_id = await order.get_exchange_order_id()
++        path_url = f"/order/{exchange_order_id}"
++        result = await self._api_request("GET", path_url=path_url)
++        return result
++
+     async def get_deposit_address(self, currency: str) -> str:
+         path_url = f"/addresses/{currency}"
+ 
+@@ -1041,4 +1048,4 @@
+         if self._trading_required:
+             self._status_polling_task = safe_ensure_future(self._status_polling_loop())
+             self._user_stream_tracker_task = safe_ensure_future(self._user_stream_tracker.start())
+-            self._user_stream_event_listener_task = safe_ensure_future(self._user_stream_event_listener())
++            self._user_stream_event_listener_task = safe_ensure_future(self._user_stream_event_listener())
+\ No newline at end of file

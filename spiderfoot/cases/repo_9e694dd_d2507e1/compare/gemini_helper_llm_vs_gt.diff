@@ -1,0 +1,18 @@
+--- cases/repo_9e694dd_d2507e1/merge_helper.py	2026-03-18 19:14:18
++++ cases/repo_9e694dd_d2507e1/llm_gemini_helper.py	2026-06-08 14:50:36
+@@ -139,7 +139,7 @@
+                     'color': col
+                 })
+ 
+-                nodelist[dst] = ncounter
++                nodelist[dst] = ecounter = ncounter
+ 
+             if src not in nodelist:
+                 ncounter = ncounter + 1
+@@ -334,4 +334,4 @@
+                 if m:
+                     returnArr.append(m.group(1))
+ 
+-        return returnArr
++        return returnArr
+\ No newline at end of file

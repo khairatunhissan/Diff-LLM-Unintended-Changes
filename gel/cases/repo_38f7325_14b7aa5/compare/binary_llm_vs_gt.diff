@@ -1,0 +1,23 @@
+--- cases/repo_38f7325_14b7aa5/merge_binary.py	2026-03-05 09:36:25
++++ cases/repo_38f7325_14b7aa5/llm_binary.py	2026-03-05 13:04:09
+@@ -489,10 +489,10 @@
+             # the ClientHandshake message, under the scenario of
+             # binary protocol over HTTP
+             if self._auth_data:
+-                token = self._extract_token_from_auth_data(self._auth_data)
++                secret_key = self._extract_token_from_auth_data(self._auth_data)
+             else:
+-                token = params.get('secret_key')
+-            self._auth_jwt(user, token)
++                secret_key = params.get('secret_key')
++            self._auth_jwt(user, secret_key)
+         elif authmethod_name == 'Trust':
+             self._auth_trust(user)
+         else:
+@@ -2341,4 +2341,4 @@
+         else:
+             raise exc
+     finally:
+-        conn.close()
++        conn.close()
+\ No newline at end of file

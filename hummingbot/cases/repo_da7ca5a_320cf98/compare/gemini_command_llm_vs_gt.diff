@@ -1,0 +1,26 @@
+--- cases/repo_da7ca5a_320cf98/merge_command.py	2026-03-07 22:59:47
++++ cases/repo_da7ca5a_320cf98/llm_gemini_command.py	2026-06-04 22:44:38
+@@ -40,7 +40,7 @@
+                        "moving_price_band_enabled",
+                        "price_ceiling_pct",
+                        "price_floor_pct",
+-                       "price_band_refresh_time"
++                       "price_band_refresh_time",
+                        "order_optimization_enabled",
+                        "bid_order_optimization_depth",
+                        "ask_order_optimization_depth"
+@@ -274,6 +274,7 @@
+                     self.list_strategy_configs()
+                 self.app.style = load_style(self.client_config_map)
+         except asyncio.TimeoutError:
++            self.placeholder_mode = False
+             self.logger().error("Prompt timeout")
+         except Exception as err:
+             self.logger().error(str(err), exc_info=True)
+@@ -475,4 +476,4 @@
+                         base_volume=balances[base_asset],
+                         quote_volume=quote_volume,
+                         overwrite=True,
+-                    )
++                    )
+\ No newline at end of file

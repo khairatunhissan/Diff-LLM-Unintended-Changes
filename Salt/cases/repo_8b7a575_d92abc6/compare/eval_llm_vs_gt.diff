@@ -1,0 +1,17 @@
+--- cases/repo_8b7a575_d92abc6/merge_eval.py	2026-03-09 00:29:11
++++ cases/repo_8b7a575_d92abc6/llm_eval.py	2026-03-09 00:34:22
+@@ -39,6 +39,7 @@
+ class SchedulerEvalTest(SchedulerTestsBase):
+     def setUp(self):
+         super(SchedulerEvalTest, self).setUp()
++        self.addCleanup(self.schedule.reset)
+         self.schedule.opts["loop_interval"] = 1
+         self.schedule.opts["grains"]["whens"] = {"tea time": "11/29/2017 12:00pm"}
+ 
+@@ -910,4 +911,4 @@
+         self.schedule.eval(now=run_time1)
+         ret = self.schedule.job_status(job_name)
+         self.assertNotIn("_last_run", ret)
+-        self.assertEqual(ret["_next_fire_time"], None)
++        self.assertEqual(ret["_next_fire_time"], None)
+\ No newline at end of file

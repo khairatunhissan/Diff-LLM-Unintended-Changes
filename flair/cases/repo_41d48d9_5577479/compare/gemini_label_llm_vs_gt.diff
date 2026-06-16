@@ -1,0 +1,200 @@
+--- cases/repo_41d48d9_5577479/merge_label.py	2026-03-03 00:15:28
++++ cases/repo_41d48d9_5577479/llm_gemini_label.py	2026-06-07 21:40:44
+@@ -234,7 +234,7 @@
+         if start_idx == -1 or start_idx > end_idx:
+             raise ValueError(
+                 f"Could not create token span from char span.\n\
+-                    Sen: {sentence}\nStart: {start}, End: {end}, Label: {label}\n\
++                  Sen: {sentence}\nStart: {start}, End: {end}, Label: {label}\n\
+                         Ann: {annotated_part}\nRaw: {text}\nCo: {start_idx}, {end_idx}"
+             )
+ 
+@@ -807,7 +807,6 @@
+         parent directory where the conll_03 folder resides.
+         If using entity linking, the conll03 dateset is reduced by about 20 Documents, which are not part of the yago dataset.
+         :param base_path: Path to the CoNLL-03 corpus (i.e. 'conll_03' folder) on your machine
+-        POS tags or chunks respectively
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -852,7 +851,6 @@
+         'conll_03_german'. Then set the base_path parameter in the constructor to the path to the parent directory where
+         the conll_03_german folder resides.
+         :param base_path: Path to the CoNLL-03 corpus (i.e. 'conll_03_german' folder) on your machine
+-        word lemmas, POS tags or chunks respectively
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -899,7 +897,6 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1295,7 +1292,6 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1312,7 +1308,7 @@
+ 
+         data_folder = base_path / dataset_name
+ 
+-        # download data if necessary
++        # download data from github if necessary
+         weiboNER_conll_path = "https://raw.githubusercontent.com/87302380/WEIBO_NER/main/data/"
+         cached_path(
+             f"{weiboNER_conll_path}weiboNER_2nd_conll_format.train",
+@@ -1407,7 +1403,6 @@
+         in BIO format. The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         """
+         # column format
+@@ -1452,7 +1447,6 @@
+         in BIO format. The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         """
+         # column format
+@@ -1490,7 +1484,6 @@
+     Initialize corpus of SEC-fillings annotated with English NER tags. See paper "Domain Adaption of Named Entity
+     Recognition to Support Credit Risk Assessment" by Alvarado et al, 2015: https://aclanthology.org/U15-1010/
+     :param base_path: Path to the CoNLL-03 corpus (i.e. 'conll_03' folder) on your machine
+-    POS tags or chunks respectively
+     :param in_memory: If True, keeps dataset in memory giving speedups in training.
+     :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+     """
+@@ -1544,7 +1537,6 @@
+         The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1587,7 +1579,6 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1784,7 +1775,6 @@
+         The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -2265,7 +2255,6 @@
+         dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -2382,7 +2371,6 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -2432,7 +2420,6 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -2569,7 +2556,6 @@
+         with the languages you require. If you pass "all", all languages will be initialized.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         """
+         if not base_path:
+@@ -2660,7 +2646,6 @@
+         parent directory where the multiconer folder resides. You can also create the multiconer in
+         the {FLAIR_CACHE_ROOT}/datasets folder to leave the path empty.
+         :param base_path: Path to the CoNLL-03 corpus (i.e. 'conll_03' folder) on your machine
+-        POS tags or chunks respectively
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param use_dev_as_test: If True, it uses the dev set as test set and samples random training data for a dev split.
+         :param task: either 'multi', 'code-switch', or the language code for one of the mono tasks.
+@@ -2753,8 +2738,6 @@
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
+-            The data is in bio-format. It will by default (with the string "ner" as value) be transformed
+-            into the bioes format. If you dont want that set it to None.
+ 
+         """
+         if type(languages) == str:
+@@ -2981,7 +2964,7 @@
+             "kbd": "1jNbfrboPOwJmlXQBIv053d7n5WXpMRv7",
+             "kg": "1iiu5z-sdJ2JLC4Ja9IgDxpRZklIb6nDx",
+             "ki": "1GUtt0QI84c5McyLGGxoi5uwjHOq1d6G8",
+-            "kj": "1nSxXUSGDlXVCIPGlVpcakRc537MwuKZR",  # leer
++            "choose": "1nSxXUSGDlXVCIPGlVpcakRc537MwuKZR",  # leer
+             "kk": "1ryC3UN0myckc1awrWhhb6RIi17C0LCuS",
+             "kl": "1gXtGtX9gcTXms1IExICnqZUHefrlcIFf",
+             "km": "1DS5ATxvxyfn1iWvq2G6qmjZv9pv0T6hD",
+@@ -3105,7 +3088,7 @@
+             "sw": "1_bNTj6T8eXlNAIuHaveleWlHB_22alJs",
+             "szl": "1_dXEip1snK4CPVGqH8x7lF5O-6FdCNFW",
+             "ta": "1ZFTONsxGtSnC9QB6RpWSvgD_MbZwIhHH",
+-            "tcy": "15R6u7KQs1vmDSm_aSDrQMJ3Q6q3Be0r7",  # leer
++            "tl": "15R6u7KQs1vmDSm_aSDrQMJ3Q6q3Be0r7",  # leer
+             "te": "11Sx-pBAPeZOXGyv48UNSVMD0AH7uf4YN",
+             "tet": "11mr2MYLcv9pz7mHhGGNi5iNCOVErYeOt",
+             "tg": "16ttF7HWqM9Cnj4qmgf3ZfNniiOJfZ52w",
+@@ -3128,7 +3111,7 @@
+             "uk": "1UMJCHtzxkfLDBJE7NtfN5FeMrnnUVwoh",
+             "ur": "1WNaD2TuHvdsF-z0k_emQYchwoQQDFmRk",
+             "uz": "11wrG2FSTpRJc2jb5MhgvxjkVDYhT8M-l",
+-            "ve": "1PucJ7pJ4CXGEXZ5p_WleZDs2usNz74to",
++            "see": "1PucJ7pJ4CXGEXZ5p_WleZDs2usNz74to",
+             "vec": "1cAVjm_y3ehNteDQIYz9yyoq1EKkqOXZ0",
+             "vep": "1K_eqV7O6C7KPJWZtmIuzFMKAagj-0O85",
+             "vi": "1yQ6nhm1BmG9lD4_NaG1hE5VV6biEaV5f",
+@@ -3176,8 +3159,6 @@
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
+-            The data is in bio-format. It will by default (with the string "ner" as value) be transformed
+-            into the bioes format. If you dont want that set it to None.
+ 
+         """
+         # if no languages are given as argument all languages used in XTREME will be loaded
+@@ -3491,7 +3472,6 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -4184,4 +4164,4 @@
+             comment_symbol="# ",
+             sample_missing_splits=sample_missing_splits,
+             **corpusargs,
+-        )
++        )
+\ No newline at end of file

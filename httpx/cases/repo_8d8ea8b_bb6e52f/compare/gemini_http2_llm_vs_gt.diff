@@ -1,0 +1,22 @@
+--- cases/repo_8d8ea8b_bb6e52f/merge_http2.py	2026-03-28 16:15:55
++++ cases/repo_8d8ea8b_bb6e52f/llm_gemini_http2.py	2026-06-08 23:16:08
+@@ -132,10 +132,10 @@
+         return stream_id
+ 
+     async def send_request_data(
+-        self, stream_id: int, stream: typing.AsyncIterator[bytes], timeout: Timeout,
++        self, stream_id: int, socket: typing.AsyncIterator[bytes], timeout: Timeout,
+     ) -> None:
+         try:
+-            async for data in stream:
++            async for data in socket:
+                 await self.send_data(stream_id, data, timeout)
+             await self.end_stream(stream_id, timeout)
+         finally:
+@@ -256,4 +256,4 @@
+         return False
+ 
+     def is_connection_dropped(self) -> bool:
+-        return self.socket.is_connection_dropped()
++        return self.socket.is_connection_dropped()
+\ No newline at end of file

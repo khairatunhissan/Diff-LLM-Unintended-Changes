@@ -1,0 +1,9 @@
+--- cases/repo_8d8ea8b_bb6e52f/merge_http11.py	2026-03-28 16:10:46
++++ cases/repo_8d8ea8b_bb6e52f/llm_gemini_http11.py	2026-06-08 23:22:13
+@@ -206,4 +206,4 @@
+         return self.h11_state.our_state in (h11.CLOSED, h11.ERROR)
+ 
+     def is_connection_dropped(self) -> bool:
+-        return self.socket.is_connection_dropped()
++        return self.socket.is_connection_dropped()
+\ No newline at end of file

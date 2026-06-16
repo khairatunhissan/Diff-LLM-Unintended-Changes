@@ -1,0 +1,18 @@
+--- cases/repo_582dec9_0a5e14c/merge_main.py	2026-03-07 13:19:58
++++ cases/repo_582dec9_0a5e14c/llm_main.py	2026-03-07 13:25:19
+@@ -76,7 +76,7 @@
+         ls_server.document_updated(ls, params.text_document.uri)
+ 
+     @ls.feature(lsp_types.TEXT_DOCUMENT_DID_SAVE)
+-    def text_document_did_save(params: lsp_types.DidChangeTextDocumentParams):
++    def text_document_did_save(params: lsp_types.DidSaveTextDocumentParams):
+         ls_server.document_updated(ls, params.text_document.uri)
+ 
+     @ls.feature(lsp_types.TEXT_DOCUMENT_DEFINITION)
+@@ -92,4 +92,4 @@
+     def completion(params: lsp_types.CompletionParams):
+         return ls_completion.get_completion(ls, params)
+ 
+-    return ls
++    return ls
+\ No newline at end of file

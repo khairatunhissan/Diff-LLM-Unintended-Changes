@@ -1,0 +1,61 @@
+--- cases/repo_15a5c59_ef8da99/merge_sys.py	2026-04-03 14:11:44
++++ cases/repo_15a5c59_ef8da99/llm_gemini_sys.py	2026-06-09 12:30:59
+@@ -512,7 +512,7 @@
+ 
+     @property
+     def solid_def(self) -> OpDefinition:
+-        return self.solid.definition.ensure_op_def()
++        return self.node.definition.ensure_op_def()
+ 
+     @property
+     def op_def(self) -> OpDefinition:
+@@ -539,7 +539,7 @@
+         return self._execution_data.mode_def
+ 
+     @property
+-    def solid(self) -> "Node":
++    def node(self) -> "Node":
+         return self.pipeline_def.get_solid(self._step.solid_handle)
+ 
+     @property
+@@ -712,13 +712,13 @@
+                 else f"output '{output_def.name}' with mapping_key '{mapping_key}'"
+             )
+             raise DagsterInvariantViolationError(
+-                f"In {self.solid_def.node_type_str} '{self.solid.name}', attempted to log output"
++                f"In {self.solid_def.node_type_str} '{self.node.name}', attempted to log output"
+                 f" metadata for {output_desc} which has already been yielded. Metadata must be"
+                 " logged before the output is yielded."
+             )
+         if output_def.is_dynamic and not mapping_key:
+             raise DagsterInvariantViolationError(
+-                f"In {self.solid_def.node_type_str} '{self.solid.name}', attempted to log metadata"
++                f"In {self.solid_def.node_type_str} '{self.node.name}', attempted to log metadata"
+                 f" for dynamic output '{output_def.name}' without providing a mapping key. When"
+                 " logging metadata for a dynamic output, it is necessary to provide a mapping key."
+             )
+@@ -726,7 +726,7 @@
+         if output_name in self._output_metadata:
+             if not mapping_key or mapping_key in self._output_metadata[output_name]:
+                 raise DagsterInvariantViolationError(
+-                    f"In {self.solid_def.node_type_str} '{self.solid.name}', attempted to log"
++                    f"In {self.solid_def.node_type_str} '{self.node.name}', attempted to log"
+                     f" metadata for output '{output_name}' more than once."
+                 )
+         if mapping_key:
+@@ -816,7 +816,7 @@
+ 
+     @property
+     def op_config(self) -> Any:
+-        op_config = self.resolved_run_config.solids.get(str(self.solid_handle))
++        op_config = self.resolved_run_config.ops.get(str(self.solid_handle))
+         return op_config.config if op_config else None
+ 
+     @property
+@@ -1123,4 +1123,4 @@
+     @property
+     def op_def(self) -> "OpDefinition":
+         """The op for which type loading is occurring."""
+-        return super(DagsterTypeLoaderContext, self).op_def
++        return super(DagsterTypeLoaderContext, self).op_def
+\ No newline at end of file

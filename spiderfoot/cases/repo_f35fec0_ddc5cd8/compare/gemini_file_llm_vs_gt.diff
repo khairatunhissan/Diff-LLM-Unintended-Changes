@@ -1,0 +1,9 @@
+--- cases/repo_f35fec0_ddc5cd8/merge_file.py	2026-03-16 17:08:29
++++ cases/repo_f35fec0_ddc5cd8/llm_gemini_file.py	2026-06-08 14:15:42
+@@ -181,4 +181,4 @@
+                             # Strip non-ASCII
+                             v = ''.join([i if ord(i) < 128 else ' ' for i in v])
+                             evt = SpiderFootEvent("SOFTWARE_USED", v, self.__name__, event)
+-                            self.notifyListeners(evt)
++                            self.notifyListeners(evt)
+\ No newline at end of file

@@ -1,0 +1,93 @@
+--- cases/repo_9e73689_fd2dfc8/merge_light.py	2026-02-26 23:40:17
++++ cases/repo_9e73689_fd2dfc8/llm_light.py	2026-02-26 23:50:16
+@@ -120,6 +120,10 @@
+         self._supports_rgbw = False
+         self._supports_color_temp = False
+         self._supports_dimming = False
++        self._attr_color_mode: ColorMode | None = None
++        self._attr_hs_color: tuple[float, float] | None = None
++        self._rgbw_color: tuple[int, int, int, int] | None = None
++        self._color_temp: int | None = None
+         self._warm_white = self.get_zwave_value(
+             TARGET_COLOR_PROPERTY,
+             CommandClass.SWITCH_COLOR,
+@@ -222,6 +226,11 @@
+         return round((cast(int, self.info.primary_value.value) / 99) * 255)
+ 
+     @property
++    def color_mode(self) -> ColorMode | None:
++        """Return the color mode of the light."""
++        return self._attr_color_mode
++
++    @property
+     def is_on(self) -> bool | None:
+         """Return true if device is on (brightness above 0)."""
+         if self._set_optimistic_state:
+@@ -229,6 +238,21 @@
+             return True
+         brightness = self.brightness
+         return brightness > 0 if brightness is not None else None
++
++    @property
++    def hs_color(self) -> tuple[float, float] | None:
++        """Return the hs color."""
++        return self._attr_hs_color
++
++    @property
++    def rgbw_color(self) -> tuple[int, int, int, int] | None:
++        """Return the RGBW color."""
++        return self._rgbw_color
++
++    @property
++    def color_temp_kelvin(self) -> int | None:
++        """Return the color temperature value in Kelvin."""
++        return self._color_temp
+ 
+     @property
+     def supported_color_modes(self) -> set[ColorMode] | None:
+@@ -477,16 +501,14 @@
+             cold_white = multi_color.get(COLOR_SWITCH_COMBINED_COLD_WHITE, cw_val.value)
+             # Calculate color temps based on whites
+             if cold_white or warm_white:
+-                self._attr_color_temp_kelvin = (
+-                    color_util.color_temperature_mired_to_kelvin(
+-                        MAX_MIREDS
+-                        - ((cast(int, cold_white) / 255) * (MAX_MIREDS - MIN_MIREDS))
+-                    )
++                self._color_temp = color_util.color_temperature_mired_to_kelvin(
++                    MAX_MIREDS
++                    - ((cast(int, cold_white) / 255) * (MAX_MIREDS - MIN_MIREDS))
+                 )
+                 # White channels turned on, set color mode to color_temp
+                 self._attr_color_mode = ColorMode.COLOR_TEMP
+             else:
+-                self._attr_color_temp_kelvin = None
++                self._color_temp = None
+         # only one white channel (warm white) = rgbw support
+         elif red_val and green_val and blue_val and ww_val:
+             white = multi_color.get(COLOR_SWITCH_COMBINED_WARM_WHITE, ww_val.value)
+@@ -497,7 +519,7 @@
+                     and blue is not None
+                     and white is not None
+                 )
+-            self._attr_rgbw_color = (red, green, blue, white)
++            self._rgbw_color = (red, green, blue, white)
+             # Light supports rgbw, set color mode to rgbw
+             self._attr_color_mode = ColorMode.RGBW
+         # only one white channel (cool white) = rgbw support
+@@ -511,7 +533,7 @@
+                     and blue is not None
+                     and white is not None
+                 )
+-            self._attr_rgbw_color = (red, green, blue, white)
++            self._rgbw_color = (red, green, blue, white)
+             # Light supports rgbw, set color mode to rgbw
+             self._attr_color_mode = ColorMode.RGBW
+ 
+@@ -688,4 +710,4 @@
+     ) -> None:
+         """Initialize the ZWA-2 LED entity."""
+         super().__init__(config_entry, driver, info)
+-        self._attr_name = "LED"
++        self._attr_name = "LED"
+\ No newline at end of file

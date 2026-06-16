@@ -1,0 +1,37 @@
+--- cases/repo_cfbfe90_371ee1e/merge_testmisc.py	2026-03-08 22:27:03
++++ cases/repo_cfbfe90_371ee1e/llm_testmisc.py	2026-03-08 22:28:37
+@@ -76,6 +76,7 @@
+     assert call_args.subparser == 'backtesting'
+     assert call_args.func is not None
+     assert call_args.ticker_interval == 5
++    assert call_args.realistic_simulation is False
+ 
+ 
+ def test_parse_args_backtesting_invalid():
+@@ -88,7 +89,10 @@
+ 
+ def test_parse_args_backtesting_custom(mocker):
+     backtesting_mock = mocker.patch('freqtrade.misc.start_backtesting', MagicMock())
+-    args = parse_args(['-c', 'test_conf.json', 'backtesting', '--live', '--ticker-interval', '1'])
++    args = parse_args([
++        '-c', 'test_conf.json', 'backtesting', '--live',
++        '--ticker-interval', '1', '--realistic-simulation'
++    ])
+     assert args is None
+     assert backtesting_mock.call_count == 1
+ 
+@@ -99,6 +103,7 @@
+     assert call_args.subparser == 'backtesting'
+     assert call_args.func is not None
+     assert call_args.ticker_interval == 1
++    assert call_args.realistic_simulation is True
+ 
+ 
+ def test_start_backtesting(mocker):
+@@ -148,4 +153,4 @@
+     conf.pop('exchange')
+     mocker.patch('freqtrade.misc.open', mocker.mock_open(read_data=json.dumps(conf)))
+     with pytest.raises(ValidationError, match=r'.*\'exchange\' is a required property.*'):
+-        load_config('somefile')
++        load_config('somefile')
+\ No newline at end of file

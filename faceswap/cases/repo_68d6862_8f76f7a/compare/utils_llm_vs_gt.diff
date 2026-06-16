@@ -1,0 +1,25 @@
+--- cases/repo_68d6862_8f76f7a/merge_utils.py	2026-03-12 15:39:54
++++ cases/repo_68d6862_8f76f7a/llm_utils.py	2026-03-12 15:43:40
+@@ -1,18 +1,8 @@
+ '''
+ Multiple plaidml implementation.
+ '''
++from plaidml.keras import backend as K
+ 
+-import plaidml
+ 
+-
+-def pad(data, paddings, mode="CONSTANT", name=None, constant_value=0):
+-    """ PlaidML Pad """
+-    # TODO: use / impl other padding method when required
+-    # CONSTANT -> SpatialPadding ? | Doesn't support first and last axis +
+-    #             no support for constant_value
+-    # SYMMETRIC -> Requires impl ?
+-    if mode.upper() != "REFLECT":
+-        raise NotImplementedError("pad only supports mode == 'REFLECT'")
+-    if constant_value != 0:
+-        raise NotImplementedError("pad does not support constant_value != 0")
+-    return plaidml.op.reflection_padding(data, paddings)
++extract_image_patches = K.extract_image_patches  # pylint: disable=invalid-name
++pad = K.pad
+\ No newline at end of file

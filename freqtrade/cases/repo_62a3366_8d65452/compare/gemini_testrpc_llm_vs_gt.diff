@@ -1,0 +1,9 @@
+--- cases/repo_62a3366_8d65452/merge_testrpc.py	2026-03-08 15:25:24
++++ cases/repo_62a3366_8d65452/llm_gemini_testrpc.py	2026-06-03 15:29:00
+@@ -541,4 +541,4 @@
+     (error, trades) = rpc.rpc_count()
+     nb_trades = len(trades)
+     assert not error
+-    assert nb_trades == 1
++    assert nb_trades == 1
+\ No newline at end of file

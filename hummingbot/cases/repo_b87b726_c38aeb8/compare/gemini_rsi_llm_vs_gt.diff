@@ -1,0 +1,9 @@
+--- cases/repo_b87b726_c38aeb8/merge_rsi.py	2026-02-28 21:50:03
++++ cases/repo_b87b726_c38aeb8/llm_gemini_rsi.py	2026-06-03 16:17:37
+@@ -95,4 +95,4 @@
+         candles_df = self.get_processed_df()
+         lines.extend([f"Candles: {self.candles[0].name} | Interval: {self.candles[0].interval}\n"])
+         lines.extend(self.candles_formatted_list(candles_df, columns_to_show))
+-        return lines
++        return lines
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_105fb70_71d6cd4/merge_dbt.py	2026-04-04 15:51:02
++++ cases/repo_105fb70_71d6cd4/llm_dbt.py	2026-04-04 15:52:53
+@@ -21,4 +21,4 @@
+ 
+ @op(required_resource_keys={"dbt"}, tags={"kind": "dbt"})
+ def hn_dbt_test(context, _dbt_output):
+-    context.resources.dbt.test()
++    context.resources.dbt.test()
+\ No newline at end of file

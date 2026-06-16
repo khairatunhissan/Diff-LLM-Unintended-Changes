@@ -1,0 +1,9 @@
+--- cases/repo_70b894b_325609e/merge_base.py	2026-03-03 22:17:35
++++ cases/repo_70b894b_325609e/llm_base.py	2026-03-03 22:20:57
+@@ -219,4 +219,4 @@
+       else:
+         x = tf.reduce_mean(x, [1, 2])
+     tf.logging.info('image after unit %s: %s', name_scope, x.get_shape())
+-    return x
++    return x
+\ No newline at end of file

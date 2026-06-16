@@ -1,0 +1,9 @@
+--- cases/repo_625da0d_9d458bb/merge_pkg.py	2026-02-26 21:05:04
++++ cases/repo_625da0d_9d458bb/llm_pkg.py	2026-05-07 13:14:55
+@@ -315,4 +315,4 @@
+ 
+ if __name__ == '__main__':
+     from integration import run_tests
+-    run_tests(PkgTest)
++    run_tests(PkgTest)
+\ No newline at end of file

@@ -1,0 +1,18 @@
+--- cases/repo_2d52fc3_1721991/merge_ticket.py	2026-03-02 00:10:49
++++ cases/repo_2d52fc3_1721991/llm_ticket.py	2026-03-02 00:14:49
+@@ -47,7 +47,7 @@
+ 
+ 	def __str__(self):
+ 		return "%s: ip=%s time=%s #attempts=%d" % \
+-			   (self.__class__.__name__.split('.')[-1], self.__ip, self.__time, self.__attempt)
++			   (self.__class__, self.__ip, self.__time, self.__attempt)
+ 	
+ 
+ 	def setIP(self, value):
+@@ -85,4 +85,4 @@
+ # This class extends the Ticket class. It is mainly used by the BanManager.
+ 
+ class BanTicket(Ticket):
+-	pass
++	pass
+\ No newline at end of file

@@ -1,0 +1,22 @@
+diff --git a/salt/utils/event.py b/salt/utils/event.py
+index 31b9bc2a9d..a4d18f676f 100644
+--- a/salt/utils/event.py
++++ b/salt/utils/event.py
+@@ -715,7 +715,7 @@ class ReactWrap(object):
+             return False
+         return ret
+ 
+-    def cmd(self, *args, **kwargs):
++    def local(self, *args, **kwargs):
+         '''
+         Wrap LocalClient for running :ref:`execution modules <all-salt.modules>`
+         '''
+@@ -723,6 +723,8 @@ class ReactWrap(object):
+             self.client_cache['local'] = salt.client.LocalClient(self.opts['conf_file'])
+         return self.client_cache['local'].cmd_async(*args, **kwargs)
+ 
++    cmd = local
++
+     def runner(self, fun, **kwargs):
+         '''
+         Wrap RunnerClient for executing :ref:`runner modules <all-salt.runners>`

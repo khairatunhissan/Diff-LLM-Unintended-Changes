@@ -1,0 +1,45 @@
+--- cases/repo_21b48a8_5f0776a/merge_main.py	2026-03-03 20:05:55
++++ cases/repo_21b48a8_5f0776a/llm_main.py	2026-03-03 20:10:01
+@@ -90,7 +90,7 @@
+ 
+ 
+ def record_parser(value, is_training):
+-  """Parse an ImageNet record from `value`."""
++  """Parse an Imagenet record from value."""
+   keys_to_features = {
+       'image/encoded':
+           tf.FixedLenFeature((), tf.string, default_value=''),
+@@ -134,21 +134,24 @@
+ 
+ def input_fn(is_training, data_dir, batch_size, num_epochs=1):
+   """Input function which provides batches for train or eval."""
+-  dataset = tf.data.Dataset.from_tensor_slices(filenames(is_training, data_dir))
++  dataset = tf.data.Dataset.from_tensor_slices(
++      filenames(is_training, data_dir))
+ 
+   if is_training:
+     dataset = dataset.shuffle(buffer_size=_FILE_SHUFFLE_BUFFER)
+ 
+   dataset = dataset.flat_map(tf.data.TFRecordDataset)
++
+   dataset = dataset.map(lambda value: record_parser(value, is_training),
+                         num_parallel_calls=5)
+-  dataset = dataset.prefetch(batch_size)
+ 
+   if is_training:
+     # When choosing shuffle buffer sizes, larger sizes result in better
+     # randomness, while smaller sizes have better performance.
+     dataset = dataset.shuffle(buffer_size=_SHUFFLE_BUFFER)
+ 
++  dataset = dataset.prefetch(batch_size)
++
+   # We call repeat after shuffling, rather than before, to prevent separate
+   # epochs from blending together.
+   dataset = dataset.repeat(num_epochs)
+@@ -274,4 +277,4 @@
+ if __name__ == '__main__':
+   tf.logging.set_verbosity(tf.logging.INFO)
+   FLAGS, unparsed = parser.parse_known_args()
+-  tf.app.run(argv=[sys.argv[0]] + unparsed)
++  tf.app.run(argv=[sys.argv[0]] + unparsed)
+\ No newline at end of file

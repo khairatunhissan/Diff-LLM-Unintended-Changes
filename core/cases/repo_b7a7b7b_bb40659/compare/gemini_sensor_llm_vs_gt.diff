@@ -1,0 +1,9 @@
+--- cases/repo_b7a7b7b_bb40659/merge_sensor.py	2026-02-27 23:50:51
++++ cases/repo_b7a7b7b_bb40659/llm_gemini_sensor.py	2026-06-03 15:09:22
+@@ -120,4 +120,4 @@
+     @property
+     def native_value(self) -> StateType:
+         """Return the value provided by the description."""
+-        return self.entity_description.value_fn(self.coordinator)
++        return self.entity_description.value_fn(self.coordinator)
+\ No newline at end of file

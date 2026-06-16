@@ -1,0 +1,18 @@
+--- cases/repo_b87b726_c38aeb8/merge_base.py	2026-02-28 21:40:27
++++ cases/repo_b87b726_c38aeb8/llm_gemini_base.py	2026-06-03 16:06:25
+@@ -110,7 +110,7 @@
+         for candle in self.candles:
+             candle.start()
+ 
+-    def candles_formatted_list(self, candles_df: pd.DataFrame, columns_to_show: List):
++    def candles_formatted_list((self, candles_df: pd.DataFrame, columns_to_show: List):
+         lines = []
+         candles_df = candles_df.copy()
+         candles_df["timestamp"] = pd.to_datetime(candles_df["timestamp"], unit="ms")
+@@ -307,4 +307,4 @@
+                              position_action=PositionAction.CLOSE)
+ 
+     def market_data_extra_info(self):
+-        return ["\n"]
++        return ["\n"]
+\ No newline at end of file

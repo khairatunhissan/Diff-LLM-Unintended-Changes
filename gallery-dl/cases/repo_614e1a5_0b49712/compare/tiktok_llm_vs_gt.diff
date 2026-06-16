@@ -1,0 +1,86 @@
+--- cases/repo_614e1a5_0b49712/merge_tiktok.py	2026-03-04 20:35:35
++++ cases/repo_614e1a5_0b49712/llm_tiktok.py	2026-03-04 20:41:31
+@@ -914,22 +914,19 @@
+ 
+ 
+ class TiktokTimeCursor(TiktokPaginationCursor):
+-    def __init__(self, *, reverse=True, has_more_attribute="hasMore",
+-                 cursor_attribute="cursor"):
++    def __init__(self, *, reverse=True):
+         super().__init__()
+         self.cursor = 0
+         # If we expect the cursor to go up or down as we go to the next page.
+         # True for down, False for up.
+         self.reverse = reverse
+-        self.has_more_key = has_more_attribute
+-        self.cursor_key = cursor_attribute
+ 
+     def current_page(self):
+         return self.cursor
+ 
+     def next_page(self, data, query_parameters):
+         skip_fallback_logic = self.cursor == 0
+-        new_cursor = int(data.get(self.cursor_key, 0))
++        new_cursor = int(data.get("cursor", 0))
+         no_cursor = not new_cursor
+         if not skip_fallback_logic:
+             # If the new cursor doesn't go in the direction we expect, use the
+@@ -941,7 +938,7 @@
+         elif no_cursor:
+             raise exception.ExtractionError("Could not extract next cursor")
+         self.cursor = new_cursor
+-        return not data.get(self.has_more_key, False)
++        return not data.get("hasMore", False)
+ 
+     def fallback_cursor(self, data):
+         try:
+@@ -971,12 +968,6 @@
+         return -50_000
+ 
+ 
+-class TiktokStoryTimeCursor(TiktokTimeCursor):
+-    def __init__(self):
+-        super().__init__(reverse=False, has_more_attribute="HasMoreAfter",
+-                         cursor_attribute="MaxCursor")
+-
+-
+ class TiktokLegacyTimeCursor(TiktokPaginationCursor):
+     def __init__(self):
+         super().__init__()
+@@ -1022,8 +1013,9 @@
+ 
+ 
+ class TiktokPaginationRequest:
+-    def __init__(self, endpoint):
++    def __init__(self, endpoint, *, cursor_attribute="cursor"):
+         self.endpoint = endpoint
++        self.cursor_attribute = cursor_attribute
+         self._regenerate_device_id()
+         self.items = {}
+ 
+@@ -1253,7 +1245,8 @@
+         }
+         if cursor:
+             # We must not write this as a floating-point number:
+-            query_parameters["cursor"] = str(int(cursor.current_page()))
++            query_parameters[self.cursor_attribute] = str(
++                int(cursor.current_page()))
+         for key, value in extra_parameters.items():
+             query_parameters[key] = f"{value}"
+         query_str = text.build_query(query_parameters)
+@@ -1481,7 +1474,7 @@
+         assert query_parameters["loadBackward"] in ["true", "false"]
+ 
+     def cursor_type(self, query_parameters):
+-        return TiktokStoryTimeCursor
++        return TiktokBackwardTimeCursor
+ 
+ 
+ class TiktokStoryBatchItemListRequest(TiktokItemListRequest):
+@@ -1544,4 +1537,4 @@
+ 
+     def generate_urls(self):
+         return [(id, f"https://www.tiktok.com/@{name}")
+-                for id, name in self.items.items()]
++                for id, name in self.items.items()]
+\ No newline at end of file

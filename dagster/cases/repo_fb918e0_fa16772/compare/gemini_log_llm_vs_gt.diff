@@ -1,0 +1,187 @@
+--- cases/repo_fb918e0_fa16772/merge_log.py	2026-04-04 13:18:51
++++ cases/repo_fb918e0_fa16772/llm_gemini_log.py	2026-06-09 14:37:22
+@@ -463,10 +463,11 @@
+             of_type (Optional[DagsterEventType]): the dagster event type to filter the logs.
+             limit (Optional[int]): the maximum number of events to fetch
+         """
++        pre_conditions = not of_type or isinstance(of_type, (DagsterEventType, frozenset, set))
+         check.str_param(run_id, "run_id")
+         check.opt_str_param(cursor, "cursor")
+ 
+-        check.invariant(not of_type or isinstance(of_type, (DagsterEventType, frozenset, set)))
++        check.invariant(pre_conditions)
+ 
+         dagster_event_types = (
+             {of_type}
+@@ -619,19 +620,21 @@
+             .where(SqlEventLogStorageTable.c.run_id == run_id)
+             .where(SqlEventLogStorageTable.c.step_key != None)  # noqa: E711
+             .where(
+-                SqlEventLogStorageTable.c.dagster_event_type.in_(
+-                    [
+-                        DagsterEventType.STEP_START.value,
+-                        DagsterEventType.STEP_SUCCESS.value,
+-                        DagsterEventType.STEP_SKIPPED.value,
+-                        DagsterEventType.STEP_FAILURE.value,
+-                        DagsterEventType.STEP_RESTARTED.value,
+-                        DagsterEventType.ASSET_MATERIALIZATION.value,
+-                        DagsterEventType.STEP_EXPECTATION_RESULT.value,
+-                        DagsterEventType.STEP_RESTARTED.value,
+-                        DagsterEventType.STEP_UP_FOR_RETRY.value,
+-                    ]
+-                    + [marker_event.value for marker_event in MARKER_EVENTS]
++                db.and_(
++                    SqlEventLogStorageTable.c.dagster_event_type.in_(
++                        [
++                            DagsterEventType.STEP_START.value,
++                            DagsterEventType.STEP_SUCCESS.value,
++                            DagsterEventType.STEP_SKIPPED.value,
++                            DagsterEventType.STEP_FAILURE.value,
++                            DagsterEventType.STEP_RESTARTED.value,
++                            DagsterEventType.ASSET_MATERIALIZATION.value,
++                            DagsterEventType.STEP_EXPECTATION_RESULT.value,
++                            DagsterEventType.STEP_RESTARTED.value,
++                            DagsterEventType.STEP_UP_FOR_RETRY.value,
++                        ]
++                        + [marker_event.value for marker_event in MARKER_EVENTS]
++                    )
+                 )
+             )
+             .order_by(SqlEventLogStorageTable.c.id.asc())
+@@ -1033,7 +1036,7 @@
+                 ascending=ascending,
+             )
+         else:
+-            before_cursor, after_cursor = EventRecordsFilter.get_cursor_params(cursor, ascending)
++            before_cursor, after_cursor = EventLogStorage.get_cursor_params(cursor, ascending)
+             asset_key = records_filter
+             event_records_filter = EventRecordsFilter(
+                 event_type=DagsterEventType.ASSET_MATERIALIZATION,
+@@ -1059,7 +1062,7 @@
+                 ascending=ascending,
+             )
+         else:
+-            before_cursor, after_cursor = EventRecordsFilter.get_cursor_params(cursor, ascending)
++            before_cursor, after_cursor = EventLogStorage.get_cursor_params(cursor, ascending)
+             asset_key = records_filter
+             event_records_filter = EventRecordsFilter(
+                 event_type=DagsterEventType.ASSET_OBSERVATION,
+@@ -1085,7 +1088,7 @@
+                 ascending=ascending,
+             )
+         else:
+-            before_cursor, after_cursor = EventRecordsFilter.get_cursor_params(cursor, ascending)
++            before_cursor, after_cursor = EventLogStorage.get_cursor_params(cursor, ascending)
+             asset_key = records_filter
+             event_records_filter = EventRecordsFilter(
+                 event_type=DagsterEventType.ASSET_MATERIALIZATION_PLANNED,
+@@ -1112,7 +1115,7 @@
+             expected = ", ".join(EVENT_TYPE_TO_PIPELINE_RUN_STATUS.keys())
+             check.failed(f"Expected one of {expected}, received {event_type.value}")
+ 
+-        before_cursor, after_cursor = EventRecordsFilter.get_cursor_params(cursor, ascending)
++        before_cursor, after_cursor = EventLogStorage.get_cursor_params(cursor, ascending)
+         event_records_filter = (
+             records_filter.to_event_records_filter(cursor, ascending)
+             if isinstance(records_filter, RunStatusChangeRecordsFilter)
+@@ -1186,7 +1189,7 @@
+     ) -> AssetRecord:
+         from dagster._core.storage.partition_status_cache import AssetStatusCacheValue
+ 
+-        asset_key = AssetKey.from_db_string(row["asset_key"])
++        asset_key = AssetKey.from_coerceable(row["asset_key"])
+         if asset_key:
+             return AssetRecord(
+                 storage_id=row["id"],
+@@ -1214,7 +1217,7 @@
+         to_backcompat_fetch = set()
+         results: Dict[AssetKey, Optional[EventLogRecord]] = {}
+         for row in raw_asset_rows:
+-            asset_key = AssetKey.from_db_string(row["asset_key"])
++            asset_key = AssetKey.from_coerceable(row["asset_key"])
+             if not asset_key:
+                 continue
+             event_or_materialization = (
+@@ -1265,7 +1268,7 @@
+             event_rows = db_fetch_mappings(conn, backcompat_query)
+ 
+         for row in event_rows:
+-            asset_key = AssetKey.from_db_string(cast(Optional[str], row["asset_key"]))
++            asset_key = AssetKey.from_coerceable(row["asset_key"])
+             if asset_key:
+                 results[asset_key] = EventLogRecord(
+                     storage_id=cast(int, row["id"]),
+@@ -1297,7 +1300,7 @@
+ 
+         asset_records: List[AssetRecord] = []
+         for row in rows:
+-            asset_key = AssetKey.from_db_string(row["asset_key"])
++            asset_key = AssetKey.from_coerceable(row["asset_key"])
+             if asset_key:
+                 asset_records.append(
+                     self._construct_asset_record_from_row(
+@@ -1317,7 +1320,7 @@
+     def all_asset_keys(self):
+         rows = self._fetch_asset_rows()
+         asset_keys = [
+-            AssetKey.from_db_string(row["asset_key"])
++            AssetKey.from_coerceable(row["asset_key"])
+             for row in sorted(rows, key=lambda x: x["asset_key"])
+         ]
+         return [asset_key for asset_key in asset_keys if asset_key]
+@@ -1330,10 +1333,10 @@
+     ) -> Sequence[AssetKey]:
+         rows = self._fetch_asset_rows(prefix=prefix, limit=limit, cursor=cursor)
+         asset_keys = [
+-            AssetKey.from_db_string(row["asset_key"])
++            AssetKey.from_coerceable(row["asset_key"])
+             for row in sorted(rows, key=lambda x: x["asset_key"])
+         ]
+-        return [asset_key for asset_key in asset_keys if asset_key]
++        return [asset_key for asset_keys in asset_keys if asset_key]
+ 
+     def get_latest_materialization_events(
+         self, asset_keys: Iterable[AssetKey]
+@@ -1440,7 +1443,7 @@
+         row_by_asset_key: Dict[AssetKey, SqlAlchemyRow] = OrderedDict()
+ 
+         for row in rows:
+-            asset_key = AssetKey.from_db_string(cast(str, row["asset_key"]))
++            asset_key = AssetKey.from_coerceable(row["asset_key"])
+             if not asset_key:
+                 continue
+             asset_details = AssetDetails.from_db_string(row["asset_details"])
+@@ -1521,7 +1524,7 @@
+         with self.index_connection() as conn:
+             backcompat_rows = db_fetch_mappings(conn, backcompat_query)
+         return {
+-            AssetKey.from_db_string(row["asset_key"]): row["timestamp"] for row in backcompat_rows
++            AssetKey.from_coerceable(row["asset_key"]): row["timestamp"] for row in backcompat_rows
+         }  # type: ignore
+ 
+     def _can_mark_assets_as_migrated(self, rows):
+@@ -1949,7 +1952,7 @@
+                 latest_event_ids_subquery.join(
+                     SqlEventLogStorageTable,
+                     SqlEventLogStorageTable.c.id == latest_event_ids_subquery.c.id,
+-                ),
++                )
+             ),
+             "latest_events_subquery",
+         )
+@@ -2416,7 +2419,7 @@
+         self, concurrency_key: str, run_id: str, step_key: str
+     ) -> ConcurrencySlotStatus:
+         """Claim a concurrency slot for the step.  Helper method that is called for steps that are
+-        popped off the priority queue.
++        opened from the priority queue.
+ 
+         Args:
+             concurrency_key (str): The concurrency key to claim.
+@@ -2804,4 +2807,4 @@
+     """
+     if column not in row.keys():
+         return None
+-    return row[column]
++    return row[column]
+\ No newline at end of file

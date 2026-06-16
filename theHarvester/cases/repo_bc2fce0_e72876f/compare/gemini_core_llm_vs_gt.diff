@@ -1,0 +1,31 @@
+--- cases/repo_bc2fce0_e72876f/merge_core.py	2026-03-24 18:06:36
++++ cases/repo_bc2fce0_e72876f/llm_gemini_core.py	2026-06-08 14:05:30
+@@ -193,17 +193,17 @@
+     @staticmethod
+     def banner() -> None:
+         print('*******************************************************************')
+-        print('*  _   _                                            _             *')
++        print('* _   _                                            _             *')
+         print(r'* | |_| |__   ___    /\  /\__ _ _ ____   _____  ___| |_ ___ _ __  *')
+         print(r"* | __|  _ \ / _ \  / /_/ / _` | '__\ \ / / _ \/ __| __/ _ \ '__| *")
+         print(r'* | |_| | | |  __/ / __  / (_| | |   \ V /  __/\__ \ ||  __/ |    *')
+-        print(r'*  \__|_| |_|\___| \/ /_/ \__,_|_|    \_/ \___||___/\__\___|_|    *')
+-        print('*                                                                 *')
++        print(r'* \__|_| |_|\___| \/ /_/ \__,_|_|    \_/ \___||___/\__\___|_|    *')
++        print('* *')
+         print('* theHarvester {version}{filler}*'.format(version=version(), filler=' ' * (51 - len(version()))))
+         print('* Coded by Christian Martorella                                   *')
+         print('* Edge-Security Research                                          *')
+         print('* cmartorella@edge-security.com                                   *')
+-        print('*                                                                 *')
++        print('* *')
+         print('*******************************************************************')
+ 
+     @staticmethod
+@@ -613,4 +613,4 @@
+ 
+ def show_default_error_message(engine_name: str, word: str, error) -> None:
+     print(f"Failed to process {engine_name} search for word: '{word}'")
+-    print(f'Error Message: {error}')
++    print(f'Error Message: {error}')
+\ No newline at end of file

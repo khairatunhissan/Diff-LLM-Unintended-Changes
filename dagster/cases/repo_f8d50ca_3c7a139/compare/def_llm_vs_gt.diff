@@ -1,0 +1,46 @@
+--- cases/repo_f8d50ca_3c7a139/merge_def.py	2026-04-04 15:00:53
++++ cases/repo_f8d50ca_3c7a139/llm_def.py	2026-04-04 15:13:08
+@@ -803,33 +803,24 @@
+         if not (self.partitions_def and self.partitioned_config):
+             check.failed("Called run_request_for_partition on a non-partitioned job")
+ 
+-        if (
+-            isinstance(self.partitions_def, DynamicPartitionsDefinition)
+-            and self.partitions_def.name
+-        ):
+-            # Do not support using run_request_for_partition with dynamic partitions,
+-            # since this requires querying the instance once per run request for the
+-            # existent dynamic partitions
++        if isinstance(self.partitions_def, DynamicPartitionsDefinition) and self.partitions_def.name:
+             check.failed(
+                 "run_request_for_partition is not supported for dynamic partitions. Instead, use"
+                 " RunRequest(partition_key=...)"
+             )
+ 
+-        partition = self.partitions_def.get_partition(
+-            partition_key, dynamic_partitions_store=None, current_time=current_time
+-        )
++        partition = self.partitions_def.get_partition(partition_key, current_time=current_time)
+         run_config = (
+             run_config
+             if run_config is not None
+             else self.partitioned_config.get_run_config_for_partition_key(
+-                partition.name, dynamic_partitions_store=None, current_time=current_time
++                partition.name, current_time=current_time
+             )
+         )
+         run_request_tags = {
+             **(tags or {}),
+             **self.partitioned_config.get_tags_for_partition_key(
+                 partition_key,
+-                dynamic_partitions_store=None,
+                 current_time=current_time,
+                 job_name=self.name,
+             ),
+@@ -1331,4 +1322,4 @@
+         config_type_dict_by_name=config_type_dict_by_name,
+         config_type_dict_by_key=config_type_dict_by_key,
+         config_mapping=job_def.config_mapping,
+-    )
++    )
+\ No newline at end of file

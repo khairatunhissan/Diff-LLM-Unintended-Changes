@@ -1,0 +1,55 @@
+--- cases/repo_1d98531_4756d4c/merge_trainer2.py	2026-03-02 23:03:08
++++ cases/repo_1d98531_4756d4c/llm_gemini_trainer2.py	2026-06-07 12:01:08
+@@ -76,7 +76,7 @@
+         num_workers: int = 6,
+         sampler=None,
+         use_amp: bool = False,
+-        amp_opt_level: str = "O1",
++        amp_opt_level: str = 'O1',
+         **kwargs,
+     ) -> dict:
+         """
+@@ -125,10 +125,8 @@
+             if sys.version_info < (3, 0):
+                 raise RuntimeError("Apex currently only supports Python 3. Aborting.")
+             if amp is None:
+-                raise RuntimeError(
+-                    "Failed to import apex. Please install apex from https://www.github.com/nvidia/apex "
+-                    "to enable mixed-precision training."
+-                )
++                raise RuntimeError("Failed to import apex. Please install apex from https://www.github.com/nvidia/apex "
++                                   "to enable mixed-precision training.")
+ 
+         if eval_mini_batch_size is None:
+             eval_mini_batch_size = mini_batch_size
+@@ -180,10 +178,10 @@
+             optimizer.load_state_dict(self.optimizer_state)
+ 
+         if use_amp:
+-            self.model, optimizer = amp.initialize(
+-                self.model, optimizer, opt_level=amp_opt_level
+-            )
+-
++            self.model, optimizer = amp.initialize(self.model, optimizer,
++                                                    opt_level=amp_opt_level
++                                                    )
++                    
+         # minimize training loss if training with dev data, else maximize dev score
+         anneal_mode = "min" if train_with_dev else "max"
+ 
+@@ -280,7 +278,7 @@
+ 
+                     # depending on memory mode, embeddings are moved to CPU, GPU or deleted
+                     store_embeddings(batch, embeddings_storage_mode)
+-
++    
+                     batch_time += time.time() - start_time
+                     if batch_no % modulo == 0:
+                         log.info(
+@@ -624,4 +622,4 @@
+         log.info(f"learning rate finder finished - plot {learning_rate_tsv}")
+         log_line(log)
+ 
+-        return Path(learning_rate_tsv)
++        return Path(learning_rate_tsv)
+\ No newline at end of file

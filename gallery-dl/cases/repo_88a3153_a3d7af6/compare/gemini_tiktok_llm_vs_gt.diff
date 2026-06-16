@@ -1,0 +1,54 @@
+--- cases/repo_88a3153_a3d7af6/merge_tiktok.py	2026-03-04 20:18:22
++++ cases/repo_88a3153_a3d7af6/llm_gemini_tiktok.py	2026-06-05 14:34:02
+@@ -151,7 +151,7 @@
+                                  self._retries)
+                 self.sleep(self._timeout, "retry")
+ 
+-    def _extract_rehydration_data_user(self, profile_url, additional_keys=()):
++    def _extract_rehydration_data(self, profile_url, additional_keys=()):
+         if profile_url in self.rehydration_data_cache:
+             data = self.rehydration_data_cache[profile_url]
+         else:
+@@ -207,7 +207,7 @@
+             # from the rehydration data.
+             return user_name
+ 
+-        id = self._extract_rehydration_data_user(
++        id = self._extract_rehydration_data(
+             profile_url, ("userInfo", "user", id_key))
+         return None if match(id) is None else id
+ 
+@@ -415,7 +415,7 @@
+         user_name = self.groups[0]
+         profile_url = f"{self.root}/@{user_name}"
+ 
+-        data = self._extract_rehydration_data_user(
++        data = self._extract_rehydration_data(
+             profile_url, ("userInfo", "user"))
+         data["user"] = data.get("uniqueId", user_name)
+         avatar_url = data.get("avatarLarger") or data.get("avatarMedium") \
+@@ -796,7 +796,7 @@
+             return 7 * 86_400_000 * (-1 if self.reverse else 1)
+ 
+ 
+-class TiktokForwardTimeCursor(TiktokTimeCursor):
++class TiktokFileCursor(TiktokTimeCursor):
+     def __init__(self):
+         super().__init__(reverse=False)
+ 
+@@ -1235,7 +1235,7 @@
+     def cursor_type(self, query_parameters):
+         request_type = query_parameters["post_item_list_request_type"]
+         if request_type == "2":
+-            return TiktokForwardTimeCursor
++            return TiktokFileCursor
+         elif request_type == "1":
+             return TiktokPopularTimeCursor
+         else:
+@@ -1383,4 +1383,4 @@
+ 
+     def generate_urls(self):
+         return [(id, f"https://www.tiktok.com/@{name}")
+-                for id, name in self.items.items()]
++                for id, name in self.items.items()]
+\ No newline at end of file

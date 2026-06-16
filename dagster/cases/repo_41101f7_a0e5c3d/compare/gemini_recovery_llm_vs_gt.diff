@@ -1,0 +1,9 @@
+--- cases/repo_41101f7_a0e5c3d/merge_recovery.py	2026-04-03 15:26:45
++++ cases/repo_41101f7_a0e5c3d/llm_gemini_recovery.py	2026-06-09 13:57:43
+@@ -258,4 +258,4 @@
+             external_sensor.get_external_origin_id(), external_sensor.selector_id
+         )
+         assert len(ticks) == 2
+-        assert ticks[0].status == TickStatus.SKIPPED
++        assert ticks[0].status == TickStatus.SKIPPED
+\ No newline at end of file

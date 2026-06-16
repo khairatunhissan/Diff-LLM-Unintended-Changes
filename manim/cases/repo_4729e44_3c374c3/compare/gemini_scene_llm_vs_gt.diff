@@ -1,0 +1,12 @@
+--- cases/repo_4729e44_3c374c3/merge_scene.py	2026-03-03 23:45:59
++++ cases/repo_4729e44_3c374c3/llm_gemini_scene.py	2026-06-08 12:42:37
+@@ -729,7 +729,4 @@
+ 
+         self.textbox.set_value("Manim")
+         # self.wait(60)
+-        # self.embed()
+-
+-
+-# See https://github.com/3b1b/videos for many, many more
++        # self.embed()
+\ No newline at end of file

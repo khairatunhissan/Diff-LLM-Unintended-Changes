@@ -1,0 +1,9 @@
+--- cases/repo_ba9ec8c_b3fc8ef/merge_case.py	2026-03-02 21:54:03
++++ cases/repo_ba9ec8c_b3fc8ef/llm_gemini_case.py	2026-06-08 12:57:51
+@@ -102,4 +102,4 @@
+ 
+     def tearDown(self):
+         super(WebserverTestCase, self).tearDown()
+-        self._web_server.stop()
++        self._web_server.stop()
+\ No newline at end of file

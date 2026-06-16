@@ -1,0 +1,73 @@
+--- cases/repo_5992898_7c7c0aa/merge_helpertrigger.py	2026-02-27 20:10:24
++++ cases/repo_5992898_7c7c0aa/llm_gemini_helpertrigger.py	2026-06-03 14:07:48
+@@ -338,12 +338,12 @@
+         self._target = config.target
+ 
+     def is_valid_transition(self, from_state: State, to_state: State) -> bool:
+-        """Check if the origin state is not an expected target states."""
++        """Check if the state matches the origin state."""
+         return not self.is_valid_state(from_state)
+ 
+     @abc.abstractmethod
+     def is_valid_state(self, state: State) -> bool:
+-        """Check if the new state matches the expected state(s)."""
++        """Check if the state matches the target state."""
+ 
+     def check_all_match(self, entity_ids: set[str]) -> bool:
+         """Check if all entity states match."""
+@@ -394,12 +394,12 @@
+             if not from_state or from_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN):
+                 return
+ 
+-            # The trigger should never fire if the new state is not valid
+-            if not to_state or not self.is_valid_state(to_state):
++            # The trigger should never fire if the previous state was not the from state
++            if not to_state or not self.is_valid_transition(from_state, to_state):
+                 return
+ 
+-            # The trigger should never fire if the transition is not valid
+-            if not self.is_valid_transition(from_state, to_state):
++            # The trigger should never fire if the new state is not the to state
++            if not self.is_valid_state(to_state):
+                 return
+ 
+             if behavior == BEHAVIOR_LAST:
+@@ -434,7 +434,7 @@
+     _to_state: str
+ 
+     def is_valid_state(self, state: State) -> bool:
+-        """Check if the new state matches the expected state."""
++        """Check if the state matches the target state."""
+         return state.state == self._to_state
+ 
+ 
+@@ -445,11 +445,11 @@
+     _to_states: set[str]
+ 
+     def is_valid_transition(self, from_state: State, to_state: State) -> bool:
+-        """Check if the origin state matches the expected ones."""
++        """Check if the state matches the origin state."""
+         return from_state.state in self._from_states
+ 
+     def is_valid_state(self, state: State) -> bool:
+-        """Check if the new state matches the expected states."""
++        """Check if the state matches the target state."""
+         return state.state in self._to_states
+ 
+ 
+@@ -460,7 +460,7 @@
+     _attribute_to_state: str
+ 
+     def is_valid_state(self, state: State) -> bool:
+-        """Check if the new state attribute matches the expected one."""
++        """Check if the state matches the target state."""
+         return state.attributes.get(self._attribute) == self._attribute_to_state
+ 
+ 
+@@ -1093,4 +1093,4 @@
+         new_descriptions_cache[missing_trigger] = description
+ 
+     hass.data[TRIGGER_DESCRIPTION_CACHE] = new_descriptions_cache
+-    return new_descriptions_cache
++    return new_descriptions_cache
+\ No newline at end of file

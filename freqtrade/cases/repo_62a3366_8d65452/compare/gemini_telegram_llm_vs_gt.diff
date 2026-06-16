@@ -1,0 +1,9 @@
+--- cases/repo_62a3366_8d65452/merge_telegram.py	2026-03-08 15:30:46
++++ cases/repo_62a3366_8d65452/llm_gemini_telegram.py	2026-06-03 15:17:35
+@@ -1090,4 +1090,4 @@
+     assert log_has(
+         'Telegram NetworkError: Oh snap! Trying one more time.',
+         caplog.record_tuples
+-    )
++    )
+\ No newline at end of file

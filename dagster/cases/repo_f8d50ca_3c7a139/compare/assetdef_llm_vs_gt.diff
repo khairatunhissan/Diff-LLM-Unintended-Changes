@@ -1,0 +1,41 @@
+--- cases/repo_f8d50ca_3c7a139/merge_assetdef.py	2026-04-04 15:15:41
++++ cases/repo_f8d50ca_3c7a139/llm_assetdef.py	2026-04-04 15:17:54
+@@ -121,16 +121,10 @@
+             self.config, self.partitions_def
+         )
+ 
+-        if (
+-            isinstance(self.partitions_def, DynamicPartitionsDefinition)
+-            and self.partitions_def.name
+-        ):
+-            # Do not support using run_request_for_partition with dynamic partitions,
+-            # since this requires querying the instance once per run request for the
+-            # existent dynamic partitions
++        if isinstance(self.partitions_def, DynamicPartitionsDefinition) and self.partitions_def.name:
+             check.failed(
+-                "run_request_for_partition is not supported for dynamic partitions. Instead, use"
+-                " RunRequest(partition_key=...)"
++                "run_request_for_partition is not supported for dynamic partitions. Instead, use "
++                "RunRequest(partition_key=...)"
+             )
+ 
+         partition = self.partitions_def.get_partition(
+@@ -146,10 +140,7 @@
+         run_request_tags = {
+             **(tags or {}),
+             **partitioned_config.get_tags_for_partition_key(
+-                partition_key,
+-                dynamic_partitions_store=None,
+-                current_time=current_time,
+-                job_name=self.name,
++                partition_key, None, current_time=current_time, job_name=self.name
+             ),
+         }
+ 
+@@ -379,4 +370,4 @@
+         tags=tags,
+         partitions_def=partitions_def,
+         executor_def=executor_def,
+-    )
++    )
+\ No newline at end of file

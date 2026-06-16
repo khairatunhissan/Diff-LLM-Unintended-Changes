@@ -1,0 +1,27 @@
+--- cases/repo_cfcc82a_947f1ad/merge_sites.py	2026-03-24 22:15:10
++++ cases/repo_cfcc82a_947f1ad/llm_gemini_sites.py	2026-06-08 16:13:22
+@@ -129,7 +129,7 @@
+         if data_file_path.lower().startswith("http"):
+             # Reference is to a URL.
+             try:
+-                response = requests.get(url=data_file_path, timeout=30)
++                response = requests.get(url=data_file_path, timeout=60)
+             except Exception as error:
+                 raise FileNotFoundError(
+                     f"Problem while attempting to access data file URL '{data_file_path}':  {error}"
+@@ -166,7 +166,7 @@
+ 
+         if honor_exclusions:
+             try:
+-                response = requests.get(url=EXCLUSIONS_URL, timeout=10)
++                response = requests.get(url=EXCLUSIONS_URL, timeout=60)
+                 if response.status_code == 200:
+                     exclusions = response.text.splitlines()
+                     exclusions = [exclusion.strip() for exclusion in exclusions]
+@@ -262,4 +262,4 @@
+         Return Value:
+         Length of sites object.
+         """
+-        return len(self.sites)
++        return len(self.sites)
+\ No newline at end of file

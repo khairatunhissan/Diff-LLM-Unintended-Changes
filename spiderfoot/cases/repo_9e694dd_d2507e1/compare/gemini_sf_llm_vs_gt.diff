@@ -1,0 +1,9 @@
+--- cases/repo_9e694dd_d2507e1/merge_sf.py	2026-03-18 19:00:44
++++ cases/repo_9e694dd_d2507e1/llm_gemini_sf.py	2026-06-08 14:54:16
+@@ -602,4 +602,4 @@
+         print("SpiderFoot requires -l <ip>:<port> to start the web server. Try --help for guidance.")
+         sys.exit(-1)
+ 
+-    main()
++    main()
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_e2865f7_005ec45/merge_doc.py	2026-03-03 00:27:28
++++ cases/repo_e2865f7_005ec45/llm_doc.py	2026-03-03 00:32:57
+@@ -771,4 +771,4 @@
+             "word_dropout": 0.0 if self.word_dropout is None else self.word_dropout.p,
+             "locked_dropout": 0.0 if self.locked_dropout is None else self.locked_dropout.dropout_rate,
+             "fine_tune": not self.static_embeddings,
+-        }
++        }
+\ No newline at end of file

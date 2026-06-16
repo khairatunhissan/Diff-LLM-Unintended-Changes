@@ -1,0 +1,17 @@
+--- cases/repo_bba8242_fa02bc8/merge_iban.py	2026-03-28 15:11:30
++++ cases/repo_bba8242_fa02bc8/llm_gemini_iban.py	2026-06-08 15:49:43
+@@ -63,6 +63,7 @@
+         srcModuleName = event.module
+         eventData = event.data
+ 
++        # event was received.
+         self.sf.debug(f"Received event, {eventName}, from {srcModuleName}")
+ 
+         # Extract IBAN Card numbers
+@@ -86,4 +87,4 @@
+                 evt.moduleDataSource = "Unknown"
+             self.notifyListeners(evt)
+ 
+-# End of sfp_iban class
++# End of sfp_iban class
+\ No newline at end of file

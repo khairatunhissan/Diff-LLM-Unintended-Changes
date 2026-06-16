@@ -1,0 +1,24 @@
+--- cases/repo_ba68976_e8f1418/merge_pdfa.py	2026-03-04 15:46:15
++++ cases/repo_ba68976_e8f1418/llm_pdfa.py	2026-03-04 15:49:58
+@@ -17,8 +17,14 @@
+ from .metadata import add_metadata
+ 
+ 
++def _compatibility_warning(kind):
++    pass
++
++
+ def pdfa(pdf, metadata, document, page_streams, compress, version):
+     """Set metadata for PDF/A documents."""
++    _compatibility_warning('PDF/A')
++
+     # Add ICC profile
+     profile = pydyf.Stream(
+         [read_binary(__package__, 'sRGB2014.icc')],
+@@ -45,4 +51,4 @@
+ 
+ VARIANTS = {
+     f'pdf/a-{i}b': (partial(pdfa, version=i), {'version': pdf_version})
+-    for i, pdf_version in enumerate(('1.4', '1.7', '1.7', '2.0'), start=1)}
++    for i, pdf_version in enumerate(('1.4', '1.7', '1.7', '2.0'), start=1)}
+\ No newline at end of file

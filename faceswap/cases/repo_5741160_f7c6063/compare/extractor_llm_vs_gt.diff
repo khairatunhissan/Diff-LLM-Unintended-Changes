@@ -1,0 +1,29 @@
+--- cases/repo_5741160_f7c6063/merge_extractor.py	2026-03-12 15:25:16
++++ cases/repo_5741160_f7c6063/llm_extractor.py	2026-03-12 15:28:32
+@@ -147,15 +147,16 @@
+     if input_is_predetected_face:
+         input_scale = 1.0
+         detected_faces = [ dlib.rectangle(0, 0, w, h) ]
++        input_image = input_image_bgr[:, :, ::-1].copy()
+     else:
+         input_scale = scale_to / (w if w > h else h)
+-        input_image_bgr = cv2.resize (input_image_bgr, ( int(w*input_scale), int(h*input_scale) ), interpolation=cv2.INTER_LINEAR)
+-        input_image = input_image_bgr[:,:,::-1].copy() #cv2 and numpy inputs differs in rgb-bgr order, this affects chance of dlib face detection
++        input_image_bgr = cv2.resize(input_image_bgr, (int(w*input_scale), int(h*input_scale)), interpolation=cv2.INTER_LINEAR)
++        input_image = input_image_bgr[:, :, ::-1].copy() #cv2 and numpy inputs differs in rgb-bgr order, this affects chance of dlib face detection
+         input_images = [input_image, input_image_bgr]
+         for current_detector, current_image in ((current_detector, current_image) for current_detector in dlib_detectors for current_image in input_images):
+             detected_faces = current_detector(current_image, 0)
+             if len(detected_faces) != 0:
+-                break
++                break           
+ 
+     landmarks = []
+     if len(detected_faces) > 0:        
+@@ -182,4 +183,4 @@
+     elif verbose:
+         print("Warning: No faces were detected.")
+         
+-    return landmarks
++    return landmarks
+\ No newline at end of file

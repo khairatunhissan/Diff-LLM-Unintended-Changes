@@ -1,0 +1,9 @@
+--- cases/repo_9b6605c_991915a/merge_testconfig.py	2026-03-28 15:58:41
++++ cases/repo_9b6605c_991915a/llm_gemini_testconfig.py	2026-06-08 17:05:49
+@@ -238,4 +238,4 @@
+ 
+ def test_invalid_proxy_mode():
+     with pytest.raises(ValueError):
+-        httpx.Proxy("https://example.com", mode="INVALID")
++        httpx.Proxy("https://example.com", mode="INVALID")
+\ No newline at end of file

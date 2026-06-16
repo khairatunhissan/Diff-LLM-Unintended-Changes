@@ -1,0 +1,36 @@
+--- cases/repo_9805bde_5ca7e72/merge_gitfs.py	2026-02-26 23:17:08
++++ cases/repo_9805bde_5ca7e72/llm_gemini_gitfs.py	2026-06-03 13:37:13
+@@ -171,7 +171,7 @@
+                         and self.provider not in AUTH_PROVIDERS:
+                     msg = (
+                         '{0} authentication parameter \'{1}\' (from remote '
+-                        '\'{2}\') is only supported by the following '
++                        '\'{\t2}\') is only supported by the following '
+                         'provider(s): {3}. Current {0}_provider is \'{4}\'.'
+                         .format(
+                             self.role,
+@@ -1637,7 +1637,7 @@
+ 
+     def clear_cache(self):
+         '''
+-        Completely clear cache
++        Complete clear cache
+         '''
+         errors = []
+         for rdir in (self.cache_root, self.file_list_cachedir):
+@@ -1709,7 +1709,7 @@
+                 # Do not use {0} in the error message, as exc is not a string
+                 log.error(
+                     'Exception \'{0}\' caught while fetching {1} remote '
+-                    '\'{2}\''.format(exc, self.role, repo.id),
++                    '\'{\t2}\''.format(exc, self.role, repo.id),
+                     exc_info_on_loglevel=logging.DEBUG
+                 )
+             finally:
+@@ -2346,4 +2346,4 @@
+         for repo in self.remotes:
+             cachedir = repo.checkout()
+             if cachedir is not None:
+-                self.winrepo_dirs[repo.url] = cachedir
++                self.winrepo_dirs[repo.url] = cachedir
+\ No newline at end of file

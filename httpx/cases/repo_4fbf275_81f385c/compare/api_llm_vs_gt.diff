@@ -1,0 +1,31 @@
+--- cases/repo_4fbf275_81f385c/merge_api.py	2026-03-28 21:11:19
++++ cases/repo_4fbf275_81f385c/llm_api.py	2026-03-28 21:14:47
+@@ -142,12 +142,7 @@
+     [0]: /quickstart#streaming-responses
+     """
+     with Client(
+-        cookies=cookies,
+-        proxies=proxies,
+-        cert=cert,
+-        verify=verify,
+-        timeout=timeout,
+-        trust_env=trust_env,
++        cookies=cookies, proxies=proxies, cert=cert, verify=verify, trust_env=trust_env
+     ) as client:
+         with client.stream(
+             method=method,
+@@ -159,6 +154,7 @@
+             params=params,
+             headers=headers,
+             auth=auth,
++            timeout=timeout,
+             allow_redirects=allow_redirects,
+         ) as response:
+             yield response
+@@ -442,4 +438,4 @@
+         verify=verify,
+         timeout=timeout,
+         trust_env=trust_env,
+-    )
++    )
+\ No newline at end of file

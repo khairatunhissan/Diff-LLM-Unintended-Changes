@@ -1,0 +1,9 @@
+--- cases/repo_52c80f9_018b7ce/merge_scene.py	2026-03-04 13:15:58
++++ cases/repo_52c80f9_018b7ce/llm_scene.py	2026-03-04 13:38:56
+@@ -938,4 +938,4 @@
+                 mob.apply_depth_test()
+             if isinstance(mob, VMobject) and mob.has_stroke() and perp_stroke:
+                 mob.set_flat_stroke(False)
+-        super().add(*mobjects)
++        super().add(*mobjects)
+\ No newline at end of file

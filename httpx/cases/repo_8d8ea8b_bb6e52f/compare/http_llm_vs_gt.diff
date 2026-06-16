@@ -1,0 +1,9 @@
+--- cases/repo_8d8ea8b_bb6e52f/merge_http.py	2026-03-28 16:18:44
++++ cases/repo_8d8ea8b_bb6e52f/llm_http.py	2026-03-28 16:19:54
+@@ -246,4 +246,4 @@
+             f"HTTPProxy(proxy_url={self.proxy_url!r} "
+             f"proxy_headers={self.proxy_headers!r} "
+             f"proxy_mode={self.proxy_mode!r})"
+-        )
++        )
+\ No newline at end of file

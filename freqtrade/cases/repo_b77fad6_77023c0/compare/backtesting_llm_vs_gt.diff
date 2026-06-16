@@ -1,0 +1,19 @@
+--- cases/repo_b77fad6_77023c0/merge_backtesting.py	2026-03-08 22:35:31
++++ cases/repo_b77fad6_77023c0/llm_backtesting.py	2026-03-08 22:39:20
+@@ -35,7 +35,8 @@
+     return arrow.get(min_date), arrow.get(max_date)
+ 
+ 
+-def generate_text_table(data: Dict[str, Dict], results: DataFrame, stake_currency, ticker_interval) -> str:
++def generate_text_table(data: Dict[str, Dict], results: DataFrame,
++                        stake_currency, ticker_interval) -> str:
+     """
+     Generates and returns a text table for the given backtest data and the results dataframe
+     :return: pretty printed table with tabulate as str
+@@ -163,4 +164,4 @@
+     logger.info(
+         '\n====================== BACKTESTING REPORT ======================================\n%s',
+         generate_text_table(data, results, config['stake_currency'], args.ticker_interval)
+-    )
++    )
+\ No newline at end of file

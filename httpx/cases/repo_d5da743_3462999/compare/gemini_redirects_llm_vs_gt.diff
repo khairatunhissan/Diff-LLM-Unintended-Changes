@@ -1,0 +1,9 @@
+--- cases/repo_d5da743_3462999/merge_redirects.py	2026-03-28 17:24:23
++++ cases/repo_d5da743_3462999/llm_gemini_redirects.py	2026-06-08 23:33:14
+@@ -370,4 +370,4 @@
+     # The client is not logged in.
+     response = await client.get("https://example.com/")
+     assert response.url == "https://example.com/"
+-    assert response.text == "Not logged in"
++    assert response.text == "Not logged in"
+\ No newline at end of file

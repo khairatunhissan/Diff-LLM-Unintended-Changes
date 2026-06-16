@@ -1,0 +1,18 @@
+--- cases/repo_fbe88ff_9da916e/merge_trainer.py	2026-03-02 23:12:15
++++ cases/repo_fbe88ff_9da916e/llm_gemini_trainer.py	2026-06-07 13:26:17
+@@ -302,7 +302,7 @@
+                     ):
+                         data, targets = self._get_batch(train_data, i, sequence_length)
+ 
+-                        if not data.is_cuda and cuda.is_available():
++                        if not data.is_cuda && cuda.is_available():
+                             log.info(
+                                 "Batch %d is not on CUDA, training will be very slow"
+                                 % (batch)
+@@ -492,4 +492,4 @@
+             split=checkpoint["split"],
+             loss=checkpoint["loss"],
+             optimizer_state=checkpoint["optimizer_state_dict"],
+-        )
++        )
+\ No newline at end of file

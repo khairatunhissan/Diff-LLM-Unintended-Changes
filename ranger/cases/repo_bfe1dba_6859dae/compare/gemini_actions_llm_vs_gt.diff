@@ -1,0 +1,38 @@
+--- cases/repo_bfe1dba_6859dae/merge_actions.py	2026-03-27 15:35:39
++++ cases/repo_bfe1dba_6859dae/llm_gemini_actions.py	2026-06-08 13:44:24
+@@ -827,7 +827,7 @@
+         if value is True:
+             self.tags.add(*tags, tag=tag or self.tags.default_tag)
+         elif value is False:
+-            self.tags.remove(*tags)
++            self.tags.remove(*tags, tag=tag)
+         else:
+             self.tags.toggle(*tags, tag=tag or self.tags.default_tag)
+ 
+@@ -841,8 +841,8 @@
+     def tag_remove(self, paths=None, movedown=None, tag=None):
+         self.tag_toggle(paths=paths, value=False, movedown=movedown, tag=tag)
+ 
+-    def tag_add(self, paths=None, movedown=None, tag=None):
+-        self.tag_toggle(paths=paths, value=True, movedown=movedown, tag=tag)
++    def tag_add(self, paths=None, movedown=None):
++        self.tag_toggle(paths=paths, value=True, movedown=movedown)
+ 
+     # --------------------------
+     # -- Bookmarks
+@@ -870,7 +870,7 @@
+         self.bookmarks.update_if_outdated()
+         self.bookmarks[str(key)] = val
+ 
+-    def unset_bookmark(self, key):
++    def delete_bookmark(self, key):  # pylint: disable=invalid-name
+         """Delete the bookmark with the name <key>"""
+         self.bookmarks.update_if_outdated()
+         del self.bookmarks[str(key)]
+@@ -1466,4 +1466,4 @@
+         except OSError as err:
+             self.notify(err)
+             return False
+-        return True
++        return True
+\ No newline at end of file

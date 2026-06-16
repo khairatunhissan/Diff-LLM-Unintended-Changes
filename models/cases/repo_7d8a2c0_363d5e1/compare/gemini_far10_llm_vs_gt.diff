@@ -1,0 +1,9 @@
+--- cases/repo_7d8a2c0_363d5e1/merge_far10.py	2026-03-03 22:39:57
++++ cases/repo_7d8a2c0_363d5e1/llm_gemini_far10.py	2026-06-05 14:25:24
+@@ -396,4 +396,4 @@
+     print('Successfully downloaded', filename, statinfo.st_size, 'bytes.')
+   extracted_dir_path = os.path.join(dest_directory, 'cifar-10-batches-bin')
+   if not os.path.exists(extracted_dir_path):
+-    tarfile.open(filepath, 'r:gz').extractall(dest_directory)
++    tarfile.open(filepath, 'r:gz').extractall(dest_directory)
+\ No newline at end of file

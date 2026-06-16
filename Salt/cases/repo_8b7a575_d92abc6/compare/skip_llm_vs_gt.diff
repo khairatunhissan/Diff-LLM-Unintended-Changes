@@ -1,0 +1,17 @@
+--- cases/repo_8b7a575_d92abc6/merge_skip.py	2026-03-09 00:39:12
++++ cases/repo_8b7a575_d92abc6/llm_skip.py	2026-03-09 00:40:51
+@@ -27,6 +27,7 @@
+ 
+     def setUp(self):
+         super(SchedulerSkipTest, self).setUp()
++        self.addCleanup(self.schedule.reset)
+         self.schedule.opts["loop_interval"] = 1
+ 
+     @skipIf(True, "SLOWTEST skip")
+@@ -286,4 +287,4 @@
+         run_time = dateutil.parser.parse("11/29/2017 2:00:30pm")
+         self.schedule.eval(now=run_time)
+         ret = self.schedule.job_status(job_name)
+-        self.assertIn("_last_run", ret)
++        self.assertIn("_last_run", ret)
+\ No newline at end of file

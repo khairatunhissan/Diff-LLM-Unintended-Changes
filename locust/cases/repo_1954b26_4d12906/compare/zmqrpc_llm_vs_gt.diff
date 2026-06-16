@@ -1,0 +1,63 @@
+--- cases/repo_1954b26_4d12906/merge_zmqrpc.py	2026-03-02 22:05:27
++++ cases/repo_1954b26_4d12906/llm_zmqrpc.py	2026-03-02 22:09:55
+@@ -1,26 +1,31 @@
+ from locust.exception import RPCError, RPCReceiveError, RPCSendError
+ from locust.util.exception_handler import retry
+ 
+-import socket as csocket
+-from socket import gaierror, has_dualstack_ipv6
+-
++import ipaddress
+ import msgpack.exceptions as msgerr
+ import zmq.error as zmqerr
+ import zmq.green as zmq
++from urllib3.util.connection import HAS_IPV6
+ 
+ from .protocol import Message
+ 
+ 
+ class BaseSocket:
+-    def __init__(self, sock_type, ipv4_only):
++    def __init__(self, sock_type, ipv4_only=False):
+         context = zmq.Context()
+         self.socket = context.socket(sock_type)
+ 
+         self.socket.setsockopt(zmq.TCP_KEEPALIVE, 1)
+         self.socket.setsockopt(zmq.TCP_KEEPALIVE_IDLE, 30)
+-        if has_dualstack_ipv6() and not ipv4_only:
++        if HAS_IPV6 and not ipv4_only:
+             self.socket.setsockopt(zmq.IPV6, 1)
+ 
++    def ipv4_only(self, host, port):
++        try:
++            return ipaddress.ip_address(host).version == 4
++        except ValueError:
++            return False
++
+     @retry()
+     def send(self, msg):
+         try:
+@@ -62,16 +67,7 @@
+     def close(self, linger=None):
+         self.socket.close(linger=linger)
+ 
+-    def ipv4_only(self, host, port) -> bool:
+-        try:
+-            if str(csocket.getaddrinfo(host, port, proto=csocket.IPPROTO_TCP)).find("Family.AF_INET6") == -1:
+-                return True
+-        except gaierror as e:
+-            print(f"Error resolving address: {e}")
+-            return False
+-        return False
+ 
+-
+ class Server(BaseSocket):
+     def __init__(self, host, port):
+         BaseSocket.__init__(self, zmq.ROUTER, self.ipv4_only(host, port))
+@@ -89,4 +85,4 @@
+     def __init__(self, host, port, identity):
+         BaseSocket.__init__(self, zmq.DEALER, self.ipv4_only(host, port))
+         self.socket.setsockopt(zmq.IDENTITY, identity.encode())
+-        self.socket.connect("tcp://%s:%i" % (host, port))
++        self.socket.connect("tcp://%s:%i" % (host, port))
+\ No newline at end of file

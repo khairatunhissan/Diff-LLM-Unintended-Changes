@@ -1,0 +1,24 @@
+--- cases/repo_ba68976_e8f1418/merge_pdfua.py	2026-03-04 15:53:20
++++ cases/repo_ba68976_e8f1418/llm_pdfua.py	2026-03-04 15:56:52
+@@ -5,8 +5,14 @@
+ from .metadata import add_metadata
+ 
+ 
++def _compatibility_warning(kind):
++    pass
++
++
+ def pdfua(pdf, metadata, document, page_streams, compress):
+     """Set metadata for PDF/UA documents."""
++    _compatibility_warning('PDF/UA')
++
+     # Structure for PDF tagging
+     content_mapping = pydyf.Dictionary({})
+     pdf.add_object(content_mapping)
+@@ -122,4 +128,4 @@
+     pdf.catalog['MarkInfo'] = pydyf.Dictionary({'Marked': 'true'})
+ 
+ 
+-VARIANTS = {'pdf/ua-1': (pdfua, {'mark': True})}
++VARIANTS = {'pdf/ua-1': (pdfua, {'mark': True})}
+\ No newline at end of file

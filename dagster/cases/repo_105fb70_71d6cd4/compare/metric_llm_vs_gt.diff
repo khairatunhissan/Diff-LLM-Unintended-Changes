@@ -1,0 +1,9 @@
+--- cases/repo_105fb70_71d6cd4/merge_metric.py	2026-04-04 15:23:30
++++ cases/repo_105fb70_71d6cd4/llm_metric.py	2026-04-04 15:26:37
+@@ -52,4 +52,4 @@
+ 
+ 
+ dbt_prod_job = dbt_metrics.to_job(resource_defs=DBT_RESOURCES_PROD)
+-dbt_staging_job = dbt_metrics.to_job(resource_defs=DBT_RESOURCES_STAGING)
++dbt_staging_job = dbt_metrics.to_job(resource_defs=DBT_RESOURCES_STAGING)
+\ No newline at end of file

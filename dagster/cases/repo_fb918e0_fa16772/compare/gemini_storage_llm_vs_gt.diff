@@ -1,0 +1,19 @@
+--- cases/repo_fb918e0_fa16772/merge_storage.py	2026-04-04 13:38:58
++++ cases/repo_fb918e0_fa16772/llm_gemini_storage.py	2026-06-09 15:03:04
+@@ -584,6 +584,9 @@
+             partitions_def_name, partition_key
+         )
+ 
++    def get_asset_details(self, asset_key: AssetKey) -> Optional[object]:
++        return self._storage.event_log_storage.get_asset_details(asset_key)
++
+     def get_event_tags_for_asset(
+         self,
+         asset_key: "AssetKey",
+@@ -814,4 +817,4 @@
+         )
+ 
+     def dispose(self) -> None:
+-        return self._storage.schedule_storage.dispose()
++        return self._storage.schedule_storage.dispose()
+\ No newline at end of file

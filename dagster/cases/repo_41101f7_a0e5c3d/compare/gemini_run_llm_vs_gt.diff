@@ -1,0 +1,36 @@
+--- cases/repo_41101f7_a0e5c3d/merge_run.py	2026-04-03 15:32:19
++++ cases/repo_41101f7_a0e5c3d/llm_gemini_run.py	2026-06-09 14:03:13
+@@ -1533,7 +1533,7 @@
+ 
+ 
+ @pytest.mark.parametrize("executor", get_sensor_executors())
+-def test_sensor_start_stop(executor, instance, workspace_context, external_repo):
++def test_checkpoint_sensor(executor, instance, workspace_context, external_repo):
+     freeze_datetime = to_timezone(
+         create_pendulum_time(year=2019, month=2, day=27, tz="UTC"),
+         "US/Central",
+@@ -2114,7 +2114,7 @@
+         )
+         assert len(ticks) == 1
+         validate_tick(
+-            ticks[0],
++            cursor_sensor_ticks[0],
+             cursor_sensor,
+             freeze_datetime,
+             TickStatus.SKIPPED,
+@@ -2132,7 +2132,7 @@
+         )
+         assert len(ticks) == 2
+         validate_tick(
+-            ticks[0],
++            cursor_sensor_ticks[0],
+             cursor_sensor,
+             freeze_datetime,
+             TickStatus.FAILURE,
+@@ -2697,4 +2697,4 @@
+     assert len(records) == 1
+     record = records[0]
+     assert record[DAGSTER_META_KEY]["orig_message"] == "hello hello"
+-    instance.compute_log_manager.delete_logs(log_key=tick.log_key)
++    instance.compute_log_manager.delete_logs(log_key=tick.log_key)
+\ No newline at end of file

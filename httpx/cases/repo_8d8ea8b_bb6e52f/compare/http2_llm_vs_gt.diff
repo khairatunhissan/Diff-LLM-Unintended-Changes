@@ -1,0 +1,37 @@
+--- cases/repo_8d8ea8b_bb6e52f/merge_http2.py	2026-03-28 16:15:55
++++ cases/repo_8d8ea8b_bb6e52f/llm_http2.py	2026-03-28 16:17:33
+@@ -51,12 +51,12 @@
+         timeout = Timeout() if timeout is None else timeout
+ 
+         if not self.init_started:
+-            # The very first stream is responsible for initiating the connection.
++            # The very first socket is responsible for initiating the connection.
+             self.init_started = True
+             await self.send_connection_init(timeout)
+             self.init_complete.set()
+         else:
+-            # All other streams need to wait until the connection is established.
++            # All other sockets need to wait until the connection is established.
+             await self.init_complete.wait()
+ 
+         stream_id = await self.send_headers(request, timeout)
+@@ -132,10 +132,10 @@
+         return stream_id
+ 
+     async def send_request_data(
+-        self, stream_id: int, stream: typing.AsyncIterator[bytes], timeout: Timeout,
++        self, stream_id: int, socket: typing.AsyncIterator[bytes], timeout: Timeout,
+     ) -> None:
+         try:
+-            async for data in stream:
++            async for data in socket:
+                 await self.send_data(stream_id, data, timeout)
+             await self.end_stream(stream_id, timeout)
+         finally:
+@@ -256,4 +256,4 @@
+         return False
+ 
+     def is_connection_dropped(self) -> bool:
+-        return self.socket.is_connection_dropped()
++        return self.socket.is_connection_dropped()
+\ No newline at end of file

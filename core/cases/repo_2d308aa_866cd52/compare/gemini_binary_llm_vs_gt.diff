@@ -1,0 +1,9 @@
+--- cases/repo_2d308aa_866cd52/merge_binary.py	2026-05-08 14:01:38
++++ cases/repo_2d308aa_866cd52/llm_gemini_binary.py	2026-06-03 14:28:25
+@@ -68,4 +68,4 @@
+     def update(self) -> None:
+         """Update the status."""
+         egardia_input = self._egardia_system.getsensorstate(self._id)
+-        self._attr_is_on = bool(egardia_input)
++        self._attr_is_on = bool(egardia_input)
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_e392f51_5b0c3e7/merge_regex.py	2026-03-01 23:24:59
++++ cases/repo_e392f51_5b0c3e7/llm_regex.py	2026-03-01 23:28:01
+@@ -696,4 +696,4 @@
+ 
+ 	fail2banRegex = Fail2banRegex(opts)
+ 	if not fail2banRegex.start(args):
+-		sys.exit(255)
++		sys.exit(255)
+\ No newline at end of file

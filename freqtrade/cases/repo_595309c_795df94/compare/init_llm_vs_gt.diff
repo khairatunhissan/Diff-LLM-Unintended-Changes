@@ -1,0 +1,19 @@
+--- cases/repo_595309c_795df94/merge_init.py	2026-03-08 22:08:11
++++ cases/repo_595309c_795df94/llm_init.py	2026-03-08 22:12:01
+@@ -6,7 +6,6 @@
+     """
+     Migrate persisted data from old formats to new formats
+     """
+-
+     migrate_funding_fee_timeframe(config, exchange)
+ 
+ 
+@@ -14,6 +13,4 @@
+     """
+     Migrate database content from old formats to new formats
+     Used for dry/live mode.
+-    """
+-    # Currently not used
+-    pass
++    """
+\ No newline at end of file

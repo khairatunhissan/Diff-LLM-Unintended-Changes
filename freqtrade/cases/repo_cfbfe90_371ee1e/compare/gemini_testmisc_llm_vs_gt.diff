@@ -1,0 +1,9 @@
+--- cases/repo_cfbfe90_371ee1e/merge_testmisc.py	2026-03-08 22:27:03
++++ cases/repo_cfbfe90_371ee1e/llm_gemini_testmisc.py	2026-06-03 15:52:42
+@@ -148,4 +148,4 @@
+     conf.pop('exchange')
+     mocker.patch('freqtrade.misc.open', mocker.mock_open(read_data=json.dumps(conf)))
+     with pytest.raises(ValidationError, match=r'.*\'exchange\' is a required property.*'):
+-        load_config('somefile')
++        load_config('somefile')
+\ No newline at end of file

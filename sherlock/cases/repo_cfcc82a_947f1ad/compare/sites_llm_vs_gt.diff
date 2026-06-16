@@ -1,0 +1,35 @@
+--- cases/repo_cfcc82a_947f1ad/merge_sites.py	2026-03-24 22:15:10
++++ cases/repo_cfcc82a_947f1ad/llm_sites.py	2026-03-24 22:17:50
+@@ -10,6 +10,7 @@
+ 
+ MANIFEST_URL = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock_project/resources/data.json"
+ EXCLUSIONS_URL = "https://raw.githubusercontent.com/sherlock-project/sherlock/refs/heads/exclusions/false_positive_exclusions.txt"
++REQUEST_TIMEOUT = 10
+ 
+ class SiteInformation:
+     def __init__(self, name, url_home, url_username_format, username_claimed,
+@@ -129,7 +130,7 @@
+         if data_file_path.lower().startswith("http"):
+             # Reference is to a URL.
+             try:
+-                response = requests.get(url=data_file_path, timeout=30)
++                response = requests.get(url=data_file_path, timeout=REQUEST_TIMEOUT)
+             except Exception as error:
+                 raise FileNotFoundError(
+                     f"Problem while attempting to access data file URL '{data_file_path}':  {error}"
+@@ -166,7 +167,7 @@
+ 
+         if honor_exclusions:
+             try:
+-                response = requests.get(url=EXCLUSIONS_URL, timeout=10)
++                response = requests.get(url=EXCLUSIONS_URL, timeout=REQUEST_TIMEOUT)
+                 if response.status_code == 200:
+                     exclusions = response.text.splitlines()
+                     exclusions = [exclusion.strip() for exclusion in exclusions]
+@@ -262,4 +263,4 @@
+         Return Value:
+         Length of sites object.
+         """
+-        return len(self.sites)
++        return len(self.sites)
+\ No newline at end of file

@@ -1,0 +1,31 @@
+--- cases/repo_f35abde_354b8b1/merge_cliapp.py	2026-05-19 13:05:02
++++ cases/repo_f35abde_354b8b1/llm_gemini_cliapp.py	2026-06-09 13:21:43
+@@ -166,7 +166,9 @@
+ 
+             path.unlink()
+ 
+-    dagster_project_dir.joinpath("scaffold").rename(dagster_project_dir.joinpath(project_name))
++    path = dagster_project_dir.joinpath("scaffold")
++    if path.exists():
++        path.rename(dagster_project_dir.joinpath(project_name))
+ 
+     if use_experimental_dbt_project:
+         dagster_project_dir.joinpath(project_name, "constants.py").unlink()
+@@ -358,8 +360,8 @@
+     console.print("Sync complete.")
+ 
+ 
+-@project_app.command(name="prepare-and-package")
+-def project_prepare_and_package_command(
++@project_app.command(name="prepare-for-deployment")
++def project_prepare_for_deployment_command(
+     file: Annotated[
+         str,
+         typer.Option(
+@@ -378,4 +380,4 @@
+         prepare_and_package(project)
+ 
+ 
+-project_app_typer_click_object = typer.main.get_command(project_app)
++project_app_typer_click_object = typer.main.get_command(project_app)
+\ No newline at end of file

@@ -1,0 +1,57 @@
+--- cases/repo_1d98531_4756d4c/merge_trainer.py	2026-03-02 22:55:25
++++ cases/repo_1d98531_4756d4c/llm_gemini_trainer.py	2026-06-07 11:57:45
+@@ -255,7 +255,7 @@
+         checkpoint: bool = False,
+         grow_to_sequence_length: int = 0,
+         use_amp: bool = False,
+-        amp_opt_level: str = "O1",
++        amp_opt_level: str = 'O1',
+         **kwargs,
+     ):
+ 
+@@ -263,11 +263,9 @@
+             if sys.version_info < (3, 0):
+                 raise RuntimeError("Apex currently only supports Python 3. Aborting.")
+             if amp is None:
+-                raise RuntimeError(
+-                    "Failed to import apex. Please install apex from https://www.github.com/nvidia/apex "
+-                    "to enable mixed-precision training."
+-                )
+-
++                raise RuntimeError("Failed to import apex. Please install apex from https://www.github.com/nvidia/apex "
++                                   "to enable mixed-precision training.")
++                
+         # cast string to Path
+         if type(base_path) is str:
+             base_path = Path(base_path)
+@@ -301,10 +299,10 @@
+                 )
+ 
+             if use_amp:
+-                self.model, optimizer = amp.initialize(
+-                    self.model, optimizer, opt_level=amp_opt_level
+-                )
+-
++                self.model, optimizer = amp.initialize(self.model, optimizer,
++                                                       opt_level=amp_opt_level
++                                                       )
++            
+             training_generator = DataLoader(
+                 self.corpus.train, shuffle=False, num_workers=self.num_workers
+             )
+@@ -378,7 +376,7 @@
+ 
+                         # try to predict the targets
+                         loss = self.loss_function(output.view(-1, ntokens), targets)
+-                        # Backward
++                                            # Backward
+                         if use_amp:
+                             with amp.scale_loss(loss, optimizer) as scaled_loss:
+                                 scaled_loss.backward()
+@@ -550,4 +548,4 @@
+             split=checkpoint["split"],
+             loss=checkpoint["loss"],
+             optimizer_state=checkpoint["optimizer_state_dict"],
+-        )
++        )
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_7c84ddc_b72a57d/merge_asset.py	2026-04-04 12:13:12
++++ cases/repo_7c84ddc_b72a57d/llm_gemini_asset.py	2026-06-09 15:38:24
+@@ -654,4 +654,4 @@
+             used.add(repo_id)
+             repos.append(external_repository)
+ 
+-    return repos
++    return repos
+\ No newline at end of file

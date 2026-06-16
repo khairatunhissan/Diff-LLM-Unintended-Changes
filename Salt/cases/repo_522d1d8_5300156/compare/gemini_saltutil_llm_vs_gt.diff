@@ -1,0 +1,45 @@
+--- cases/repo_522d1d8_5300156/merge_saltutil.py	2026-02-26 22:13:26
++++ cases/repo_522d1d8_5300156/llm_gemini_saltutil.py	2026-06-02 17:06:41
+@@ -753,7 +753,7 @@
+         yield ret
+ 
+ 
+-def runner(fun, **kwargs):
++def runner(fun, kwarg=None):
+     '''
+     Execute a runner module (this function must be run on the master)
+ 
+@@ -770,7 +770,7 @@
+ 
+         salt '*' saltutil.runner jobs.list_jobs
+     '''
+-    kwargs = salt.utils.clean_kwargs(**kwargs)
++    kwarg = salt.utils.clean_kwargs(**kwarg)
+ 
+     if 'master_job_cache' not in __opts__:
+         master_config = os.path.join(os.path.dirname(__opts__['conf_file']),
+@@ -780,7 +780,7 @@
+     else:
+         rclient = salt.runner.RunnerClient(__opts__)
+ 
+-    return rclient.cmd(fun, [], kwarg=kwargs)
++    return rclient.cmd(fun, [], kwarg=kwarg)
+ 
+ 
+ def wheel(fun, **kwargs):
+@@ -801,7 +801,7 @@
+         salt '*' saltutil.wheel key.accept match=jerry
+     '''
+     wclient = salt.wheel.WheelClient(__opts__)
+-    return wclient.cmd(fun, kwarg=kwargs)
++    return wclient.cmd(fun, **kwargs)
+ 
+ 
+ # this is the only way I could figure out how to get the REAL file_roots
+@@ -849,4 +849,4 @@
+         salt '*' saltutil.mmodule base test.ping
+     '''
+     mminion = _MMinion(saltenv)
+-    return mminion.functions[fun](*args, **kwargs)
++    return mminion.functions[fun](*args, **kwargs)
+\ No newline at end of file

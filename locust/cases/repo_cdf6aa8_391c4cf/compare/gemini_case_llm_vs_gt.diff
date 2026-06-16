@@ -1,0 +1,18 @@
+--- cases/repo_cdf6aa8_391c4cf/merge_case.py	2026-03-02 22:14:54
++++ cases/repo_cdf6aa8_391c4cf/llm_gemini_case.py	2026-06-08 12:53:04
+@@ -138,7 +138,7 @@
+         for event, handlers in six.iteritems(self._event_handlers):
+             event._handlers = handlers
+ 
+-
++            
+ class WebserverTestCase(LocustTestCase):
+     """
+     Test case class that sets up an HTTP server which can be used within the tests
+@@ -154,4 +154,4 @@
+     def tearDown(self):
+         super(WebserverTestCase, self).tearDown()
+         self._web_server.stop_accepting()
+-        self._web_server.stop()
++        self._web_server.stop()
+\ No newline at end of file

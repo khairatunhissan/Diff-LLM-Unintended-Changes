@@ -1,0 +1,18 @@
+--- cases/repo_f35fec0_ddc5cd8/merge_test.py	2026-03-17 14:23:20
++++ cases/repo_f35fec0_ddc5cd8/llm_gemini_test.py	2026-06-08 14:27:13
+@@ -225,7 +225,7 @@
+         config = sf.configSerialize(dict(), None)
+         self.assertIsInstance(config, dict)
+ 
+-    def test_config_unserialize_invalid_opts_should_raise(self):
++    def test_config_serialize_invalid_opts_should_raise(self):
+         """
+         Test configUnserialize(self, opts, referencePoint, filterSystem=True)
+         """
+@@ -1403,4 +1403,4 @@
+         sf = SpiderFoot(self.default_options)
+ 
+         sf.bingIterate(None, None)
+-        self.assertEqual('TBD', 'TBD')
++        self.assertEqual('TBD', 'TBD')
+\ No newline at end of file

@@ -1,0 +1,18 @@
+--- cases/repo_5741160_f7c6063/merge_extractor.py	2026-03-12 16:25:16
++++ cases/repo_5741160_f7c6063/llm_gemini_extractor.py	2026-06-08 16:28:37
+@@ -155,7 +155,7 @@
+         for current_detector, current_image in ((current_detector, current_image) for current_detector in dlib_detectors for current_image in input_images):
+             detected_faces = current_detector(current_image, 0)
+             if len(detected_faces) != 0:
+-                break
++                break           
+ 
+     landmarks = []
+     if len(detected_faces) > 0:        
+@@ -182,4 +182,4 @@
+     elif verbose:
+         print("Warning: No faces were detected.")
+         
+-    return landmarks
++    return landmarks
+\ No newline at end of file

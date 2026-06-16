@@ -1,0 +1,27 @@
+--- cases/repo_cfcc82a_947f1ad/merge_sherlock.py	2026-03-24 22:09:57
++++ cases/repo_cfcc82a_947f1ad/llm_sherlock.py	2026-03-24 22:13:57
+@@ -749,7 +749,7 @@
+ 
+     # Check for newer version of Sherlock. If it exists, let the user know about it
+     try:
+-        latest_release_raw = requests.get(forge_api_latest_release, timeout=10).text
++        latest_release_raw = requests.get(forge_api_latest_release, timeout=args.timeout).text
+         latest_release_json = json_loads(latest_release_raw)
+         latest_remote_tag = latest_release_json["tag_name"]
+ 
+@@ -809,7 +809,7 @@
+                 if args.json_file.isnumeric():
+                     pull_number = args.json_file
+                     pull_url = f"https://api.github.com/repos/sherlock-project/sherlock/pulls/{pull_number}"
+-                    pull_request_raw = requests.get(pull_url, timeout=10).text
++                    pull_request_raw = requests.get(pull_url, timeout=args.timeout).text
+                     pull_request_json = json_loads(pull_request_raw)
+ 
+                     # Check if it's a valid pull request
+@@ -994,4 +994,4 @@
+ 
+ 
+ if __name__ == "__main__":
+-    main()
++    main()
+\ No newline at end of file

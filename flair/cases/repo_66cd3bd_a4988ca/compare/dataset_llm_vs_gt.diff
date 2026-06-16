@@ -1,0 +1,25 @@
+--- cases/repo_66cd3bd_a4988ca/merge_dataset.py	2026-03-02 23:27:55
++++ cases/repo_66cd3bd_a4988ca/llm_dataset.py	2026-03-02 23:32:38
+@@ -803,7 +803,6 @@
+         check_number_sentences(len(corpus.dev), stats["dev"], "dev")
+ 
+ 
+-@pytest.mark.skip()
+ def test_german_ler_corpus(tasks_base_path):
+     corpus = flair.datasets.NER_GERMAN_LEGAL()
+ 
+@@ -975,7 +974,6 @@
+     assert all([res.scheme, res.netloc])
+ 
+ 
+-@pytest.mark.skip()
+ def test_ontonotes_extraction(tasks_base_path):
+     import os
+     import tempfile
+@@ -1047,4 +1045,4 @@
+     with pytest.raises(RuntimeError) as err:
+         MultiFileJsonlCorpus(None, None, None)
+ 
+-    assert str(err.value) == "No data provided when initializing corpus object."
++    assert str(err.value) == "No data provided when initializing corpus object."
+\ No newline at end of file

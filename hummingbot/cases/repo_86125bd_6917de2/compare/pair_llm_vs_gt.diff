@@ -1,0 +1,9 @@
+--- cases/repo_86125bd_6917de2/merge_pair.py	2026-03-07 22:45:38
++++ cases/repo_86125bd_6917de2/llm_pair.py	2026-03-07 22:49:20
+@@ -138,4 +138,4 @@
+             lines.extend(
+                 [f"Strategy: {executor_handler.controller.config.strategy_name} | Trading Pair: {trading_pair}",
+                  executor_handler.to_format_status()])
+-        return "\n".join(lines)
++        return "\n".join(lines)
+\ No newline at end of file

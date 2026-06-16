@@ -1,0 +1,17 @@
+--- cases/repo_8b7a575_d92abc6/merge_postpone.py	2026-03-09 00:35:36
++++ cases/repo_8b7a575_d92abc6/llm_postpone.py	2026-03-09 00:37:21
+@@ -28,6 +28,7 @@
+ 
+     def setUp(self):
+         super(SchedulerPostponeTest, self).setUp()
++        self.addCleanup(self.schedule.reset)
+         self.schedule.opts["loop_interval"] = 1
+ 
+     @skipIf(True, "SLOWTEST skip")
+@@ -71,4 +72,4 @@
+         # Run 6 minutes later
+         self.schedule.eval(now=run_time + datetime.timedelta(seconds=delay + 1))
+         ret = self.schedule.job_status("job1")
+-        self.assertEqual(ret["_last_run"], run_time + datetime.timedelta(seconds=delay))
++        self.assertEqual(ret["_last_run"], run_time + datetime.timedelta(seconds=delay))
+\ No newline at end of file

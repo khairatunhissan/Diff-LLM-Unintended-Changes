@@ -1,0 +1,9 @@
+--- cases/repo_9e694dd_d2507e1/merge_sfbui.py	2026-03-18 16:07:44
++++ cases/repo_9e694dd_d2507e1/llm_sfbui.py	2026-03-18 16:11:39
+@@ -1527,4 +1527,4 @@
+         retdata['tree'] = SpiderFootHelpers.dataParentChildToTree(pc)
+         retdata['data'] = datamap
+ 
+-        return retdata
++        return retdata
+\ No newline at end of file

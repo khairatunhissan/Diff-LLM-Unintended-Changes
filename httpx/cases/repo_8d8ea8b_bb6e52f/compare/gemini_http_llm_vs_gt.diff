@@ -1,0 +1,18 @@
+--- cases/repo_8d8ea8b_bb6e52f/merge_http.py	2026-03-28 16:18:44
++++ cases/repo_8d8ea8b_bb6e52f/llm_gemini_http.py	2026-06-08 23:08:26
+@@ -175,7 +175,7 @@
+         assert http_connection is not None
+         assert http_connection.h11_state.our_state == h11.SWITCHED_PROTOCOL
+         on_release = http_connection.on_release
+-        socket = http_connection.socket
++        socket = http_connection.stream
+ 
+         # If we need to start TLS again for the target server
+         # we need to pull the socket stream off the internal
+@@ -246,4 +246,4 @@
+             f"HTTPProxy(proxy_url={self.proxy_url!r} "
+             f"proxy_headers={self.proxy_headers!r} "
+             f"proxy_mode={self.proxy_mode!r})"
+-        )
++        )
+\ No newline at end of file

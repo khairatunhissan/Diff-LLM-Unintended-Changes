@@ -1,0 +1,9 @@
+--- cases/repo_28d92a8_cb18ecb/merge_treach.py	2026-03-24 17:44:17
++++ cases/repo_28d92a8_cb18ecb/llm_gemini_treach.py	2026-06-08 14:01:55
+@@ -53,4 +53,4 @@
+ 
+     async def process(self, proxy=False):
+         self.proxy = proxy
+-        await self.do_search()
++        await self.do_search()
+\ No newline at end of file
