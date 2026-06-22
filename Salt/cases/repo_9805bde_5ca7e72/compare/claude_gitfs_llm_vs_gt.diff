@@ -1,0 +1,9 @@
+--- cases/repo_9805bde_5ca7e72/merge_gitfs.py	2026-02-26 23:17:08
++++ cases/repo_9805bde_5ca7e72/llm_claude_gitfs.py	2026-06-16 22:52:22
+@@ -2346,4 +2346,4 @@
+         for repo in self.remotes:
+             cachedir = repo.checkout()
+             if cachedir is not None:
+-                self.winrepo_dirs[repo.url] = cachedir
++                self.winrepo_dirs[repo.url] = cachedir
+\ No newline at end of file

@@ -1,0 +1,17 @@
+--- cases/repo_ba68976_e8f1418/merge_pdfua.py	2026-03-04 15:53:20
++++ cases/repo_ba68976_e8f1418/llm_claude_pdfua.py	2026-06-19 19:28:29
+@@ -2,6 +2,7 @@
+ 
+ import pydyf
+ 
++from ..logger import LOGGER
+ from .metadata import add_metadata
+ 
+ 
+@@ -122,4 +123,4 @@
+     pdf.catalog['MarkInfo'] = pydyf.Dictionary({'Marked': 'true'})
+ 
+ 
+-VARIANTS = {'pdf/ua-1': (pdfua, {'mark': True})}
++VARIANTS = {'pdf/ua-1': (pdfua, {'mark': True})}
+\ No newline at end of file

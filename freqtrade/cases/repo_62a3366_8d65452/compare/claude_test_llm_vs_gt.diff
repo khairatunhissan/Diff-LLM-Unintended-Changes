@@ -1,0 +1,17 @@
+--- cases/repo_62a3366_8d65452/merge_test.py	2026-03-08 15:37:25
++++ cases/repo_62a3366_8d65452/llm_claude_test.py	2026-06-17 14:39:28
+@@ -85,6 +85,7 @@
+     Test the FreqtradeBot object has the mandatory public methods
+     """
+     assert hasattr(FreqtradeBot, 'worker')
++    assert hasattr(FreqtradeBot, 'state')
+     assert hasattr(FreqtradeBot, 'clean')
+     assert hasattr(FreqtradeBot, 'create_trade')
+     assert hasattr(FreqtradeBot, 'get_target_bid')
+@@ -1273,4 +1274,4 @@
+     trade = Trade.query.first()
+     trade.update(limit_buy_order)
+     patch_get_signal(mocker, value=(False, True))
+-    assert freqtrade.handle_trade(trade) is True
++    assert freqtrade.handle_trade(trade) is True
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_8b7a575_d92abc6/merge_eval.py	2026-03-09 00:29:11
++++ cases/repo_8b7a575_d92abc6/llm_claude_eval.py	2026-06-16 20:27:00
+@@ -910,4 +910,4 @@
+         self.schedule.eval(now=run_time1)
+         ret = self.schedule.job_status(job_name)
+         self.assertNotIn("_last_run", ret)
+-        self.assertEqual(ret["_next_fire_time"], None)
++        self.assertEqual(ret["_next_fire_time"], None)
+\ No newline at end of file

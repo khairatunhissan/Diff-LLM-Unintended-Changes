@@ -1,0 +1,25 @@
+--- cases/repo_780f526_d7676c1/merge_test.py	2026-03-03 16:54:59
++++ cases/repo_780f526_d7676c1/llm_claude_test.py	2026-06-18 12:53:49
+@@ -13,7 +13,6 @@
+ # limitations under the License.
+ # ==============================================================================
+ """ Tests for distribution util functions."""
+-
+ from __future__ import absolute_import
+ from __future__ import division
+ from __future__ import print_function
+@@ -25,6 +24,7 @@
+ 
+ class GetDistributionStrategyTest(tf.test.TestCase):
+   """Tests for get_distribution_strategy."""
++
+   def test_one_device_strategy_cpu(self):
+     ds = distribution_utils.get_distribution_strategy(0)
+     self.assertEquals(ds.num_replicas, 1)
+@@ -62,4 +62,4 @@
+ 
+ 
+ if __name__ == "__main__":
+-  tf.test.main()
++  tf.test.main()
+\ No newline at end of file

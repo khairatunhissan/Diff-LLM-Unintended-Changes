@@ -1,0 +1,139 @@
+--- cases/repo_3dc16e2_ef926e6/merge_init.py	2026-03-03 16:43:46
++++ cases/repo_3dc16e2_ef926e6/llm_claude_init.py	2026-06-19 19:17:44
+@@ -6,9 +6,7 @@
+     TransformerOnnxDocumentEmbeddings,
+     TransformerOnnxWordEmbeddings,
+ )
+-
+ from .base import Embeddings, ScalarMix
+-
+ # Expose document embedding classes
+ from .document import (
+     DocumentCNNEmbeddings,
+@@ -20,7 +18,6 @@
+     SentenceTransformerDocumentEmbeddings,
+     TransformerDocumentEmbeddings,
+ )
+-
+ # Expose image embedding classes
+ from .image import (
+     ConvTransformNetworkImageEmbeddings,
+@@ -29,7 +26,6 @@
+     NetworkImageEmbeddings,
+     PrecomputedImageEmbeddings,
+ )
+-
+ # Expose legacy embedding classes
+ from .legacy import (
+     BertEmbeddings,
+@@ -45,7 +41,6 @@
+     XLMRobertaEmbeddings,
+     XLNetEmbeddings,
+ )
+-
+ # Expose token embedding classes
+ from .token import (
+     BPEmbSerializable,
+@@ -64,53 +59,52 @@
+     TransformerWordEmbeddings,
+     WordEmbeddings,
+ )
+-
+ __all__ = [
+-    "Embeddings",
+-    "ScalarMix",
+-    "DocumentCNNEmbeddings",
+-    "DocumentEmbeddings",
+-    "DocumentLMEmbeddings",
+-    "DocumentPoolEmbeddings",
+-    "DocumentRNNEmbeddings",
+-    "DocumentTFIDFEmbeddings",
+-    "SentenceTransformerDocumentEmbeddings",
+-    "TransformerDocumentEmbeddings",
+-    "ConvTransformNetworkImageEmbeddings",
+-    "IdentityImageEmbeddings",
+-    "ImageEmbeddings",
+-    "NetworkImageEmbeddings",
+-    "PrecomputedImageEmbeddings",
+-    "BertEmbeddings",
+-    "CamembertEmbeddings",
+-    "CharLMEmbeddings",
+-    "DocumentLSTMEmbeddings",
+-    "DocumentMeanEmbeddings",
+-    "ELMoTransformerEmbeddings",
+-    "OpenAIGPT2Embeddings",
+-    "OpenAIGPTEmbeddings",
+-    "RoBERTaEmbeddings",
+-    "XLMEmbeddings",
+-    "XLMRobertaEmbeddings",
+-    "XLNetEmbeddings",
+-    "BPEmbSerializable",
+-    "BytePairEmbeddings",
+-    "CharacterEmbeddings",
+-    "ELMoEmbeddings",
+-    "FastTextEmbeddings",
+-    "FlairEmbeddings",
+-    "HashEmbeddings",
+-    "MuseCrosslingualEmbeddings",
+-    "NILCEmbeddings",
+-    "OneHotEmbeddings",
+-    "PooledFlairEmbeddings",
+-    "StackedEmbeddings",
+-    "TokenEmbeddings",
+-    "TransformerWordEmbeddings",
+-    "WordEmbeddings",
+-    "TransformerEmbeddings",
+-    "TransformerOnnxWordEmbeddings",
+-    "TransformerOnnxDocumentEmbeddings",
+-    "TransformerJitWordEmbeddings",
+-    "TransformerJitDocumentEmbeddings",
+-]
++"Embeddings",
++"ScalarMix",
++"DocumentCNNEmbeddings",
++"DocumentEmbeddings",
++"DocumentLMEmbeddings",
++"DocumentPoolEmbeddings",
++"DocumentRNNEmbeddings",
++"DocumentTFIDFEmbeddings",
++"SentenceTransformerDocumentEmbeddings",
++"TransformerDocumentEmbeddings",
++"ConvTransformNetworkImageEmbeddings",
++"IdentityImageEmbeddings",
++"ImageEmbeddings",
++"NetworkImageEmbeddings",
++"PrecomputedImageEmbeddings",
++"BertEmbeddings",
++"CamembertEmbeddings",
++"CharLMEmbeddings",
++"DocumentLSTMEmbeddings",
++"DocumentMeanEmbeddings",
++"ELMoTransformerEmbeddings",
++"OpenAIGPT2Embeddings",
++"OpenAIGPTEmbeddings",
++"RoBERTaEmbeddings",
++"XLMEmbeddings",
++"XLMRobertaEmbeddings",
++"XLNetEmbeddings",
++"BPEmbSerializable",
++"BytePairEmbeddings",
++"CharacterEmbeddings",
++"ELMoEmbeddings",
++"FastTextEmbeddings",
++"FlairEmbeddings",
++"HashEmbeddings",
++"MuseCrosslingualEmbeddings",
++"NILCEmbeddings",
++"OneHotEmbeddings",
++"PooledFlairEmbeddings",
++"StackedEmbeddings",
++"TokenEmbeddings",
++"TransformerWordEmbeddings",
++"WordEmbeddings",
++"TransformerEmbeddings",
++"TransformerOnnxWordEmbeddings",
++"TransformerOnnxDocumentEmbeddings",
++"TransformerJitWordEmbeddings",
++"TransformerJitDocumentEmbeddings",
++]
+\ No newline at end of file

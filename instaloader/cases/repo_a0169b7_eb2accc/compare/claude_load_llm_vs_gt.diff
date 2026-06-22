@@ -1,0 +1,65 @@
+--- cases/repo_a0169b7_eb2accc/merge_load.py	2026-04-08 10:44:11
++++ cases/repo_a0169b7_eb2accc/llm_claude_load.py	2026-06-22 00:49:14
+@@ -1410,8 +1410,7 @@
+                           post_filter: Optional[Callable[[Post], bool]] = None,
+                           storyitem_filter: Optional[Callable[[Post], bool]] = None,
+                           raise_errors: bool = False,
+-                          latest_stamps: Optional[LatestStamps] = None,
+-                          max_count: Optional[int] = None):
++                          latest_stamps: Optional[LatestStamps] = None):
+         """High-level method to download set of profiles.
+ 
+         :param profiles: Set of profiles to download.
+@@ -1428,7 +1427,6 @@
+            Whether :exc:`LoginRequiredException` and :exc:`PrivateProfileNotFollowedException` should be raised or
+            catched and printed with :meth:`InstaloaderContext.error_catcher`.
+         :param latest_stamps: :option:`--latest-stamps`.
+-        :param max_count: Maximum count of posts to download.
+ 
+         .. versionadded:: 4.1
+ 
+@@ -1437,9 +1435,6 @@
+ 
+         .. versionchanged:: 4.8
+            Add `latest_stamps` parameter.
+-
+-        .. versionchanged:: 4.13
+-           Add `max_count` parameter.
+         """
+ 
+         @contextmanager
+@@ -1505,7 +1500,7 @@
+                     posts_to_download = profile.get_posts()
+                     self.posts_download_loop(posts_to_download, profile_name, fast_update, post_filter,
+                                              total_count=profile.mediacount, owner_profile=profile,
+-                                             takewhile=posts_takewhile, possibly_pinned=3, max_count=max_count)
++                                             takewhile=posts_takewhile, possibly_pinned=3)
+                     if latest_stamps is not None and posts_to_download.first_item is not None:
+                         latest_stamps.set_last_post_timestamp(profile_name,
+                                                               posts_to_download.first_item.date_local)
+@@ -1522,7 +1517,8 @@
+                          download_stories: bool = False, download_stories_only: bool = False,
+                          download_tagged: bool = False, download_tagged_only: bool = False,
+                          post_filter: Optional[Callable[[Post], bool]] = None,
+-                         storyitem_filter: Optional[Callable[[StoryItem], bool]] = None) -> None:
++                         storyitem_filter: Optional[Callable[[StoryItem], bool]] = None,
++                         max_count: Optional[int] = None) -> None:
+         """Download one profile
+ 
+         .. deprecated:: 4.1
+@@ -1588,7 +1584,7 @@
+         # Iterate over pictures and download them
+         self.context.log("Retrieving posts from profile {}.".format(profile_name))
+         self.posts_download_loop(profile.get_posts(), profile_name, fast_update, post_filter,
+-                                 total_count=profile.mediacount, owner_profile=profile)
++                                 total_count=profile.mediacount, owner_profile=profile, max_count=max_count)
+ 
+     def interactive_login(self, username: str) -> None:
+         """Logs in and internally stores session, asking user for password interactively.
+@@ -1627,4 +1623,4 @@
+         """Returns whether any error has been reported and stored to be repeated at program termination.
+ 
+         .. versionadded: 4.12"""
+-        return self.context.has_stored_errors
++        return self.context.has_stored_errors
+\ No newline at end of file

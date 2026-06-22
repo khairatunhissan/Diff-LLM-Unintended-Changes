@@ -1,0 +1,127 @@
+--- cases/repo_4fbf275_81f385c/merge_api.py	2026-03-28 21:11:19
++++ cases/repo_4fbf275_81f385c/llm_claude_api.py	2026-06-21 00:32:43
+@@ -1,94 +1,4 @@
+-import typing
+-from contextlib import contextmanager
+-
+-from ._client import Client
+-from ._config import DEFAULT_TIMEOUT_CONFIG
+-from ._models import Response
+-from ._types import (
+-    AuthTypes,
+-    CertTypes,
+-    CookieTypes,
+-    HeaderTypes,
+-    ProxiesTypes,
+-    QueryParamTypes,
+-    RequestContent,
+-    RequestData,
+-    RequestFiles,
+-    TimeoutTypes,
+-    URLTypes,
+-    VerifyTypes,
+-)
+-
+-
+-def request(
+-    method: str,
+-    url: URLTypes,
+-    *,
+-    params: QueryParamTypes = None,
+-    content: RequestContent = None,
+-    data: RequestData = None,
+-    files: RequestFiles = None,
+-    json: typing.Any = None,
+-    headers: HeaderTypes = None,
+-    cookies: CookieTypes = None,
+-    auth: AuthTypes = None,
+-    proxies: ProxiesTypes = None,
+-    timeout: TimeoutTypes = DEFAULT_TIMEOUT_CONFIG,
+-    allow_redirects: bool = True,
+-    verify: VerifyTypes = True,
+-    cert: CertTypes = None,
+-    trust_env: bool = True,
+-) -> Response:
+-    """
+-    Sends an HTTP request.
+-
+-    **Parameters:**
+-
+-    * **method** - HTTP method for the new `Request` object: `GET`, `OPTIONS`,
+-    `HEAD`, `POST`, `PUT`, `PATCH`, or `DELETE`.
+-    * **url** - URL for the new `Request` object.
+-    * **params** - *(optional)* Query parameters to include in the URL, as a
+-    string, dictionary, or sequence of two-tuples.
+-    * **content** - *(optional)* Binary content to include in the body of the
+-    request, as bytes or a byte iterator.
+-    * **data** - *(optional)* Form data to include in the body of the request,
+-    as a dictionary.
+-    * **files** - *(optional)* A dictionary of upload files to include in the
+-    body of the request.
+-    * **json** - *(optional)* A JSON serializable object to include in the body
+-    of the request.
+-    * **headers** - *(optional)* Dictionary of HTTP headers to include in the
+-    request.
+-    * **cookies** - *(optional)* Dictionary of Cookie items to include in the
+-    request.
+-    * **auth** - *(optional)* An authentication class to use when sending the
+-    request.
+-    * **proxies** - *(optional)* A dictionary mapping proxy keys to proxy URLs.
+-    * **timeout** - *(optional)* The timeout configuration to use when sending
+-    the request.
+-    * **allow_redirects** - *(optional)* Enables or disables HTTP redirects.
+-    * **verify** - *(optional)* SSL certificates (a.k.a CA bundle) used to
+-    verify the identity of requested hosts. Either `True` (default CA bundle),
+-    a path to an SSL certificate file, an `ssl.SSLContext`, or `False`
+-    (which will disable verification).
+-    * **cert** - *(optional)* An SSL certificate used by the requested host
+-    to authenticate the client. Either a path to an SSL certificate file, or
+-    two-tuple of (certificate file, key file), or a three-tuple of (certificate
+-    file, key file, password).
+-    * **trust_env** - *(optional)* Enables or disables usage of environment
+-    variables for configuration.
+-
+-    **Returns:** `Response`
+-
+-    Usage:
+-
+-    ```
+-    >>> import httpx
+-    >>> response = httpx.request('GET', 'https://httpbin.org/get')
+-    >>> response
+-    <Response [200 OK]>
+-    ```
+-    """
++"""
+     with Client(
+         cookies=cookies,
+         proxies=proxies,
+@@ -142,12 +52,7 @@
+     [0]: /quickstart#streaming-responses
+     """
+     with Client(
+-        cookies=cookies,
+-        proxies=proxies,
+-        cert=cert,
+-        verify=verify,
+-        timeout=timeout,
+-        trust_env=trust_env,
++        cookies=cookies, proxies=proxies, cert=cert, verify=verify, trust_env=trust_env
+     ) as client:
+         with client.stream(
+             method=method,
+@@ -160,6 +65,7 @@
+             headers=headers,
+             auth=auth,
+             allow_redirects=allow_redirects,
++            timeout=timeout,
+         ) as response:
+             yield response
+ 
+@@ -442,4 +348,4 @@
+         verify=verify,
+         timeout=timeout,
+         trust_env=trust_env,
+-    )
++    )
+\ No newline at end of file

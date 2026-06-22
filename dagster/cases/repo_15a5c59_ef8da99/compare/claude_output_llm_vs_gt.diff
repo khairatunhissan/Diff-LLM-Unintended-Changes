@@ -1,0 +1,9 @@
+--- cases/repo_15a5c59_ef8da99/merge_output.py	2026-04-03 13:41:55
++++ cases/repo_15a5c59_ef8da99/llm_claude_output.py	2026-06-21 00:48:43
+@@ -877,4 +877,4 @@
+         op_def=op_def,
+         asset_info=AssetOutputInfo(key=asset_key) if asset_key else None,
+         partition_key=partition_key,
+-    )
++    )
+\ No newline at end of file

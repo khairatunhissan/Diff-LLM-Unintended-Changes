@@ -1,0 +1,20 @@
+--- cases/repo_f35abde_354b8b1/merge_cliapp.py	2026-05-19 13:05:02
++++ cases/repo_f35abde_354b8b1/llm_claude_cliapp.py	2026-06-21 01:27:40
+@@ -358,8 +358,8 @@
+     console.print("Sync complete.")
+ 
+ 
+-@project_app.command(name="prepare-and-package")
+-def project_prepare_and_package_command(
++@project_app.command(name="prepare-for-deployment")
++def project_prepare_for_deployment_command(
+     file: Annotated[
+         str,
+         typer.Option(
+@@ -378,4 +378,4 @@
+         prepare_and_package(project)
+ 
+ 
+-project_app_typer_click_object = typer.main.get_command(project_app)
++project_app_typer_click_object = typer.main.get_command(project_app)
+\ No newline at end of file

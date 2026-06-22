@@ -1,0 +1,9 @@
+--- cases/repo_2d308aa_866cd52/merge_parsers.py	2026-02-27 22:52:27
++++ cases/repo_2d308aa_866cd52/llm_claude_parsers.py	2026-06-17 13:59:59
+@@ -752,4 +752,4 @@
+         "motion",
+         None,
+         payload.Data.SimpleItem[0].Value == "true",
+-    )
++    )
+\ No newline at end of file

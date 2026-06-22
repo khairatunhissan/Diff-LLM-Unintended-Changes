@@ -1,0 +1,20 @@
+--- cases/repo_30450d5_9079508/merge_factory.py	2026-04-29 22:27:55
++++ cases/repo_30450d5_9079508/llm_claude_factory.py	2026-06-22 13:15:20
+@@ -8,7 +8,9 @@
+ from .sessions.u2net import U2netSession
+ 
+ 
+-def new_session(model_name: str = "u2net", *args, **kwargs) -> BaseSession:
++def new_session(
++    model_name: str = "u2net", *args, **kwargs
++) -> BaseSession:
+     """
+     Create a new session object based on the specified model name.
+ 
+@@ -38,4 +40,4 @@
+         sess_opts.inter_op_num_threads = int(os.environ["OMP_NUM_THREADS"])
+         sess_opts.intra_op_num_threads = int(os.environ["OMP_NUM_THREADS"])
+ 
+-    return session_class(model_name, sess_opts, *args, **kwargs)
++    return session_class(model_name, sess_opts, *args, **kwargs)
+\ No newline at end of file

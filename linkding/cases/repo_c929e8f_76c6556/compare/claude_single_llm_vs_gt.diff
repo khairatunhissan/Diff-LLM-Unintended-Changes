@@ -1,0 +1,9 @@
+--- cases/repo_c929e8f_76c6556/merge_single.py	2026-04-08 11:11:34
++++ cases/repo_c929e8f_76c6556/llm_claude_single.py	2026-06-22 00:59:07
+@@ -55,4 +55,4 @@
+             os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+             raise SingleFileError("Timeout expired while creating snapshot")
+     except subprocess.CalledProcessError as error:
+-        raise SingleFileError(f"Failed to create snapshot: {error.stderr}")
++        raise SingleFileError(f"Failed to create snapshot: {error.stderr}")
+\ No newline at end of file

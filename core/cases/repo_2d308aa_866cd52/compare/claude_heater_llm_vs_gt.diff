@@ -1,0 +1,9 @@
+--- cases/repo_2d308aa_866cd52/merge_heater.py	2026-02-27 23:08:09
++++ cases/repo_2d308aa_866cd52/llm_claude_heater.py	2026-06-17 14:07:10
+@@ -151,4 +151,4 @@
+         """Return current operation ie. heat, cool, idle."""
+         if self._current_mode is None:
+             return None
+-        return VICARE_TO_HA_HVAC_DHW.get(self._current_mode)
++        return VICARE_TO_HA_HVAC_DHW.get(self._current_mode)
+\ No newline at end of file

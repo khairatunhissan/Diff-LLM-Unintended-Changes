@@ -1,0 +1,17 @@
+--- cases/repo_320db20_7c42a17/merge_classifier.py	2026-03-03 20:32:04
++++ cases/repo_320db20_7c42a17/llm_claude_classifier.py	2026-06-18 13:19:03
+@@ -310,6 +310,7 @@
+     raise ValueError('Optimizer [%s] was not recognized', FLAGS.optimizer)
+   return optimizer
+ 
++
+ def _get_init_fn():
+   """Returns a function run by the chief worker to warm-start the training.
+ 
+@@ -570,4 +571,4 @@
+ 
+ 
+ if __name__ == '__main__':
+-  tf.app.run()
++  tf.app.run()
+\ No newline at end of file

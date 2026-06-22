@@ -1,0 +1,45 @@
+--- cases/repo_e798854_52c9d19/merge_handler.py	2026-02-28 22:21:31
++++ cases/repo_e798854_52c9d19/llm_claude_handler.py	2026-06-17 21:56:02
+@@ -58,7 +58,7 @@
+ 
+     @property
+     def instance_id(self):
+-        return global_config_map["instance_id"].value or ""
++        return global_config_map["client_id"].value or ""
+ 
+     def emit(self, record):
+         if record.__dict__.get("do_not_send", False):
+@@ -136,7 +136,7 @@
+                     'Content-Type': "application/json"
+                 },
+                 "data": json.dumps(logs, default=log_encoder),
+-                "params": {"ddtags": f"instance_id:{self.instance_id},"
++                "params": {"ddtags": f"client_id:{self.instance_id},"
+                                      f"client_version:{CLIENT_VERSION},"
+                                      f"type:log",
+                            "ddsource": "hummingbot-client"}
+@@ -153,7 +153,7 @@
+                     'Content-Type': "application/json"
+                 },
+                 "data": json.dumps(logs, default=log_encoder),
+-                "params": {"ddtags": f"instance_id:{self.instance_id},"
++                "params": {"ddtags": f"client_id:{self.instance_id},"
+                                      f"client_version:{CLIENT_VERSION},"
+                                      f"type:log",
+                            "ddsource": "hummingbot-client"}
+@@ -169,7 +169,7 @@
+                 "headers": {
+                     'Content-Type': "application/json"
+                 },
+-                "data": json.dumps({"instance_id": self.instance_id,
++                "data": json.dumps({"client_id": self.instance_id,
+                                     "exchange": exchange,
+                                     "market": market,
+                                     "version": CLIENT_VERSION,
+@@ -240,4 +240,4 @@
+                 raise
+             except Exception:
+                 self.logger().network("Unexpected error while sending aggregated metrics.", exc_info=True)
+-                return
++                return
+\ No newline at end of file

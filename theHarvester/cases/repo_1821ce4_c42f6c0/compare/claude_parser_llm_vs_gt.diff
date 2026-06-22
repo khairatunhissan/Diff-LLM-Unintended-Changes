@@ -1,0 +1,9 @@
+--- cases/repo_1821ce4_c42f6c0/merge_parser.py	2026-03-24 17:20:29
++++ cases/repo_1821ce4_c42f6c0/llm_claude_parser.py	2026-06-20 01:28:32
+@@ -153,4 +153,4 @@
+         for iteration in self.temp:
+             if iteration not in self.new:
+                 self.new.append(iteration)
+-        return self.new
++        return self.new
+\ No newline at end of file

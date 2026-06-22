@@ -1,0 +1,9 @@
+--- cases/repo_bdf922b_afc425b/merge_icecream.py	2026-04-30 19:52:00
++++ cases/repo_bdf922b_afc425b/llm_claude_icecream.py	2026-06-22 14:28:09
+@@ -281,4 +281,4 @@
+     if not args:
+         icWithoutArgs(callFrame, funcName)
+     else:
+-        icWithArgs(callFrame, funcName, args)
++        icWithArgs(callFrame, funcName, args)
+\ No newline at end of file

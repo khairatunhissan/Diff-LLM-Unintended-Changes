@@ -1,0 +1,9 @@
+--- cases/repo_fb918e0_fa16772/merge_init.py	2026-04-04 12:38:28
++++ cases/repo_fb918e0_fa16772/llm_claude_init.py	2026-06-21 14:49:01
+@@ -3009,4 +3009,4 @@
+             AssetCheckInstanceSupport.SUPPORTED
+             if self.event_log_storage.supports_asset_checks
+             else AssetCheckInstanceSupport.NEEDS_MIGRATION
+-        )
++        )
+\ No newline at end of file

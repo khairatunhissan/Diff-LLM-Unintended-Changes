@@ -1,0 +1,70 @@
+--- cases/repo_15a5c59_ef8da99/merge_def.py	2026-04-03 13:29:40
++++ cases/repo_15a5c59_ef8da99/llm_claude_def.py	2026-06-21 00:43:10
+@@ -340,7 +340,7 @@
+         node = self.node_named(name)
+         while lineage:
+             name = lineage.pop()
+-            # We know that this is a current node is a graph while ascending lineage
++            # We know that this is a current solid is a graph while ascending lineage
+             definition = cast(GraphDefinition, node.definition)
+             node = definition.node_named(name)
+ 
+@@ -485,11 +485,11 @@
+     def input_supports_dynamic_output_dep(self, input_name: str) -> bool:
+         mapping = self.get_input_mapping(input_name)
+         target_node = mapping.maps_to.node_name
+-        # check if input mapped to node which is downstream of another dynamic output within
++        # check if input mapped to solid which is downstream of another dynamic output within
+         if self.dependency_structure.is_dynamic_mapped(target_node):
+             return False
+ 
+-        # check if input mapped to node which starts new dynamic downstream
++        # check if input mapped to solid which starts new dynamic downstream
+         if self.dependency_structure.has_dynamic_downstreams(target_node):
+             return False
+ 
+@@ -561,7 +561,7 @@
+                 Describes how the job is parameterized at runtime.
+ 
+                 If no value is provided, then the schema for the job's run config is a standard
+-                format based on its ops and resources.
++                format based on its solids and resources.
+ 
+                 If a dictionary is provided, then it must conform to the standard config schema, and
+                 it will be used as the job's run config for the job whenever the job is executed.
+@@ -594,7 +594,7 @@
+             op_retry_policy (Optional[RetryPolicy]): The default retry policy for all ops in this job.
+                 Only used if retry policy is not defined on the op definition or op invocation.
+             version_strategy (Optional[VersionStrategy]):
+-                Defines how each op (and optionally, resource) in the job can be versioned. If
++                Defines how each solid (and optionally, resource) in the job can be versioned. If
+                 provided, memoizaton will be enabled for this job.
+             partitions_def (Optional[PartitionsDefinition]): Defines a discrete set of partition
+                 keys that can parameterize the job. If this argument is supplied, the config
+@@ -784,7 +784,7 @@
+         dependencies (Optional[Mapping[Union[str, NodeInvocation], Mapping[str, IDependencyDefinition]]]):
+             A structure that declares the dependencies of each op's inputs on the outputs of other
+             ops in the subselected graph. Keys of the top level dict are either the string names of
+-            ops in the graph or, in the case of aliased ops, :py:class:`NodeInvocations <NodeInvocation>`.
++            ops in the graph or, in the case of aliased solids, :py:class:`NodeInvocations <NodeInvocation>`.
+             Values of the top level dict are themselves dicts, which map input names belonging to
+             the op or aliased op to :py:class:`DependencyDefinitions <DependencyDefinition>`.
+         input_mappings (Optional[Sequence[InputMapping]]): Define the inputs to the nested graph, and
+@@ -821,7 +821,9 @@
+         return self._parent_graph_def
+ 
+     def get_top_level_omitted_nodes(self) -> Sequence[Node]:
+-        return [node for node in self.parent_graph_def.nodes if not self.has_node_named(node.name)]
++        return [
++            node for node in self.parent_graph_def.nodes if not self.has_node_named(node.name)
++        ]
+ 
+     @property
+     def is_subselected(self) -> bool:
+@@ -997,4 +999,4 @@
+                     type=type(mapping)
+                 )
+             )
+-    return output_mappings, output_defs
++    return output_mappings, output_defs
+\ No newline at end of file

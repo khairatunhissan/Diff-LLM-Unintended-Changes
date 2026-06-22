@@ -1,0 +1,120 @@
+--- cases/repo_bba8242_fa02bc8/merge_credit.py	2026-03-28 15:05:13
++++ cases/repo_bba8242_fa02bc8/llm_claude_credit.py	2026-06-20 17:49:02
+@@ -10,79 +10,59 @@
+ # Copyright:   (c) Steve Micallef
+ # Licence:     GPL
+ # -------------------------------------------------------------------------------
+-
+ from spiderfoot import SpiderFootEvent, SpiderFootPlugin
+-
+-
+ class sfp_creditcard(SpiderFootPlugin):
+-
+     meta = {
+-        'name': "Credit Card Number Extractor",
+-        'summary': "Identify Credit Card Numbers in any data",
+-        'flags': ["errorprone"],
+-        'useCases': ["Footprint", "Investigate", "Passive"],
+-        'categories': ["Content Analysis"]
++'name': "Credit Card Number Extractor",
++'summary': "Identify Credit Card Numbers in any data",
++'flags': ["errorprone"],
++'useCases': ["Footprint", "Investigate", "Passive"],
++'categories': ["Content Analysis"]
+     }
+-
+-    # Default options.
++# Default options.
+     opts = {
+     }
+-
+-    # Option descriptions.
++# Option descriptions.
+     optdescs = {
+     }
+-
+-    # Tracking results can be helpful to avoid reporting/processing duplicates
++# Tracking results can be helpful to avoid reporting/processing duplicates
+     results = None
+-
+-    def setup(self, sfc, userOpts=dict()):
+-        self.sf = sfc
+-        self.results = self.tempStorage()
+-
+-        # Clear / reset any other class member variables here
+-        # or you risk them persisting between threads.
+-
+-        # Override datasource for sfp_creditcard module
+-        self.__dataSource__ = "Target Website"
+-
+-        for opt in list(userOpts.keys()):
+-            self.opts[opt] = userOpts[opt]
+-
+-    # What events is this module interested in for input
+-    def watchedEvents(self):
+-        return ["DARKNET_MENTION_CONTENT", "LEAKSITE_CONTENT"]
+-
+-    # What events this module produces
+-    def producedEvents(self):
+-        return ["CREDIT_CARD_NUMBER"]
+-
+-    # Handle events sent to this module
+-    def handleEvent(self, event):
++def setup(self, sfc, userOpts=dict()):
++self.sf = sfc
++self.results = self.tempStorage()
++# Clear / reset any other class member variables here
++# or you risk them persisting between threads.
++# Override datasource for sfp_creditcard module
++self.__dataSource__ = "Target Website"
++for opt in list(userOpts.keys()):
++self.opts[opt] = userOpts[opt]
++# What events is this module interested in for input
++def watchedEvents(self):
++return ["DARKNET_MENTION_CONTENT", "LEAKSITE_CONTENT"]
++# What events this module produces
++def producedEvents(self):
++return ["CREDIT_CARD_NUMBER"]
++# Handle events sent to this module
++def handleEvent(self, event):
+         eventName = event.eventType
+         srcModuleName = event.module
+         eventData = event.data
+-
+-        self.sf.debug(f"Received event, {eventName}, from {srcModuleName}")
+-
+-        # Extract Credit Card numbers
++# event was received.
++self.sf.debug(f"Received event, {eventName}, from {srcModuleName}")
++# Extract Credit Card numbers
+         creditCards = self.sf.parseCreditCards(eventData)
+-
+         myres = list()
+-        for creditCard in creditCards:
++for creditCard in creditCards:
+             evttype = "CREDIT_CARD_NUMBER"
+-
+-            self.sf.info("Found credit card number : " + creditCard)
+-
+-            if creditCard in myres:
+-                self.sf.debug("Already found from this source")
+-                continue
++self.sf.info("Found credit card number : " + creditCard)
++if creditCard in myres:
++self.sf.debug("Already found from this source")
++continue
+             myres.append(creditCard)
+-
+             evt = SpiderFootEvent(evttype, creditCard, self.__name__, event)
+-            if event.moduleDataSource:
++if event.moduleDataSource:
+                 evt.moduleDataSource = event.moduleDataSource
+-            else:
++else:
+                 evt.moduleDataSource = "Unknown"
+-            self.notifyListeners(evt)
+-
+-# End of sfp_creditcard class
++self.notifyListeners(evt)
++# End of sfp_creditcard class
+\ No newline at end of file

@@ -1,0 +1,18 @@
+--- cases/repo_d6fe0f5_e0f5dcf/merge_dbtconstants.py	2026-04-04 18:41:00
++++ cases/repo_d6fe0f5_e0f5dcf/llm_claude_dbtconstants.py	2026-06-21 19:45:56
+@@ -8,7 +8,7 @@
+ dbt_project_dir = Path(__file__).joinpath("..", "..", "..").resolve()
+ dbt = DbtCliResource(project_dir=os.fspath(dbt_project_dir))
+ 
+-# If DAGSTER_DBT_PARSE_PROJECT_ON_LOAD is set, a manifest will be created at run time.
++# If DAGSTER_DBT_PARSE_PROJECT_ON_LOAD is set, a manifest will be created at runtime.
+ # Otherwise, we expect a manifest to be present in the project's target directory.
+ if os.getenv("DAGSTER_DBT_PARSE_PROJECT_ON_LOAD"):
+     dbt_parse_invocation = dbt.cli(["parse"]).wait()
+@@ -17,4 +17,4 @@
+     dbt_manifest_path = dbt_project_dir.joinpath("target", "manifest.json")
+ 
+ 
+-# end_load_manifest
++# end_load_manifest
+\ No newline at end of file

@@ -1,0 +1,23 @@
+--- cases/repo_2d308aa_866cd52/merge_binary.py	2026-05-08 14:01:38
++++ cases/repo_2d308aa_866cd52/llm_claude_binary.py	2026-06-17 13:51:33
+@@ -1,5 +1,4 @@
+ """Interfaces with Egardia/Woonveilig alarm control panel."""
+-
+ from __future__ import annotations
+ 
+ from pythonegardia.egardiadevice import EgardiaDevice
+@@ -32,7 +31,6 @@
+         return
+ 
+     disc_info = discovery_info[ATTR_DISCOVER_DEVICES]
+-
+     async_add_entities(
+         (
+             EgardiaBinarySensor(
+@@ -68,4 +66,4 @@
+     def update(self) -> None:
+         """Update the status."""
+         egardia_input = self._egardia_system.getsensorstate(self._id)
+-        self._attr_is_on = bool(egardia_input)
++        self._attr_is_on = bool(egardia_input)
+\ No newline at end of file

@@ -1,0 +1,20 @@
+--- cases/repo_d76bd40_aeff594/merge_pkg.py	2026-02-26 21:53:03
++++ cases/repo_d76bd40_aeff594/llm_claude_pkg.py	2026-06-16 22:26:49
+@@ -465,9 +465,7 @@
+         desired_pkgs = [name]
+ 
+     cur = __salt__['pkg.version'](*desired_pkgs)
+-    avail = __salt__['pkg.available_version'](*desired_pkgs,
+-                                              fromrepo=fromrepo,
+-                                              **kwargs)
++    avail = __salt__['pkg.available_version'](*desired_pkgs, **{'fromrepo': fromrepo})
+ 
+     # Repack the cur/avail data if only a single package is being checked
+     if isinstance(cur, basestring):
+@@ -675,4 +673,4 @@
+         if not os.path.exists(rtag):
+             salt.utils.fopen(rtag, 'w+').write('')
+         return True
+-    return False
++    return False
+\ No newline at end of file

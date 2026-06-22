@@ -1,0 +1,38 @@
+--- cases/repo_a72c8d9_584795d/merge_worker.py	2026-03-05 13:25:00
++++ cases/repo_a72c8d9_584795d/llm_claude_worker.py	2026-06-18 12:34:24
+@@ -47,7 +47,7 @@
+ 
+ async def _http_task(tenant: edbtenant.Tenant, http_client) -> None:
+     http_max_connections = tenant._server.config_lookup(
+-        'http_max_connections', tenant.get_sys_config()
++        'net_http_max_connections', tenant.get_sys_config()
+     )
+     http_client._update_limit(http_max_connections)
+     try:
+@@ -100,7 +100,7 @@
+ 
+ def create_http(tenant: edbtenant.Tenant):
+     http_max_connections = tenant._server.config_lookup(
+-        'http_max_connections', tenant.get_sys_config()
++        'net_http_max_connections', tenant.get_sys_config()
+     )
+     return HttpClient(http_max_connections)
+ 
+@@ -202,8 +202,8 @@
+                         nh as module std::net::http,
+                         net as module std::net,
+                         state := <net::RequestState>$state,
+-                        failure := <
+-                            optional tuple<
++                        failure := 
++                            optional tuple
+                                 kind: net::RequestFailureKind,
+                                 message: str
+                             >
+@@ -325,4 +325,4 @@
+         finally:
+             await asyncio.sleep(
+                 NET_HTTP_REQUEST_TTL.to_microseconds() / 1_000_000.0
+-            )
++            )
+\ No newline at end of file

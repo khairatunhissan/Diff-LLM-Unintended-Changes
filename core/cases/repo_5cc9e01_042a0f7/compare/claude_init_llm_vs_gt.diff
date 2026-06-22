@@ -1,0 +1,51 @@
+--- cases/repo_5cc9e01_042a0f7/merge_init.py	2026-02-27 20:41:56
++++ cases/repo_5cc9e01_042a0f7/llm_claude_init.py	2026-06-17 13:43:02
+@@ -1,5 +1,4 @@
+ """The Mastodon integration."""
+-
+ from __future__ import annotations
+ 
+ from mastodon.Mastodon import (
+@@ -36,18 +35,17 @@
+ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+     """Set up the Mastodon component."""
+     async_setup_services(hass)
++
+     return True
+ 
+ 
+ async def async_setup_entry(hass: HomeAssistant, entry: MastodonConfigEntry) -> bool:
+     """Set up Mastodon from a config entry."""
+-
+     try:
+         client, instance, account = await hass.async_add_executor_job(
+             setup_mastodon,
+             entry,
+         )
+-
+     except MastodonError as ex:
+         raise ConfigEntryNotReady("Failed to connect") from ex
+ 
+@@ -71,7 +69,6 @@
+ 
+ async def async_migrate_entry(hass: HomeAssistant, entry: MastodonConfigEntry) -> bool:
+     """Migrate old config."""
+-
+     if entry.version == 1 and entry.minor_version == 1:
+         # Version 1.1 had the unique_id as client_id, this isn't necessarily unique
+         LOGGER.debug("Migrating config entry from version %s", entry.version)
+@@ -111,12 +108,10 @@
+         entry.data[CONF_CLIENT_SECRET],
+         entry.data[CONF_ACCESS_TOKEN],
+     )
+-
+     try:
+         instance = client.instance_v2()
+     except MastodonNotFoundError:
+         instance = client.instance_v1()
+-
+     account = client.account_verify_credentials()
+ 
+-    return client, instance, account
++    return client, instance, account
+\ No newline at end of file

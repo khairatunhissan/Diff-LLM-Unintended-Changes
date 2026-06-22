@@ -1,0 +1,9 @@
+--- cases/repo_eaef336_54decf9/merge_load.py	2026-04-05 12:05:41
++++ cases/repo_eaef336_54decf9/llm_claude_load.py	2026-06-21 20:52:17
+@@ -345,4 +345,4 @@
+             )
+ 
+     with open(train_results_path, "w") as fp:
+-        json.dump(train_results, fp)
++        json.dump(train_results, fp)
+\ No newline at end of file

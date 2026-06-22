@@ -1,0 +1,9 @@
+--- cases/repo_aae4a1f_7f04a49/merge_testspider.py	2026-03-18 20:09:53
++++ cases/repo_aae4a1f_7f04a49/llm_claude_testspider.py	2026-06-20 17:36:23
+@@ -957,4 +957,4 @@
+         sf = SpiderFoot(self.default_options)
+ 
+         sf.bingIterate(None, None)
+-        self.assertEqual('TBD', 'TBD')
++        self.assertEqual('TBD', 'TBD')
+\ No newline at end of file

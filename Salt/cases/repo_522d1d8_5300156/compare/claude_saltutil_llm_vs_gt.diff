@@ -1,0 +1,9 @@
+--- cases/repo_522d1d8_5300156/merge_saltutil.py	2026-02-26 22:13:26
++++ cases/repo_522d1d8_5300156/llm_claude_saltutil.py	2026-06-16 22:37:18
+@@ -849,4 +849,4 @@
+         salt '*' saltutil.mmodule base test.ping
+     '''
+     mminion = _MMinion(saltenv)
+-    return mminion.functions[fun](*args, **kwargs)
++    return mminion.functions[fun](*args, **kwargs)
+\ No newline at end of file

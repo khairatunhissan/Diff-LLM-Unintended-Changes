@@ -1,0 +1,9 @@
+--- cases/repo_1442154_17e5146/merge_submaker.py	2026-04-29 14:12:19
++++ cases/repo_1442154_17e5146/llm_claude_submaker.py	2026-06-22 01:35:51
+@@ -47,4 +47,4 @@
+         return srt.compose(self.cues)  # type: ignore
+ 
+     def __str__(self) -> str:
+-        return self.get_srt()
++        return self.get_srt()
+\ No newline at end of file

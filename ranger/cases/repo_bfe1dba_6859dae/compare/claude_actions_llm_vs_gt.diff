@@ -1,0 +1,20 @@
+--- cases/repo_bfe1dba_6859dae/merge_actions.py	2026-03-27 15:35:39
++++ cases/repo_bfe1dba_6859dae/llm_claude_actions.py	2026-06-19 22:41:21
+@@ -841,8 +841,8 @@
+     def tag_remove(self, paths=None, movedown=None, tag=None):
+         self.tag_toggle(paths=paths, value=False, movedown=movedown, tag=tag)
+ 
+-    def tag_add(self, paths=None, movedown=None, tag=None):
+-        self.tag_toggle(paths=paths, value=True, movedown=movedown, tag=tag)
++    def tag_add(self, paths=None, movedown=None):
++        self.tag_toggle(paths=paths, value=True, movedown=movedown)
+ 
+     # --------------------------
+     # -- Bookmarks
+@@ -1466,4 +1466,4 @@
+         except OSError as err:
+             self.notify(err)
+             return False
+-        return True
++        return True
+\ No newline at end of file

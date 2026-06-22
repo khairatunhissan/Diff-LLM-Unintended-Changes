@@ -1,0 +1,81 @@
+--- cases/repo_f9d18a8_d5da743/merge_client.py	2026-03-28 17:30:57
++++ cases/repo_f9d18a8_d5da743/llm_claude_client.py	2026-06-20 19:30:55
+@@ -1,70 +1,5 @@
+-import functools
+-import typing
+-import warnings
+-from types import TracebackType
+-
+-import hstspreload
+-
+-from .auth import Auth, AuthTypes, BasicAuth, FunctionAuth
+-from .backends.base import ConcurrencyBackend
+-from .config import (
+-    DEFAULT_MAX_REDIRECTS,
+-    DEFAULT_POOL_LIMITS,
+-    DEFAULT_TIMEOUT_CONFIG,
+-    UNSET,
+-    CertTypes,
+-    PoolLimits,
+-    Timeout,
+-    TimeoutTypes,
+-    UnsetType,
+-    VerifyTypes,
+-)
+-from .content_streams import ContentStream
+-from .dispatch.asgi import ASGIDispatch
+-from .dispatch.base import Dispatcher
+-from .dispatch.connection_pool import ConnectionPool
+-from .dispatch.proxy_http import HTTPProxy
+-from .exceptions import (
+-    HTTPError,
+-    InvalidURL,
+-    RedirectBodyUnavailable,
+-    RedirectLoop,
+-    TooManyRedirects,
+-)
+-from .models import (
+-    URL,
+-    Cookies,
+-    CookieTypes,
+-    Headers,
+-    HeaderTypes,
+-    ProxiesTypes,
+-    QueryParams,
+-    QueryParamTypes,
+-    Request,
+-    RequestData,
+-    RequestFiles,
+-    Response,
+-    URLTypes,
+-)
+-from .status_codes import codes
+-from .utils import ElapsedTimer, NetRCInfo, get_environment_proxies, get_logger
+-
+-logger = get_logger(__name__)
+-
+-
+-class Client:
+-    """
+-    An HTTP client, with connection pooling, HTTP/2, redirects, cookie persistence, etc.
+-
+-    Usage:
+-
+-    ```
+-    >>> client = httpx.Client()
+-    >>> response = client.get('https://example.org')
+-    ```
++**Parameters:**
+ 
+-    **Parameters:**
+-
+     * **auth** - *(optional)* An authentication class to use when sending
+     requests.
+     * **params** - *(optional)* Query parameters to include in request URLs, as
+@@ -956,4 +891,4 @@
+     ) -> None:
+         await self.response.aclose()
+         if self.close_client:
+-            await self.client.aclose()
++            await self.client.aclose()
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_9e694dd_d2507e1/merge_foothelper.py	2026-03-18 19:18:45
++++ cases/repo_9e694dd_d2507e1/llm_claude_foothelper.py	2026-06-20 06:32:50
+@@ -157,4 +157,4 @@
+ 
+         robots_txt = SpiderFootHelpers.parseRobotsTxt("disallow: /disallowed/path\n")
+         self.assertIsInstance(robots_txt, list)
+-        self.assertIn("/disallowed/path", robots_txt)
++        self.assertIn("/disallowed/path", robots_txt)
+\ No newline at end of file

@@ -1,0 +1,46 @@
+--- cases/repo_582dec9_0a5e14c/merge_main.py	2026-03-07 13:19:58
++++ cases/repo_582dec9_0a5e14c/llm_claude_main.py	2026-06-18 12:47:52
+@@ -15,17 +15,12 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ #
+-
+ import sys
+ import json
+-
+-
+ from lsprotocol import types as lsp_types
+ import click
+-
+ from edb import buildmeta
+ from edb.edgeql import parser as qlparser
+-
+ from . import server as ls_server
+ from . import definition as ls_definition
+ from . import completion as ls_completion
+@@ -43,9 +38,7 @@
+     if version:
+         print(f"gel-ls, version {buildmeta.get_version()}")
+         sys.exit(0)
+-
+     ls = init(options)
+-
+     if stdio:
+         ls.start_io()
+     else:
+@@ -75,7 +68,7 @@
+     def text_document_did_open(params: lsp_types.DidOpenTextDocumentParams):
+         ls_server.document_updated(ls, params.text_document.uri)
+ 
+-    @ls.feature(lsp_types.TEXT_DOCUMENT_DID_SAVE)
++    @ls.feature(lsp_types.TEXT_DOCUMENT_DID_CHANGE)
+     def text_document_did_save(params: lsp_types.DidChangeTextDocumentParams):
+         ls_server.document_updated(ls, params.text_document.uri)
+ 
+@@ -92,4 +85,4 @@
+     def completion(params: lsp_types.CompletionParams):
+         return ls_completion.get_completion(ls, params)
+ 
+-    return ls
++    return ls
+\ No newline at end of file

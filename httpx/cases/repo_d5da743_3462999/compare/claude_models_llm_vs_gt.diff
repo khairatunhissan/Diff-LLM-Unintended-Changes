@@ -1,0 +1,9 @@
+--- cases/repo_d5da743_3462999/merge_models.py	2026-03-28 17:16:53
++++ cases/repo_d5da743_3462999/llm_claude_models.py	2026-06-20 19:16:09
+@@ -1107,4 +1107,4 @@
+             info = email.message.Message()
+             for key, value in self.response.headers.items():
+                 info[key] = value
+-            return info
++            return info
+\ No newline at end of file

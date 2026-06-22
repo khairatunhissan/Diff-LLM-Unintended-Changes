@@ -1,0 +1,61 @@
+--- cases/repo_b87b726_c38aeb8/merge_rsi.py	2026-02-28 21:50:03
++++ cases/repo_b87b726_c38aeb8/llm_claude_rsi.py	2026-06-17 19:05:14
+@@ -7,35 +7,28 @@
+ class RSI(DirectionalStrategyBase):
+     """
+     RSI (Relative Strength Index) strategy implementation based on the DirectionalStrategyBase.
+-
+     This strategy uses the RSI indicator to generate trading signals and execute trades based on the RSI values.
+     It defines the specific parameters and configurations for the RSI strategy.
+-
+     Parameters:
+         directional_strategy_name (str): The name of the strategy.
+         trading_pair (str): The trading pair to be traded.
+         exchange (str): The exchange to be used for trading.
+         order_amount_usd (Decimal): The amount of the order in USD.
+         leverage (int): The leverage to be used for trading.
+-
+     Position Parameters:
+         stop_loss (float): The stop-loss percentage for the position.
+         take_profit (float): The take-profit percentage for the position.
+         time_limit (int): The time limit for the position in seconds.
+         trailing_stop_activation_delta (float): The activation delta for the trailing stop.
+         trailing_stop_trailing_delta (float): The trailing delta for the trailing stop.
+-
+     Candlestick Configuration:
+         candles (List[CandlesBase]): The list of candlesticks used for generating signals.
+-
+     Markets:
+         A dictionary specifying the markets and trading pairs for the strategy.
+-
+     Methods:
+         get_signal(): Generates the trading signal based on the RSI indicator.
+         get_processed_df(): Retrieves the processed dataframe with RSI values.
+         market_data_extra_info(): Provides additional information about the market data.
+-
+     Inherits from:
+         DirectionalStrategyBase: Base class for creating directional strategies using the PositionExecutor.
+     """
+@@ -45,7 +38,6 @@
+     exchange: str = "binance_perpetual"
+     order_amount_usd = Decimal("15")
+     leverage = 10
+-
+     # Configure the parameters for the position
+     stop_loss: float = 0.0075
+     take_profit: float = 0.015
+@@ -53,7 +45,6 @@
+     trailing_stop_activation_delta = 0.004
+     trailing_stop_trailing_delta = 0.001
+     cooldown_after_execution = 10
+-
+     candles = [CandlesFactory.get_candle(connector=exchange,
+                                          trading_pair=trading_pair,
+                                          interval="1m", max_records=150)]
+@@ -95,4 +86,4 @@
+         candles_df = self.get_processed_df()
+         lines.extend([f"Candles: {self.candles[0].name} | Interval: {self.candles[0].interval}\n"])
+         lines.extend(self.candles_formatted_list(candles_df, columns_to_show))
+-        return lines
++        return lines
+\ No newline at end of file

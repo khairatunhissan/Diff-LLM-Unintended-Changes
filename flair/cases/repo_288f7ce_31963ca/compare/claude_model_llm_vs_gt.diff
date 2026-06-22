@@ -1,0 +1,9 @@
+--- cases/repo_288f7ce_31963ca/merge_model.py	2026-03-02 23:47:18
++++ cases/repo_288f7ce_31963ca/llm_claude_model.py	2026-06-18 22:40:21
+@@ -529,4 +529,4 @@
+     def __str__(self):
+         return super(flair.nn.Model, self).__str__().rstrip(')') + \
+                f'  (weights): {self.weight_dict}\n' + \
+-               f'  (weight_tensor) {self.loss_weights}\n)'
++               f'  (weight_tensor) {self.loss_weights}\n)'
+\ No newline at end of file

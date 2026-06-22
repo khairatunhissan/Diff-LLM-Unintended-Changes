@@ -1,0 +1,241 @@
+--- cases/repo_a55aa59_4311b2c/merge_cmdmod.py	2026-02-26 20:30:01
++++ cases/repo_a55aa59_4311b2c/llm_claude_cmdmod.py	2026-06-16 17:05:23
+@@ -616,7 +616,7 @@
+             python_shell = True
+     except NameError:
+         pass
+-    ret = _run(cmd,
++    stdout = _run(cmd,
+                runas=runas,
+                shell=shell,
+                python_shell=python_shell,
+@@ -635,7 +635,7 @@
+                saltenv=saltenv,
+                use_vt=use_vt)
+ 
+-    if 'pid' in ret and '__pub_jid' in kwargs:
++    if 'pid' in stdout and '__pub_jid' in kwargs:
+         # Stuff the child pid in the JID file
+         try:
+             proc_dir = os.path.join(__opts__['cachedir'], 'proc')
+@@ -646,9 +646,9 @@
+                     jid_dict = serial.load(fn_)
+ 
+                 if 'child_pids' in jid_dict:
+-                    jid_dict['child_pids'].append(ret['pid'])
++                    jid_dict['child_pids'].append(stdout['pid'])
+                 else:
+-                    jid_dict['child_pids'] = [ret['pid']]
++                    jid_dict['child_pids'] = [stdout['pid']]
+                 # Rewrite file
+                 with salt.utils.fopen(jid_file, 'w+b') as fn_:
+                     fn_.write(serial.dumps(jid_dict))
+@@ -658,15 +658,15 @@
+ 
+     lvl = _check_loglevel(output_loglevel)
+     if lvl is not None:
+-        if not ignore_retcode and ret['retcode'] != 0:
++        if not ignore_retcode and stdout['retcode'] != 0:
+             if lvl < LOG_LEVELS['error']:
+                 lvl = LOG_LEVELS['error']
+             log.error(
+                 'Command {0!r} failed with return code: {1}'
+-                .format(cmd, ret['retcode'])
++                .format(cmd, stdout['retcode'])
+             )
+-        log.log(lvl, 'output: {0}'.format(ret['stdout']))
+-    return ret['stdout']
++        log.log(lvl, 'output: {0}'.format(stdout['stdout']))
++    return stdout['stdout']
+ 
+ 
+ def shell(cmd,
+@@ -810,7 +810,7 @@
+             python_shell = True
+     except NameError:
+         pass
+-    ret = _run(cmd,
++    stdout = _run(cmd,
+                runas=runas,
+                cwd=cwd,
+                stdin=stdin,
+@@ -830,20 +830,20 @@
+ 
+     lvl = _check_loglevel(output_loglevel)
+     if lvl is not None:
+-        if not ignore_retcode and ret['retcode'] != 0:
++        if not ignore_retcode and stdout['retcode'] != 0:
+             if lvl < LOG_LEVELS['error']:
+                 lvl = LOG_LEVELS['error']
+             log.error(
+                 'Command {0!r} failed with return code: {1}'
+-                .format(cmd, ret['retcode'])
++                .format(cmd, stdout['retcode'])
+             )
+-        if ret['stdout']:
+-            log.log(lvl, 'stdout: {0}'.format(ret['stdout']))
+-        if ret['stderr']:
+-            log.log(lvl, 'stderr: {0}'.format(ret['stderr']))
+-        if ret['retcode']:
+-            log.log(lvl, 'retcode: {0}'.format(ret['retcode']))
+-    return ret['stdout']
++        if stdout['stdout']:
++            log.log(lvl, 'stdout: {0}'.format(stdout['stdout']))
++        if stdout['stderr']:
++            log.log(lvl, 'stderr: {0}'.format(stdout['stderr']))
++        if stdout['retcode']:
++            log.log(lvl, 'retcode: {0}'.format(stdout['retcode']))
++    return stdout['stdout']
+ 
+ 
+ def run_stderr(cmd,
+@@ -898,7 +898,7 @@
+             python_shell = True
+     except NameError:
+         pass
+-    ret = _run(cmd,
++    stdout = _run(cmd,
+                runas=runas,
+                cwd=cwd,
+                stdin=stdin,
+@@ -918,20 +918,20 @@
+ 
+     lvl = _check_loglevel(output_loglevel)
+     if lvl is not None:
+-        if not ignore_retcode and ret['retcode'] != 0:
++        if not ignore_retcode and stdout['retcode'] != 0:
+             if lvl < LOG_LEVELS['error']:
+                 lvl = LOG_LEVELS['error']
+             log.error(
+                 'Command {0!r} failed with return code: {1}'
+-                .format(cmd, ret['retcode'])
++                .format(cmd, stdout['retcode'])
+             )
+-        if ret['stdout']:
+-            log.log(lvl, 'stdout: {0}'.format(ret['stdout']))
+-        if ret['stderr']:
+-            log.log(lvl, 'stderr: {0}'.format(ret['stderr']))
+-        if ret['retcode']:
+-            log.log(lvl, 'retcode: {0}'.format(ret['retcode']))
+-    return ret['stderr']
++        if stdout['stdout']:
++            log.log(lvl, 'stdout: {0}'.format(stdout['stdout']))
++        if stdout['stderr']:
++            log.log(lvl, 'stderr: {0}'.format(stdout['stderr']))
++        if stdout['retcode']:
++            log.log(lvl, 'retcode: {0}'.format(stdout['retcode']))
++    return stdout['stderr']
+ 
+ 
+ def run_all(cmd,
+@@ -986,7 +986,7 @@
+             python_shell = True
+     except NameError:
+         pass
+-    ret = _run(cmd,
++    stdout = _run(cmd,
+                runas=runas,
+                cwd=cwd,
+                stdin=stdin,
+@@ -1006,20 +1006,20 @@
+ 
+     lvl = _check_loglevel(output_loglevel)
+     if lvl is not None:
+-        if not ignore_retcode and ret['retcode'] != 0:
++        if not ignore_retcode and stdout['retcode'] != 0:
+             if lvl < LOG_LEVELS['error']:
+                 lvl = LOG_LEVELS['error']
+             log.error(
+                 'Command {0!r} failed with return code: {1}'
+-                .format(cmd, ret['retcode'])
++                .format(cmd, stdout['retcode'])
+             )
+-        if ret['stdout']:
+-            log.log(lvl, 'stdout: {0}'.format(ret['stdout']))
+-        if ret['stderr']:
+-            log.log(lvl, 'stderr: {0}'.format(ret['stderr']))
+-        if ret['retcode']:
+-            log.log(lvl, 'retcode: {0}'.format(ret['retcode']))
+-    return ret
++        if stdout['stdout']:
++            log.log(lvl, 'stdout: {0}'.format(stdout['stdout']))
++        if stdout['stderr']:
++            log.log(lvl, 'stderr: {0}'.format(stdout['stderr']))
++        if stdout['retcode']:
++            log.log(lvl, 'retcode: {0}'.format(stdout['retcode']))
++    return stdout
+ 
+ 
+ def retcode(cmd,
+@@ -1071,7 +1071,7 @@
+ 
+         salt '*' cmd.retcode "grep f" stdin='one\\ntwo\\nthree\\nfour\\nfive\\n'
+     '''
+-    ret = _run(cmd,
++    stdout = _run(cmd,
+               runas=runas,
+               cwd=cwd,
+               stdin=stdin,
+@@ -1091,15 +1091,15 @@
+ 
+     lvl = _check_loglevel(output_loglevel)
+     if lvl is not None:
+-        if not ignore_retcode and ret['retcode'] != 0:
++        if not ignore_retcode and stdout['retcode'] != 0:
+             if lvl < LOG_LEVELS['error']:
+                 lvl = LOG_LEVELS['error']
+             log.error(
+                 'Command {0!r} failed with return code: {1}'
+-                .format(cmd, ret['retcode'])
++                .format(cmd, stdout['retcode'])
+             )
+-        log.log(lvl, 'output: {0}'.format(ret['stdout']))
+-    return ret['retcode']
++        log.log(lvl, 'output: {0}'.format(stdout['stdout']))
++    return stdout['retcode']
+ 
+ 
+ def _retcode_quiet(cmd,
+@@ -1238,7 +1238,7 @@
+     if not salt.utils.is_windows():
+         os.chmod(path, 320)
+         os.chown(path, __salt__['file.user_to_uid'](runas), -1)
+-    ret = _run(path + ' ' + str(args) if args else path,
++    stdout = _run(path + ' ' + str(args) if args else path,
+                cwd=cwd,
+                stdin=stdin,
+                output_loglevel=output_loglevel,
+@@ -1252,7 +1252,7 @@
+                saltenv=saltenv,
+                use_vt=use_vt)
+     _cleanup_tempfile(path)
+-    return ret
++    return stdout
+ 
+ 
+ def script_retcode(source,
+@@ -1472,7 +1472,7 @@
+     run_kw = copy.deepcopy(kw)
+     for a in [a for a in six.iterkeys(kw) if a.startswith('__')]:
+         run_kw.pop(a, None)
+-    ret = run_func(cmd, stdin=stdin, output_loglevel=output_loglevel, **kw)
++    stdout = run_func(cmd, stdin=stdin, output_loglevel=output_loglevel, **kw)
+ 
+     # Kill processes running in the chroot
+     for i in range(6):
+@@ -1490,7 +1490,7 @@
+ 
+     __salt__['mount.umount'](os.path.join(root, 'proc'))
+     __salt__['mount.umount'](os.path.join(root, 'dev'))
+-    return ret
++    return stdout
+ 
+ 
+ def _is_valid_shell(shell):
+@@ -1519,4 +1519,4 @@
+     if shell in available_shells:
+         return True
+     else:
+-        return False
++        return False
+\ No newline at end of file

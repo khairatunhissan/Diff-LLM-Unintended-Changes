@@ -1,0 +1,22 @@
+--- cases/repo_2b09404_8aa86b6/merge_base.py	2026-03-02 22:44:58
++++ cases/repo_2b09404_8aa86b6/llm_claude_base.py	2026-06-18 21:48:21
+@@ -155,10 +155,10 @@
+                 )
+             )
+ 
+-        normed_weights = torch.nn.functional.softmax(
++        normed_weights_split = torch.nn.functional.softmax(
+             torch.cat([parameter for parameter in self.scalar_parameters]), dim=0
+         )
+-        normed_weights_split = torch.split(normed_weights, split_size_or_sections=1)
++        normed_weights_split = torch.split(normed_weights_split, split_size_or_sections=1)
+ 
+         pieces = []
+         for weight, tensor in zip(normed_weights_split, tensors):
+@@ -777,4 +777,4 @@
+                             expanded_sentence[token_idx + context_offset].get_embedding(self.name),
+                         )
+                 if self.document_embedding:
+-                    original_sentence.set_embedding(self.name, expanded_sentence.get_embedding(self.name))
++                    original_sentence.set_embedding(self.name, expanded_sentence.get_embedding(self.name))
+\ No newline at end of file

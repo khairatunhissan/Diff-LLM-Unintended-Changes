@@ -1,0 +1,35 @@
+--- cases/repo_8b7a575_d92abc6/merge_postpone.py	2026-03-09 00:35:36
++++ cases/repo_8b7a575_d92abc6/llm_claude_postpone.py	2026-06-16 20:32:50
+@@ -38,16 +38,12 @@
+         job = {
+             "schedule": {"job1": {"function": "test.ping", "when": "11/29/2017 4pm"}}
+         }
+-
+         # 11/29/2017 4pm
+         run_time = dateutil.parser.parse("11/29/2017 4:00pm")
+-
+         # 5 minute delay
+         delay = 300
+-
+         # Add job to schedule
+         self.schedule.opts.update(job)
+-
+         # Postpone the job by 5 minutes
+         self.schedule.postpone_job(
+             "job1",
+@@ -62,13 +58,11 @@
+         self.schedule.eval(now=run_time)
+         ret = self.schedule.job_status("job1")
+         self.assertNotIn("_last_run", ret)
+-
+         # Run 5 minutes later
+         self.schedule.eval(now=run_time + datetime.timedelta(seconds=delay))
+         ret = self.schedule.job_status("job1")
+         self.assertEqual(ret["_last_run"], run_time + datetime.timedelta(seconds=delay))
+-
+         # Run 6 minutes later
+         self.schedule.eval(now=run_time + datetime.timedelta(seconds=delay + 1))
+         ret = self.schedule.job_status("job1")
+-        self.assertEqual(ret["_last_run"], run_time + datetime.timedelta(seconds=delay))
++        self.assertEqual(ret["_last_run"], run_time + datetime.timedelta(seconds=delay))
+\ No newline at end of file

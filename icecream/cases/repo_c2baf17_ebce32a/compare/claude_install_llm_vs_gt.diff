@@ -1,0 +1,22 @@
+--- cases/repo_c2baf17_ebce32a/merge_install.py	2026-04-30 15:50:35
++++ cases/repo_c2baf17_ebce32a/llm_claude_install.py	2026-06-22 14:04:04
+@@ -13,10 +13,10 @@
+ import unittest
+ 
+ import icecream
+-from tests.test_icecream import (
++from .test_icecream import (
+     disable_coloring, capture_standard_streams, parse_output_into_pairs)
+ 
+-from tests.install_test_import import runMe
++from .install_test_import import runMe
+ 
+ 
+ class TestIceCreamInstall(unittest.TestCase):
+@@ -35,4 +35,4 @@
+ 
+         # NameError: global name 'ic' is not defined.
+         with self.assertRaises(NameError):
+-            runMe()
++            runMe()
+\ No newline at end of file

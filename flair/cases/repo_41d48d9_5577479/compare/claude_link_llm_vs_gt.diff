@@ -1,0 +1,17 @@
+--- cases/repo_41d48d9_5577479/merge_link.py	2026-03-03 00:05:46
++++ cases/repo_41d48d9_5577479/llm_claude_link.py	2026-06-19 18:31:02
+@@ -1208,6 +1208,7 @@
+                                senses will be detected as one new sense. The default is True.
+         :param columns: Columns to consider when loading the dataset. You can add 1: "lemma" or 2: "pos" to the default dict {0: "text", 3: "sense"}
+             if you want to use additional pos and/or lemma for the words.
++        :param tag_to_bioes: whether to convert to BIOES tagging scheme
+         :param banned_sentences: Optionally remove sentences from the corpus. Works only if `in_memory` is true
+         :param sample_missing_splits_in_multicorpus: Whether to sample missing splits when loading the multicorpus (this is redundant if
+                                                                                                                     sample_missing_splits_in_each_corpus is True)
+@@ -1766,4 +1767,4 @@
+             label_name_map=label_name_map,
+             banned_sentences=banned_sentences,
+             sample_missing_splits=sample_missing_splits,
+-        )
++        )
+\ No newline at end of file

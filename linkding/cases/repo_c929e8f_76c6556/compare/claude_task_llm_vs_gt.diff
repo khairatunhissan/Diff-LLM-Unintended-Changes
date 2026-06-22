@@ -1,0 +1,9 @@
+--- cases/repo_c929e8f_76c6556/merge_task.py	2026-04-08 11:41:41
++++ cases/repo_c929e8f_76c6556/llm_claude_task.py	2026-06-22 01:03:11
+@@ -657,4 +657,4 @@
+         count = tasks.create_missing_html_snapshots(self.get_or_create_test_user())
+ 
+         self.assertEqual(count, 3)
+-        self.assertEqual(BookmarkAsset.objects.count(), count)
++        self.assertEqual(BookmarkAsset.objects.count(), count)
+\ No newline at end of file

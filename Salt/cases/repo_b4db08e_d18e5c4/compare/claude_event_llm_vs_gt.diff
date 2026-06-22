@@ -1,0 +1,18 @@
+--- cases/repo_b4db08e_d18e5c4/merge_event.py	2026-02-26 21:32:06
++++ cases/repo_b4db08e_d18e5c4/llm_claude_event.py	2026-06-16 17:26:26
+@@ -722,8 +722,6 @@
+         if 'local' not in self.client_cache:
+             self.client_cache['local'] = salt.client.LocalClient(self.opts['conf_file'])
+         return self.client_cache['local'].cmd_async(*args, **kwargs)
+-
+-    cmd = local
+ 
+     def runner(self, fun, **kwargs):
+         '''
+@@ -811,4 +809,4 @@
+             sreq.send(load)
+         except Exception:
+             pass
+-        return True
++        return True
+\ No newline at end of file

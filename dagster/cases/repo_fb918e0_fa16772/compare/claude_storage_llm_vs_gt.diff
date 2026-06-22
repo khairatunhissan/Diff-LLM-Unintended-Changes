@@ -1,0 +1,9 @@
+--- cases/repo_fb918e0_fa16772/merge_storage.py	2026-04-04 13:38:58
++++ cases/repo_fb918e0_fa16772/llm_claude_storage.py	2026-06-21 14:58:54
+@@ -814,4 +814,4 @@
+         )
+ 
+     def dispose(self) -> None:
+-        return self._storage.schedule_storage.dispose()
++        return self._storage.schedule_storage.dispose()
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_95fb7e6_4b90e78/merge_market.py	2026-02-28 22:51:15
++++ cases/repo_95fb7e6_4b90e78/llm_claude_market.py	2026-06-17 22:03:22
+@@ -1041,4 +1041,4 @@
+         if self._trading_required:
+             self._status_polling_task = safe_ensure_future(self._status_polling_loop())
+             self._user_stream_tracker_task = safe_ensure_future(self._user_stream_tracker.start())
+-            self._user_stream_event_listener_task = safe_ensure_future(self._user_stream_event_listener())
++            self._user_stream_event_listener_task = safe_ensure_future(self._user_stream_event_listener())
+\ No newline at end of file

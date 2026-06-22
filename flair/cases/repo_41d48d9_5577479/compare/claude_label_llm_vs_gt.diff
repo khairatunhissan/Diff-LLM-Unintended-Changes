@@ -1,0 +1,1393 @@
+--- cases/repo_41d48d9_5577479/merge_label.py	2026-03-03 00:15:28
++++ cases/repo_41d48d9_5577479/llm_claude_label.py	2026-06-19 13:22:32
+@@ -288,6 +288,7 @@
+         :param train_files: the name of the train files
+         :param test_files: the name of the test files
+         :param dev_files: the name of the dev files, if empty, dev data is sampled from train
++        :param tag_to_bioes: whether to convert to BIOES tagging scheme
+         :param column_delimiter: default is to split on any separatator, but you can overwrite for instance with "\t"
+         to split only on tabs
+         :param comment_symbol: if set, lines that begin with this symbol are treated as comments
+@@ -393,6 +394,7 @@
+         :param train_file: the name of the train file
+         :param test_file: the name of the test file
+         :param dev_file: the name of the dev file, if None, dev data is sampled from train
++        :param tag_to_bioes: whether to convert to BIOES tagging scheme
+         :param column_delimiter: default is to split on any separatator, but you can overwrite for instance with "\t"
+         to split only on tabs
+         :param comment_symbol: if set, lines that begin with this symbol are treated as comments
+@@ -445,6 +447,7 @@
+         Instantiates a column dataset (typically used for sequence labeling or word-level prediction).
+         :param path_to_column_file: path to the file with the column-formatted data
+         :param column_name_map: a map specifying the column format
++        :param tag_to_bioes: whether to convert to BIOES tagging scheme
+         :param column_delimiter: default is to split on any separatator, but you can overwrite for instance with "\t"
+         to split only on tabs
+         :param comment_symbol: if set, lines that begin with this symbol are treated as comments
+@@ -807,6 +810,7 @@
+         parent directory where the conll_03 folder resides.
+         If using entity linking, the conll03 dateset is reduced by about 20 Documents, which are not part of the yago dataset.
+         :param base_path: Path to the CoNLL-03 corpus (i.e. 'conll_03' folder) on your machine
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' or 'np' to predict
+         POS tags or chunks respectively
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -852,6 +856,7 @@
+         'conll_03_german'. Then set the base_path parameter in the constructor to the path to the parent directory where
+         the conll_03_german folder resides.
+         :param base_path: Path to the CoNLL-03 corpus (i.e. 'conll_03_german' folder) on your machine
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'lemma', 'pos' or 'np' to predict
+         word lemmas, POS tags or chunks respectively
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -899,6 +904,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -966,6 +972,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, should not be changed
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1009,6 +1016,7 @@
+         The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: 'np' by default, should not be changed, but you can set 'pos' instead to predict POS tags
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         """
+         if not base_path:
+@@ -1142,6 +1150,7 @@
+         The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed.
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1199,6 +1208,7 @@
+         Recall-Oriented Learning of Named Entities in Arabic Wikipedia. Proceedings of EACL."
+ 
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1295,6 +1305,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -1407,6 +1418,7 @@
+         in BIO format. The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         """
+@@ -1452,6 +1464,7 @@
+         in BIO format. The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         """
+@@ -1490,6 +1503,7 @@
+     Initialize corpus of SEC-fillings annotated with English NER tags. See paper "Domain Adaption of Named Entity
+     Recognition to Support Credit Risk Assessment" by Alvarado et al, 2015: https://aclanthology.org/U15-1010/
+     :param base_path: Path to the CoNLL-03 corpus (i.e. 'conll_03' folder) on your machine
++    :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' or 'np' to predict
+     POS tags or chunks respectively
+     :param in_memory: If True, keeps dataset in memory giving speedups in training.
+     :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -1544,6 +1558,7 @@
+         The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -1587,6 +1602,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -1684,6 +1700,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1784,6 +1801,7 @@
+         The first time you call this constructor it will automatically download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -1853,6 +1871,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, since it is the only option of the WNUT corpus.
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -1918,6 +1937,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, should not be changed
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -2043,6 +2063,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: 'ner' by default, should not be changed.
+         :param in_memory: If True, keeps dataset in memory giving speedups in training. Not recommended due to heavy RAM usage.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+         """
+@@ -2206,6 +2227,7 @@
+         machine. Obtain the corpus from https://sites.google.com/site/germeval2014ner/data and put it into some folder.
+         Then point the base_path parameter in the constructor to this folder
+         :param base_path: Path to the GermEval corpus on your machine
++        :param tag_to_bioes: 'ner' by default, should not be changed.
+         :param in_memory:If True, keeps dataset in memory giving speedups in training.
+         """
+         if not base_path:
+@@ -2265,6 +2287,7 @@
+         dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -2382,6 +2405,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -2432,6 +2456,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+@@ -2491,6 +2516,7 @@
+         download the dataset.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default.
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         """
+         if not base_path:
+@@ -2569,6 +2595,7 @@
+         with the languages you require. If you pass "all", all languages will be initialized.
+         :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+         to point to a different folder but typically this should not be necessary.
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' to predict
+         POS tags instead
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         """
+@@ -2660,6 +2687,7 @@
+         parent directory where the multiconer folder resides. You can also create the multiconer in
+         the {FLAIR_CACHE_ROOT}/datasets folder to leave the path empty.
+         :param base_path: Path to the CoNLL-03 corpus (i.e. 'conll_03' folder) on your machine
++        :param tag_to_bioes: NER by default, need not be changed, but you could also select 'pos' or 'np' to predict
+         POS tags or chunks respectively
+         :param in_memory: If True, keeps dataset in memory giving speedups in training.
+         :param use_dev_as_test: If True, it uses the dev set as test set and samples random training data for a dev split.
+@@ -2753,6 +2781,7 @@
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
++        tag_to_bioes : str, optional
+             The data is in bio-format. It will by default (with the string "ner" as value) be transformed
+             into the bioes format. If you dont want that set it to None.
+ 
+@@ -3176,6 +3205,7 @@
+         base_path : Union[str, Path], optional
+             Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+             to point to a different folder but typically this should not be necessary.
++        tag_to_bioes : str, optional
+             The data is in bio-format. It will by default (with the string "ner" as value) be transformed
+             into the bioes format. If you dont want that set it to None.
+ 
+@@ -3354,834 +3384,379 @@
+             )
+             corpora.append(corp)
+ 
+-        super(NER_MULTI_WIKINER, self).__init__(
+-            corpora,
+-            name="wikiner",
+-        )
++        super(NER_MULTI_WIKINER, self).init(corpora,name="wikiner",)
++        def _download_wikiner(self, language_code: str, dataset_name: str):
++    # download data if necessary
++    wikiner_path = "https://raw.githubusercontent.com/dice-group/FOX/master/input/Wikiner/"
++    lc = language_code
+ 
+-    def _download_wikiner(self, language_code: str, dataset_name: str):
+-        # download data if necessary
+-        wikiner_path = "https://raw.githubusercontent.com/dice-group/FOX/master/input/Wikiner/"
+-        lc = language_code
++    data_file = flair.cache_root / "datasets" / dataset_name / f"aij-wikiner-{lc}-wp3.train"
++    if not data_file.is_file():
+ 
+-        data_file = flair.cache_root / "datasets" / dataset_name / f"aij-wikiner-{lc}-wp3.train"
+-        if not data_file.is_file():
++        cached_path(
++            f"{wikiner_path}aij-wikiner-{lc}-wp3.bz2",
++            Path("datasets") / dataset_name,
++        )
++        import bz2
+ 
+-            cached_path(
+-                f"{wikiner_path}aij-wikiner-{lc}-wp3.bz2",
+-                Path("datasets") / dataset_name,
+-            )
+-            import bz2
+-
+-            # unpack and write out in CoNLL column-like format
+-            bz_file = bz2.BZ2File(
+-                flair.cache_root / "datasets" / dataset_name / f"aij-wikiner-{lc}-wp3.bz2",
+-                "rb",
+-            )
+-            with bz_file as f, open(
+-                flair.cache_root / "datasets" / dataset_name / f"aij-wikiner-{lc}-wp3.train",
+-                "w",
+-                encoding="utf-8",
+-            ) as out:
+-                for lineb in f:
+-                    line = lineb.decode("utf-8")
+-                    words = line.split(" ")
+-                    for word in words:
+-                        out.write("\t".join(word.split("|")) + "\n")
++        # unpack and write out in CoNLL column-like format
++        bz_file = bz2.BZ2File(
++            flair.cache_root / "datasets" / dataset_name / f"aij-wikiner-{lc}-wp3.bz2",
++            "rb",
++        )
++        with bz_file as f, open(
++            flair.cache_root / "datasets" / dataset_name / f"aij-wikiner-{lc}-wp3.train",
++            "w",
++            encoding="utf-8",
++        ) as out:
++            for lineb in f:
++                line = lineb.decode("utf-8")
++                words = line.split(" ")
++                for word in words:
++                    out.write("\t".join(word.split("|")) + "\n")
++                    if not base_path:
++        base_path = flair.cache_root / "datasets"
++    else:
++        base_path = Path(base_path)
+ 
++    # column format
++    columns = {0: "text", 1: "ner"}
+ 
+-class NER_SWEDISH(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the NER_SWEDISH corpus for Swedish. The first time you call this constructor it will automatically
+-        download the dataset.
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
++    # this dataset name
++    dataset_name = self.__class__.__name__.lower()
+ 
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
++    data_folder = base_path / dataset_name
+ 
+-        # column format
+-        columns = {0: "text", 1: "ner"}
++    # download data if necessary
++    ner_spraakbanken_path = "https://raw.githubusercontent.com/klintan/swedish-ner-corpus/master/"
++    cached_path(f"{ner_spraakbanken_path}test_corpus.txt", Path("datasets") / dataset_name)
++    cached_path(f"{ner_spraakbanken_path}train_corpus.txt", Path("datasets") / dataset_name)
+ 
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
++    # data is not in IOB2 format. Thus we transform it to IOB2
++    self._add_IOB2_tags(data_file=Path(data_folder / "test_corpus.txt"))
++    self._add_IOB2_tags(data_file=Path(data_folder / "train_corpus.txt"))
+ 
+-        data_folder = base_path / dataset_name
++    super(NER_SWEDISH, self).__init__(
++        data_folder,
++        columns,
++        in_memory=in_memory,
++        **corpusargs,
++    )
+ 
+-        # download data if necessary
+-        ner_spraakbanken_path = "https://raw.githubusercontent.com/klintan/swedish-ner-corpus/master/"
+-        cached_path(f"{ner_spraakbanken_path}test_corpus.txt", Path("datasets") / dataset_name)
+-        cached_path(f"{ner_spraakbanken_path}train_corpus.txt", Path("datasets") / dataset_name)
+-
+-        # data is not in IOB2 format. Thus we transform it to IOB2
+-        self._add_IOB2_tags(data_file=Path(data_folder / "test_corpus.txt"))
+-        self._add_IOB2_tags(data_file=Path(data_folder / "train_corpus.txt"))
+-
+-        super(NER_SWEDISH, self).__init__(
+-            data_folder,
+-            columns,
+-            in_memory=in_memory,
+-            **corpusargs,
+-        )
+-
+-    def _add_IOB2_tags(self, data_file: Union[str, Path], encoding: str = "utf8"):
+-        """
+-        Function that adds IOB2 tags if only chunk names are provided (e.g. words are tagged PER instead
+-        of B-PER or I-PER). Replaces '0' with 'O' as the no-chunk tag since ColumnCorpus expects
+-        the letter 'O'. Additionally it removes lines with no tags in the data file and can also
+-        be used if the data is only partially IOB tagged.
+-        Parameters
+-        ----------
+-        data_file : Union[str, Path]
+-            Path to the data file.
+-        encoding : str, optional
+-            Encoding used in open function. The default is "utf8".
++def _add_IOB2_tags(self, data_file: Union[str, Path], encoding: str = "utf8"):
++    """
++    Function that adds IOB2 tags if only chunk names are provided (e.g. words are tagged PER instead
++    of B-PER or I-PER). Replaces '0' with 'O' as the no-chunk tag since ColumnCorpus expects
++    the letter 'O'. Additionally it removes lines with no tags in the data file and can also
++    be used if the data is only partially IOB tagged.
++    Parameters
++    ----------
++    data_file : Union[str, Path]
++        Path to the data file.
++    encoding : str, optional
++        Encoding used in open function. The default is "utf8".
+ 
+-        """
+-        with open(file=data_file, mode="r", encoding=encoding) as f:
+-            lines = f.readlines()
+-        with open(file=data_file, mode="w", encoding=encoding) as f:
+-            pred = "O"  # remembers tag of predecessing line
+-            for line in lines:
+-                line_list = line.split()
+-                if len(line_list) == 2:  # word with tag
+-                    word = line_list[0]
+-                    tag = line_list[1]
+-                    if tag in ["0", "O"]:  # no chunk
+-                        f.write(word + " O\n")
+-                        pred = "O"
+-                    elif "-" not in tag:  # no IOB tags
+-                        if pred == "O":  # found a new chunk
++    """
++    with open(file=data_file, mode="r", encoding=encoding) as f:
++        lines = f.readlines()
++    with open(file=data_file, mode="w", encoding=encoding) as f:
++        pred = "O"  # remembers tag of predecessing line
++        for line in lines:
++            line_list = line.split()
++            if len(line_list) == 2:  # word with tag
++                word = line_list[0]
++                tag = line_list[1]
++                if tag in ["0", "O"]:  # no chunk
++                    f.write(word + " O\n")
++                    pred = "O"
++                elif "-" not in tag:  # no IOB tags
++                    if pred == "O":  # found a new chunk
++                        f.write(word + " B-" + tag + "\n")
++                        pred = tag
++                    else:  # found further part of chunk or new chunk directly after old chunk
++                        if pred == tag:
++                            f.write(word + " I-" + tag + "\n")
++                        else:
+                             f.write(word + " B-" + tag + "\n")
+                             pred = tag
+-                        else:  # found further part of chunk or new chunk directly after old chunk
+-                            if pred == tag:
+-                                f.write(word + " I-" + tag + "\n")
+-                            else:
+-                                f.write(word + " B-" + tag + "\n")
+-                                pred = tag
+-                    else:  # line already has IOB tag (tag contains '-')
+-                        f.write(line)
+-                        pred = tag.split("-")[1]
+-                elif len(line_list) == 0:  # empty line
+-                    f.write("\n")
+-                    pred = "O"
++                else:  # line already has IOB tag (tag contains '-')
++                    f.write(line)
++                    pred = tag.split("-")[1]
++            elif len(line_list) == 0:  # empty line
++                f.write("\n")
++                pred = "O"
+ 
+-
+-class NER_TURKU(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the Finnish TurkuNER corpus. The first time you call this constructor it will automatically
+-        download the dataset.
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        POS tags instead
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+         if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
++        base_path = flair.cache_root / "datasets"
++    else:
++        base_path = Path(base_path)
+ 
+-        # column format
+-        columns = {0: "text", 1: "ner"}
++    # column format
++    columns = {0: "text", 1: "keyword"}
+ 
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
++    # this dataset name
++    dataset_name = self.__class__.__name__.lower()
+ 
+-        data_folder = base_path / dataset_name
++    data_folder = base_path / dataset_name
+ 
+-        # download data if necessary
+-        conll_path = "https://raw.githubusercontent.com/TurkuNLP/turku-ner-corpus/master/data/conll"
+-        dev_file = "dev.tsv"
+-        test_file = "test.tsv"
+-        train_file = "train.tsv"
+-        cached_path(f"{conll_path}/{dev_file}", Path("datasets") / dataset_name)
+-        cached_path(f"{conll_path}/{test_file}", Path("datasets") / dataset_name)
+-        cached_path(f"{conll_path}/{train_file}", Path("datasets") / dataset_name)
++    semeval2010_path = "https://raw.githubusercontent.com/midas-research/keyphrase-extraction-as-sequence-labeling-data/master/processed_semeval-2010"
++    cached_path(f"{semeval2010_path}/train.txt", Path("datasets") / dataset_name)
++    cached_path(f"{semeval2010_path}/test.txt", Path("datasets") / dataset_name)
+ 
+-        super(NER_TURKU, self).__init__(
+-            data_folder,
+-            columns,
+-            dev_file=dev_file,
+-            test_file=test_file,
+-            train_file=train_file,
+-            column_delimiter="\t",
+-            encoding="latin-1",
+-            in_memory=in_memory,
+-            document_separator_token="-DOCSTART-",
+-            **corpusargs,
+-        )
++    super(KEYPHRASE_SEMEVAL2010, self).__init__(
++        data_folder,
++        columns,
++        in_memory=in_memory,
++        **corpusargs,
++    )
++    :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
++    to point to a different folder but typically this should not be necessary.
++    :param in_memory: If True, keeps dataset in memory giving speedups in training.
++    :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
++   
++    if not base_path:
++        base_path = flair.cache_root / "datasets"
++    else:
++        base_path = Path(base_path)
++
++    # column format
++    columns = {1: "text", 10: "frame"}
++
++    # this dataset name
++    dataset_name = self.__class__.__name__.lower()
++
++    data_folder = base_path / dataset_name
++
++    # download data if necessary
++    up_en_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_English-EWT/"
++    cached_path(f"{up_en_path}en_ewt-up-train.conllu", Path("datasets") / dataset_name)
++    cached_path(f"{up_en_path}en_ewt-up-dev.conllu", Path("datasets") / dataset_name)
++    cached_path(f"{up_en_path}en_ewt-up-test.conllu", Path("datasets") / dataset_name)
+ 
+-
+-class KEYPHRASE_SEMEVAL2017(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
++    super(UP_ENGLISH, self).__init__(
++        data_folder,
++        columns,
++        encoding="utf-8",
++        train_file="en_ewt-up-train.conllu",
++        test_file="en_ewt-up-test.conllu",
++        dev_file="en_ewt-up-dev.conllu",
++        in_memory=in_memory,
++        document_separator_token=None if not document_as_sequence else "-DOCSTART-",
++        comment_symbol="#",
++        label_name_map={"_": "O"},
+         **corpusargs,
+-    ):
++    )
++    :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
++    to point to a different folder but typically this should not be necessary.
++    :param in_memory: If True, keeps dataset in memory giving speedups in training.
++    :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+ 
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
++    if not base_path:
++        base_path = flair.cache_root / "datasets"
++    else:
++        base_path = Path(base_path)
+ 
+-        # column format
+-        columns = {0: "text", 1: "keyword"}
++    # column format
++    columns = {1: "text", 9: "frame"}
+ 
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
++    # this dataset name
++    dataset_name = self.__class__.__name__.lower()
+ 
+-        data_folder = base_path / dataset_name
++    data_folder = base_path / dataset_name
+ 
+-        semeval2017_path = "https://raw.githubusercontent.com/midas-research/keyphrase-extraction-as-sequence-labeling-data/master/SemEval-2017"
+-        cached_path(f"{semeval2017_path}/train.txt", Path("datasets") / dataset_name)
+-        cached_path(f"{semeval2017_path}/test.txt", Path("datasets") / dataset_name)
+-        cached_path(f"{semeval2017_path}/dev.txt", Path("datasets") / dataset_name)
++    # download data if necessary
++    up_fi_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_Finnish/"
++    cached_path(f"{up_fi_path}fi-up-train.conllu", Path("datasets") / dataset_name)
++    cached_path(f"{up_fi_path}fi-up-dev.conllu", Path("datasets") / dataset_name)
++    cached_path(f"{up_fi_path}fi-up-test.conllu", Path("datasets") / dataset_name)
+ 
+-        super(KEYPHRASE_SEMEVAL2017, self).__init__(
+-            data_folder,
+-            columns,
+-            in_memory=in_memory,
+-            **corpusargs,
+-        )
+-
+-
+-class KEYPHRASE_INSPEC(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
++    super(UP_FINNISH, self).__init__(
++        data_folder,
++        columns,
++        encoding="utf-8",
++        train_file="fi-up-train.conllu",
++        test_file="fi-up-test.conllu",
++        dev_file="fi-up-dev.conllu",
++        in_memory=in_memory,
++        document_separator_token=None if not document_as_sequence else "-DOCSTART-",
++        comment_symbol="#",
+         **corpusargs,
+-    ):
++    )
++    :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
++    to point to a different folder but typically this should not be necessary.
++    :param in_memory: If True, keeps dataset in memory giving speedups in training.
++    :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
++   
++    if not base_path:
++        base_path = flair.cache_root / "datasets"
++    else:
++        base_path = Path(base_path)
+ 
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
++    # column format
++    columns = {1: "text", 9: "frame"}
+ 
+-        # column format
+-        columns = {0: "text", 1: "keyword"}
++    # this dataset name
++    dataset_name = self.__class__.__name__.lower()
+ 
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
++    data_folder = base_path / dataset_name
+ 
+-        data_folder = base_path / dataset_name
++    # download data if necessary
++    up_it_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_Italian/"
++    cached_path(f"{up_it_path}it-up-train.conllu", Path("datasets") / dataset_name)
++    cached_path(f"{up_it_path}it-up-dev.conllu", Path("datasets") / dataset_name)
++    cached_path(f"{up_it_path}it-up-test.conllu", Path("datasets") / dataset_name)
+ 
+-        inspec_path = "https://raw.githubusercontent.com/midas-research/keyphrase-extraction-as-sequence-labeling-data/master/Inspec"
+-        cached_path(f"{inspec_path}/train.txt", Path("datasets") / dataset_name)
+-        cached_path(f"{inspec_path}/test.txt", Path("datasets") / dataset_name)
+-        if "dev.txt" not in os.listdir(data_folder):
+-            cached_path(f"{inspec_path}/valid.txt", Path("datasets") / dataset_name)
+-            # rename according to train - test - dev - convention
+-            os.rename(data_folder / "valid.txt", data_folder / "dev.txt")
+-
+-        super(KEYPHRASE_INSPEC, self).__init__(
+-            data_folder,
+-            columns,
+-            in_memory=in_memory,
+-            **corpusargs,
+-        )
+-
+-
+-class KEYPHRASE_SEMEVAL2010(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
++    super(UP_ITALIAN, self).__init__(
++        data_folder,
++        columns,
++        encoding="utf-8",
++        train_file="it-up-train.conllu",
++        test_file="it-up-test.conllu",
++        dev_file="it-up-dev.conllu",
++        in_memory=in_memory,
++        document_separator_token=None if not document_as_sequence else "-DOCSTART-",
++        comment_symbol="#",
+         **corpusargs,
+-    ):
++    )
++    with open(file_out, "wt", encoding="utf-8") as f_out:
++        # Add missing newline after header
++        f_out.write(lines[0] + "\n")
+ 
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
++        for line in lines[1:]:
++            if line.startswith(" \t"):
++                # Workaround for empty tokens
++                continue
+ 
+-        # column format
+-        columns = {0: "text", 1: "keyword"}
++            line = line.strip()
+ 
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
++            # Add "real" document marker
++            if add_document_separator and line.startswith(document_separator):
++                f_out.write("-DOCSTART- O\n\n")
+ 
+-        data_folder = base_path / dataset_name
++            f_out.write(line + "\n")
+ 
+-        semeval2010_path = "https://raw.githubusercontent.com/midas-research/keyphrase-extraction-as-sequence-labeling-data/master/processed_semeval-2010"
+-        cached_path(f"{semeval2010_path}/train.txt", Path("datasets") / dataset_name)
+-        cached_path(f"{semeval2010_path}/test.txt", Path("datasets") / dataset_name)
++            if eos_marker in line:
++                f_out.write("\n")
+ 
+-        super(KEYPHRASE_SEMEVAL2010, self).__init__(
+-            data_folder,
+-            columns,
+-            in_memory=in_memory,
+-            **corpusargs,
+-        )
++def __init__(
++    self,
++    dataset_name: str,
++    language: str,
++    base_path: Union[str, Path] = None,
++    in_memory: bool = True,
++    version: str = "v2.1",
++    branch_name: str = "main",
++    dev_split_name="dev",
++    add_document_separator=False,
++    sample_missing_splits=False,
++    preproc_fn=None,
++    **corpusargs,
++):
++    """
++    Initialize the CLEF-HIPE 2022 NER dataset. The first time you call this constructor it will automatically
++    download the specified dataset (by given a language).
++    :dataset_name: Supported datasets are: ajmc, hipe2020, letemps, newseye, sonar and topres19th.
++    :language: Language for a supported dataset.
++    :base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
++    to point to a different folder but typically this should not be necessary.
++    :tag_to_bioes: Dataset will automatically transformed into BIOES format (internally).
++    :in_memory: If True, keeps dataset in memory giving speedups in training.
++    :version: Version of CLEF-HIPE dataset. Currently only v1.0 is supported and available.
++    :branch_name: Defines git branch name of HIPE data repository (main by default).
++    :dev_split_name: Defines default name of development split (dev by default). Only the NewsEye dataset has
++    currently two development splits: dev and dev2.
++    :add_document_separator: If True, a special document seperator will be introduced. This is highly
++    recommended when using our FLERT approach.
++    :sample_missing_splits: If True, data is automatically sampled when certain data splits are None.
++    :preproc_fn: Function that is used for dataset preprocessing. If None, default preprocessing will be performed.
++    """
++    if not base_path:
++        base_path = flair.cache_root / "datasets"
++    else:
++        base_path = Path(base_path)
+ 
++    # Dataset split mapping
++    hipe_available_splits = {
++        "v1.0": {
++            "ajmc": {"de": ["sample"], "en": ["sample"]},
++            "hipe2020": {"de": ["train", "dev"], "en": ["dev"], "fr": ["train", "dev"]},
++            "letemps": {"fr": ["train", "dev"]},
++            "newseye": {
++                "de": ["train", "dev", "dev2"],
++                "fi": ["train", "dev", "dev2"],
++                "fr": ["train", "dev", "dev2"],
++                "sv": ["train", "dev", "dev2"],
++            },
++            "sonar": {"de": ["dev"]},
++            "topres19th": {"en": ["train", "dev"]},
++        }
++    }
+ 
+-class UP_CHINESE(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        document_as_sequence: bool = False,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the Chinese dataset from the Universal Propositions Bank, comming from that webpage:
+-        https://github.com/System-T/UniversalPropositions/tree/master/UP_Chinese
++    # v2.0 only adds new language and splits for AJMC dataset
++    hipe_available_splits["v2.0"] = hipe_available_splits["v1.0"].copy()
++    hipe_available_splits["v2.0"]["ajmc"] = {"de": ["train", "dev"], "en": ["train", "dev"], "fr": ["train", "dev"]}
+ 
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
++    hipe_available_splits["v2.1"] = hipe_available_splits["v2.0"].copy()
+ 
+-        # column format
+-        columns = {1: "text", 9: "frame"}
++    eos_marker = "EndOfSentence"
++    document_separator = "# hipe2022:document_id"
+ 
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
++    # Special document marker for sample splits in AJMC dataset
++    if f"{dataset_name}" == "ajmc":
++        document_separator = "# hipe2022:original_source"
+ 
+-        data_folder = base_path / dataset_name
++    columns = {0: "text", 1: "ner"}
+ 
+-        # download data if necessary
+-        up_zh_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_Chinese/"
+-        cached_path(f"{up_zh_path}zh-up-train.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_zh_path}zh-up-dev.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_zh_path}zh-up-test.conllu", Path("datasets") / dataset_name)
++    dataset_base = self.__class__.__name__.lower()
++    data_folder = base_path / dataset_base / version / dataset_name / language
+ 
+-        super(UP_CHINESE, self).__init__(
+-            data_folder,
+-            columns,
+-            encoding="utf-8",
+-            train_file="zh-up-train.conllu",
+-            test_file="zh-up-test.conllu",
+-            dev_file="zh-up-dev.conllu",
+-            in_memory=in_memory,
+-            document_separator_token=None if not document_as_sequence else "-DOCSTART-",
+-            comment_symbol="#",
+-            **corpusargs,
+-        )
++    data_url = (
++        f"https://github.com/hipe-eval/HIPE-2022-data/raw/{branch_name}/data/{version}/{dataset_name}/{language}"
++    )
+ 
++    dataset_splits = hipe_available_splits[version][dataset_name][language]
+ 
+-class UP_ENGLISH(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        document_as_sequence: bool = False,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the English dataset from the Universal Propositions Bank, comming from that webpage:
+-        https://github.com/System-T/UniversalPropositions.
+-
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
+-
+-        # column format
+-        columns = {1: "text", 10: "frame"}
+-
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
+-
+-        data_folder = base_path / dataset_name
+-
+-        # download data if necessary
+-        up_en_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_English-EWT/"
+-        cached_path(f"{up_en_path}en_ewt-up-train.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_en_path}en_ewt-up-dev.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_en_path}en_ewt-up-test.conllu", Path("datasets") / dataset_name)
+-
+-        super(UP_ENGLISH, self).__init__(
+-            data_folder,
+-            columns,
+-            encoding="utf-8",
+-            train_file="en_ewt-up-train.conllu",
+-            test_file="en_ewt-up-test.conllu",
+-            dev_file="en_ewt-up-dev.conllu",
+-            in_memory=in_memory,
+-            document_separator_token=None if not document_as_sequence else "-DOCSTART-",
+-            comment_symbol="#",
+-            label_name_map={"_": "O"},
+-            **corpusargs,
++    for split in dataset_splits:
++        cached_path(
++            f"{data_url}/HIPE-2022-{version}-{dataset_name}-{split}-{language}.tsv", data_folder / "original"
+         )
+ 
++    train_file = "train.txt" if "train" in dataset_splits else None
++    dev_file = f"{dev_split_name}.txt" if "sample" not in dataset_splits else "sample.txt"
++    test_file = "test.txt" if "test" in dataset_splits else None
+ 
+-class UP_FRENCH(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        document_as_sequence: bool = False,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the French dataset from the Universal Propositions Bank, comming from that webpage:
+-        https://github.com/System-T/UniversalPropositions.
++    new_data_folder = data_folder
+ 
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
++    if add_document_separator:
++        new_data_folder = new_data_folder / "with_doc_seperator"
++        new_data_folder.mkdir(parents=True, exist_ok=True)
+ 
+-        # column format
+-        columns = {1: "text", 9: "frame"}
+-
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
+-
+-        data_folder = base_path / dataset_name
+-
+-        # download data if necessary
+-        up_fr_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_French/"
+-        cached_path(f"{up_fr_path}fr-up-train.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_fr_path}fr-up-dev.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_fr_path}fr-up-test.conllu", Path("datasets") / dataset_name)
+-
+-        super(UP_FRENCH, self).__init__(
+-            data_folder,
+-            columns,
+-            encoding="utf-8",
+-            train_file="fr-up-train.conllu",
+-            test_file="fr-up-test.conllu",
+-            dev_file="fr-up-dev.conllu",
+-            in_memory=in_memory,
+-            document_separator_token=None if not document_as_sequence else "-DOCSTART-",
+-            comment_symbol="#",
+-            **corpusargs,
+-        )
+-
+-
+-class UP_FINNISH(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        document_as_sequence: bool = False,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the Finnish dataset from the Universal Propositions Bank, comming from that webpage:
+-        https://github.com/System-T/UniversalPropositions/tree/master/UP_Finnish
+-
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
+-
+-        # column format
+-        columns = {1: "text", 9: "frame"}
+-
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
+-
+-        data_folder = base_path / dataset_name
+-
+-        # download data if necessary
+-        up_fi_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_Finnish/"
+-        cached_path(f"{up_fi_path}fi-up-train.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_fi_path}fi-up-dev.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_fi_path}fi-up-test.conllu", Path("datasets") / dataset_name)
+-
+-        super(UP_FINNISH, self).__init__(
+-            data_folder,
+-            columns,
+-            encoding="utf-8",
+-            train_file="fi-up-train.conllu",
+-            test_file="fi-up-test.conllu",
+-            dev_file="fi-up-dev.conllu",
+-            in_memory=in_memory,
+-            document_separator_token=None if not document_as_sequence else "-DOCSTART-",
+-            comment_symbol="#",
+-            **corpusargs,
+-        )
+-
+-
+-class UP_GERMAN(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        document_as_sequence: bool = False,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the German dataset from the Universal Propositions Bank, comming from that webpage:
+-        https://github.com/System-T/UniversalPropositions.
+-
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
+-
+-        # column format
+-        columns = {1: "text", 9: "frame"}
+-
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
+-
+-        data_folder = base_path / dataset_name
+-
+-        # download data if necessary
+-        up_de_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_German/"
+-        cached_path(f"{up_de_path}de-up-train.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_de_path}de-up-dev.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_de_path}de-up-test.conllu", Path("datasets") / dataset_name)
+-
+-        super(UP_GERMAN, self).__init__(
+-            data_folder,
+-            columns,
+-            encoding="utf-8",
+-            train_file="de-up-train.conllu",
+-            test_file="de-up-test.conllu",
+-            dev_file="de-up-dev.conllu",
+-            in_memory=in_memory,
+-            document_separator_token=None if not document_as_sequence else "-DOCSTART-",
+-            comment_symbol="#",
+-            **corpusargs,
+-        )
+-
+-
+-class UP_ITALIAN(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        document_as_sequence: bool = False,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the Italian dataset from the Universal Propositions Bank, comming from that webpage:
+-        https://github.com/System-T/UniversalPropositions/tree/master/UP_Italian
+-
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
+-
+-        # column format
+-        columns = {1: "text", 9: "frame"}
+-
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
+-
+-        data_folder = base_path / dataset_name
+-
+-        # download data if necessary
+-        up_it_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_Italian/"
+-        cached_path(f"{up_it_path}it-up-train.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_it_path}it-up-dev.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_it_path}it-up-test.conllu", Path("datasets") / dataset_name)
+-
+-        super(UP_ITALIAN, self).__init__(
+-            data_folder,
+-            columns,
+-            encoding="utf-8",
+-            train_file="it-up-train.conllu",
+-            test_file="it-up-test.conllu",
+-            dev_file="it-up-dev.conllu",
+-            in_memory=in_memory,
+-            document_separator_token=None if not document_as_sequence else "-DOCSTART-",
+-            comment_symbol="#",
+-            **corpusargs,
+-        )
++    dev_path = new_data_folder / dev_file
+ 
++    self.preproc_fn = self._prepare_corpus if not preproc_fn else preproc_fn
+ 
+-class UP_SPANISH(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        document_as_sequence: bool = False,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the Spanish dataset from the Universal Propositions Bank, comming from that webpage:
+-        https://github.com/System-T/UniversalPropositions
+-
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
+-
+-        # column format
+-        columns = {1: "text", 9: "frame"}
+-
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
+-
+-        data_folder = base_path / dataset_name
+-
+-        # download data if necessary
+-        up_es_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_Spanish/"
+-        cached_path(f"{up_es_path}es-up-train.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_es_path}es-up-dev.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_es_path}es-up-test.conllu", Path("datasets") / dataset_name)
+-
+-        super(UP_SPANISH, self).__init__(
+-            data_folder,
+-            columns,
+-            encoding="utf-8",
+-            train_file="es-up-train.conllu",
+-            test_file="es-up-test.conllu",
+-            dev_file="es-up-dev.conllu",
+-            in_memory=in_memory,
+-            document_separator_token=None if not document_as_sequence else "-DOCSTART-",
+-            comment_symbol="#",
+-            **corpusargs,
+-        )
+-
+-
+-class UP_SPANISH_ANCORA(ColumnCorpus):
+-    def __init__(
+-        self,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        document_as_sequence: bool = False,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the Spanish AnCora dataset from the Universal Propositions Bank, comming from that webpage:
+-        https://github.com/System-T/UniversalPropositions
+-
+-        :param base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :param in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :param document_as_sequence: If True, all sentences of a document are read into a single Sentence object
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
+-
+-        # column format
+-        columns = {1: "text", 9: "frame"}
+-
+-        # this dataset name
+-        dataset_name = self.__class__.__name__.lower()
+-
+-        data_folder = base_path / dataset_name
+-
+-        # download data if necessary
+-        up_es_path = "https://raw.githubusercontent.com/System-T/UniversalPropositions/master/UP_Spanish-AnCora/"
+-        cached_path(f"{up_es_path}es_ancora-up-train.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_es_path}es_ancora-up-dev.conllu", Path("datasets") / dataset_name)
+-        cached_path(f"{up_es_path}es_ancora-up-test.conllu", Path("datasets") / dataset_name)
+-
+-        super(UP_SPANISH_ANCORA, self).__init__(
+-            data_folder,
+-            columns,
+-            encoding="utf-8",
+-            train_file="es_ancora-up-train.conllu",
+-            test_file="es_ancora-up-test.conllu",
+-            dev_file="es_ancora-up-dev.conllu",
+-            in_memory=in_memory,
+-            document_separator_token=None if not document_as_sequence else "-DOCSTART-",
+-            comment_symbol="#",
+-            **corpusargs,
+-        )
+-
+-
+-class NER_HIPE_2022(ColumnCorpus):
+-    @staticmethod
+-    def _prepare_corpus(
+-        file_in: Path, file_out: Path, eos_marker: str, document_separator: str, add_document_separator: bool
+-    ):
+-        with open(file_in, "rt", encoding="utf-8") as f_p:
+-            lines = f_p.readlines()
+-
+-        with open(file_out, "wt", encoding="utf-8") as f_out:
+-            # Add missing newline after header
+-            f_out.write(lines[0] + "\n")
+-
+-            for line in lines[1:]:
+-                if line.startswith(" \t"):
+-                    # Workaround for empty tokens
+-                    continue
+-
+-                line = line.strip()
+-
+-                # Add "real" document marker
+-                if add_document_separator and line.startswith(document_separator):
+-                    f_out.write("-DOCSTART- O\n\n")
+-
+-                f_out.write(line + "\n")
+-
+-                if eos_marker in line:
+-                    f_out.write("\n")
+-
+-    def __init__(
+-        self,
+-        dataset_name: str,
+-        language: str,
+-        base_path: Union[str, Path] = None,
+-        in_memory: bool = True,
+-        version: str = "v2.1",
+-        branch_name: str = "main",
+-        dev_split_name="dev",
+-        add_document_separator=False,
+-        sample_missing_splits=False,
+-        preproc_fn=None,
+-        **corpusargs,
+-    ):
+-        """
+-        Initialize the CLEF-HIPE 2022 NER dataset. The first time you call this constructor it will automatically
+-        download the specified dataset (by given a language).
+-        :dataset_name: Supported datasets are: ajmc, hipe2020, letemps, newseye, sonar and topres19th.
+-        :language: Language for a supported dataset.
+-        :base_path: Default is None, meaning that corpus gets auto-downloaded and loaded. You can override this
+-        to point to a different folder but typically this should not be necessary.
+-        :in_memory: If True, keeps dataset in memory giving speedups in training.
+-        :version: Version of CLEF-HIPE dataset. Currently only v1.0 is supported and available.
+-        :branch_name: Defines git branch name of HIPE data repository (main by default).
+-        :dev_split_name: Defines default name of development split (dev by default). Only the NewsEye dataset has
+-        currently two development splits: dev and dev2.
+-        :add_document_separator: If True, a special document seperator will be introduced. This is highly
+-        recommended when using our FLERT approach.
+-        :sample_missing_splits: If True, data is automatically sampled when certain data splits are None.
+-        :preproc_fn: Function that is used for dataset preprocessing. If None, default preprocessing will be performed.
+-        """
+-        if not base_path:
+-            base_path = flair.cache_root / "datasets"
+-        else:
+-            base_path = Path(base_path)
+-
+-        # Dataset split mapping
+-        hipe_available_splits = {
+-            "v1.0": {
+-                "ajmc": {"de": ["sample"], "en": ["sample"]},
+-                "hipe2020": {"de": ["train", "dev"], "en": ["dev"], "fr": ["train", "dev"]},
+-                "letemps": {"fr": ["train", "dev"]},
+-                "newseye": {
+-                    "de": ["train", "dev", "dev2"],
+-                    "fi": ["train", "dev", "dev2"],
+-                    "fr": ["train", "dev", "dev2"],
+-                    "sv": ["train", "dev", "dev2"],
+-                },
+-                "sonar": {"de": ["dev"]},
+-                "topres19th": {"en": ["train", "dev"]},
+-            }
+-        }
+-
+-        # v2.0 only adds new language and splits for AJMC dataset
+-        hipe_available_splits["v2.0"] = hipe_available_splits["v1.0"].copy()
+-        hipe_available_splits["v2.0"]["ajmc"] = {"de": ["train", "dev"], "en": ["train", "dev"], "fr": ["train", "dev"]}
+-
+-        hipe_available_splits["v2.1"] = hipe_available_splits["v2.0"].copy()
+-
+-        eos_marker = "EndOfSentence"
+-        document_separator = "# hipe2022:document_id"
+-
+-        # Special document marker for sample splits in AJMC dataset
+-        if f"{dataset_name}" == "ajmc":
+-            document_separator = "# hipe2022:original_source"
+-
+-        columns = {0: "text", 1: "ner"}
+-
+-        dataset_base = self.__class__.__name__.lower()
+-        data_folder = base_path / dataset_base / version / dataset_name / language
+-
+-        data_url = (
+-            f"https://github.com/hipe-eval/HIPE-2022-data/raw/{branch_name}/data/{version}/{dataset_name}/{language}"
+-        )
+-
+-        dataset_splits = hipe_available_splits[version][dataset_name][language]
+-
++    if not dev_path.exists():
+         for split in dataset_splits:
+-            cached_path(
+-                f"{data_url}/HIPE-2022-{version}-{dataset_name}-{split}-{language}.tsv", data_folder / "original"
++            original_filename = f"HIPE-2022-{version}-{dataset_name}-{split}-{language}.tsv"
++            self.preproc_fn(
++                data_folder / "original" / original_filename,
++                new_data_folder / f"{split}.txt",
++                eos_marker,
++                document_separator,
++                add_document_separator,
+             )
+ 
+-        train_file = "train.txt" if "train" in dataset_splits else None
+-        dev_file = f"{dev_split_name}.txt" if "sample" not in dataset_splits else "sample.txt"
+-        test_file = "test.txt" if "test" in dataset_splits else None
+-
+-        new_data_folder = data_folder
+-
+-        if add_document_separator:
+-            new_data_folder = new_data_folder / "with_doc_seperator"
+-            new_data_folder.mkdir(parents=True, exist_ok=True)
+-
+-        dev_path = new_data_folder / dev_file
+-
+-        self.preproc_fn = self._prepare_corpus if not preproc_fn else preproc_fn
+-
+-        if not dev_path.exists():
+-            for split in dataset_splits:
+-                original_filename = f"HIPE-2022-{version}-{dataset_name}-{split}-{language}.tsv"
+-                self.preproc_fn(
+-                    data_folder / "original" / original_filename,
+-                    new_data_folder / f"{split}.txt",
+-                    eos_marker,
+-                    document_separator,
+-                    add_document_separator,
+-                )
+-
+-        super(NER_HIPE_2022, self).__init__(
+-            new_data_folder,
+-            columns,
+-            train_file=train_file,
+-            dev_file=dev_file,
+-            test_file=test_file,
+-            in_memory=in_memory,
+-            document_separator_token="-DOCSTART-",
+-            skip_first_line=True,
+-            column_delimiter="\t",
+-            comment_symbol="# ",
+-            sample_missing_splits=sample_missing_splits,
+-            **corpusargs,
+-        )
++    super(NER_HIPE_2022, self).__init__(
++        new_data_folder,
++        columns,
++        train_file=train_file,
++        dev_file=dev_file,
++        test_file=test_file,
++        in_memory=in_memory,
++        document_separator_token="-DOCSTART-",
++        skip_first_line=True,
++        column_delimiter="\t",
++        comment_symbol="# ",
++        sample_missing_splits=sample_missing_splits,
++        **corpusargs,
++    )
+\ No newline at end of file

@@ -1,0 +1,18 @@
+--- cases/repo_1866432_aa5d9a7/merge_ffmpeg.py	2026-03-19 14:58:56
++++ cases/repo_1866432_aa5d9a7/llm_claude_ffmpeg.py	2026-06-18 12:29:05
+@@ -295,7 +295,7 @@
+         path = information['filepath']
+         prefix, sep, ext = path.rpartition('.')
+         ext = self._preferedformat
+-        options = self._extra_cmd_args
++        options = []
+         if self._preferedformat == 'xvid':
+             ext = 'avi'
+             options.extend(['-c:v', 'libxvid', '-vtag', 'XVID'])
+@@ -709,4 +709,4 @@
+                     'data': f.read(),
+                 }
+ 
+-        return [], info
++        return [], info
+\ No newline at end of file
