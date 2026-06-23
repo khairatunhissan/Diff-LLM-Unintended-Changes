@@ -1,0 +1,18 @@
+--- cases/repo_0afb47d_8379368/merge_smoke.py	2026-05-04 15:31:22
++++ cases/repo_0afb47d_8379368/llm_claude_smoke.py	2026-06-22 16:26:40
+@@ -29,7 +29,7 @@
+ 
+     win = labelme.app.MainWindow(
+         config_overrides={"file_search": "2011_000003"},
+-        file_or_dir=str(raw_dir),
++        filename=str(raw_dir),
+     )
+     qtbot.addWidget(win)
+     win.show()
+@@ -37,4 +37,4 @@
+     assert win._docks.file_search.text() == "2011_000003"
+     assert win._docks.file_list.count() == 1
+ 
+-    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
++    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+\ No newline at end of file

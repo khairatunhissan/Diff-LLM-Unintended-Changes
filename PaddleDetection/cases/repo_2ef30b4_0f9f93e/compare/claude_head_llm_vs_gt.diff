@@ -1,0 +1,9 @@
+--- cases/repo_2ef30b4_0f9f93e/merge_head.py	2026-03-03 16:41:10
++++ cases/repo_2ef30b4_0f9f93e/llm_claude_head.py	2026-06-23 06:05:23
+@@ -380,4 +380,4 @@
+             return pred_bboxes.sum(), pred_scores.sum()
+         else:
+             bbox_pred, bbox_num, _ = self.nms(pred_bboxes, pred_scores)
+-            return bbox_pred, bbox_num
++            return bbox_pred, bbox_num
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_8508c46_2e0a353/merge_player.py	2026-03-08 14:47:25
++++ cases/repo_8508c46_2e0a353/llm_claude_player.py	2026-06-23 12:57:42
+@@ -593,4 +593,4 @@
+     progress = int(math.ceil(pct / 100 * prog_bar_size))
+     status_line += " [%s]" % ("=" * (progress - 1) +
+                               ">").ljust(prog_bar_size, ' ')
+-    return prefix + status_line + vol_suffix
++    return prefix + status_line + vol_suffix
+\ No newline at end of file

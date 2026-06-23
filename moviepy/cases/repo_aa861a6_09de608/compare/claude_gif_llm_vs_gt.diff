@@ -1,0 +1,9 @@
+--- cases/repo_aa861a6_09de608/merge_gif.py	2026-05-04 18:47:05
++++ cases/repo_aa861a6_09de608/llm_claude_gif.py	2026-06-22 21:15:39
+@@ -383,4 +383,4 @@
+ 
+     for frame in clip.iter_frames(fps=fps, logger=logger, dtype="uint8"):
+ 
+-        writer.append_data(frame)
++        writer.append_data(frame)
+\ No newline at end of file

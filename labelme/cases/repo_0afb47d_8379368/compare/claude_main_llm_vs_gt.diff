@@ -1,0 +1,18 @@
+--- cases/repo_0afb47d_8379368/merge_main.py	2026-05-04 15:16:40
++++ cases/repo_0afb47d_8379368/llm_claude_main.py	2026-06-22 16:20:02
+@@ -302,7 +302,7 @@
+     win = MainWindow(
+         config_file=config_file,
+         config_overrides=config_overrides,
+-        file_or_dir=file_or_dir,
++        filename=file_or_dir,
+         output_dir=output_dir,
+     )
+ 
+@@ -319,4 +319,4 @@
+ 
+ # this main block is required to generate executable by pyinstaller
+ if __name__ == "__main__":
+-    main()
++    main()
+\ No newline at end of file

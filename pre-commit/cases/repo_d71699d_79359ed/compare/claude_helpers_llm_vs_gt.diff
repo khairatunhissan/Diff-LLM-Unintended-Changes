@@ -1,0 +1,18 @@
+--- cases/repo_d71699d_79359ed/merge_helpers.py	2026-03-03 14:31:08
++++ cases/repo_d71699d_79359ed/llm_claude_helpers.py	2026-06-23 05:41:49
+@@ -18,7 +18,7 @@
+ if TYPE_CHECKING:
+     from typing import NoReturn
+ 
+-FIXED_RANDOM_SEED = 1542676187
++FIXED_RANDOM_SEED = 1542676186
+ 
+ 
+ def run_setup_cmd(prefix: Prefix, cmd: Tuple[str, ...]) -> None:
+@@ -106,4 +106,4 @@
+     # but do it deterministically in case a hook cares about ordering.
+     file_args = _shuffled(file_args)
+     kwargs['target_concurrency'] = target_concurrency(hook)
+-    return xargs(cmd, file_args, **kwargs)
++    return xargs(cmd, file_args, **kwargs)
+\ No newline at end of file

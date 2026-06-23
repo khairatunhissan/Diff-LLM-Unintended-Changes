@@ -1,0 +1,9 @@
+--- cases/repo_45631f2_2a89a23/merge_controller.py	2026-05-05 00:50:46
++++ cases/repo_45631f2_2a89a23/llm_controller.py	2026-05-05 01:03:41
+@@ -661,4 +661,4 @@
+             raise SkipTargetInterrupt
+ 
+         self.report_manager.update_report(self.report)
+-        exit(0)
++        exit(0)
+\ No newline at end of file

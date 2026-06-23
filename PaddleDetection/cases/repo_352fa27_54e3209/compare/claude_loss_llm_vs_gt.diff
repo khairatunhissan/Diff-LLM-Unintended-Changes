@@ -1,0 +1,9 @@
+--- cases/repo_352fa27_54e3209/merge_loss.py	2026-03-03 15:23:40
++++ cases/repo_352fa27_54e3209/llm_claude_loss.py	2026-06-23 06:01:37
+@@ -165,4 +165,4 @@
+             min=1)
+         loss = (conf_loss + loc_loss) / normalizer
+ 
+-        return loss
++        return loss
+\ No newline at end of file

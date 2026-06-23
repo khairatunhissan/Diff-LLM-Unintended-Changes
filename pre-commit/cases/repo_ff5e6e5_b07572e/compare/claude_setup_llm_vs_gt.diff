@@ -1,0 +1,15 @@
+--- cases/repo_ff5e6e5_b07572e/merge_setup.py	2026-03-01 19:30:51
++++ cases/repo_ff5e6e5_b07572e/llm_claude_setup.py	2026-06-22 22:38:26
+@@ -51,8 +51,8 @@
+     entry_points={
+         'console_scripts': [
+             'pre-commit = pre_commit.main:main',
+-            'pre-commit-validate-config = pre_commit.clientlib.validate_config:run',  # noqa
+-            'pre-commit-validate-manifest = pre_commit.clientlib.validate_manifest:run',  # noqa
++            'pre-commit-validate-config = pre_commit.clientlib.validate_config:run',
++            'pre-commit-validate-manifest = pre_commit.clientlib.validate_manifest:run',
+         ],
+     },
+-)
++)
+\ No newline at end of file

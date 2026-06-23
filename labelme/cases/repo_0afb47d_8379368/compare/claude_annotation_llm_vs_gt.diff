@@ -1,0 +1,18 @@
+--- cases/repo_0afb47d_8379368/merge_annotation.py	2026-05-04 15:21:08
++++ cases/repo_0afb47d_8379368/llm_claude_annotation.py	2026-06-22 16:13:20
+@@ -27,7 +27,7 @@
+     out_file: str = str(tmp_path / "2011_000003.json")
+ 
+     win: labelme.app.MainWindow = labelme.app.MainWindow(
+-        file_or_dir=input_file,
++        filename=input_file,
+         config_overrides=dict(auto_save=True),
+         output_dir=str(tmp_path),
+     )
+@@ -80,4 +80,4 @@
+ 
+     labelme.testing.assert_labelfile_sanity(out_file)
+ 
+-    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
++    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+\ No newline at end of file

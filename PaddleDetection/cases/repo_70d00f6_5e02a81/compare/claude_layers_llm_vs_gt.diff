@@ -1,0 +1,9 @@
+--- cases/repo_70d00f6_5e02a81/merge_layers.py	2026-03-28 21:48:15
++++ cases/repo_70d00f6_5e02a81/llm_claude_layers.py	2026-06-23 06:38:45
+@@ -1359,4 +1359,4 @@
+                     nn.Conv2D(
+                         dim, dim, kernel_size, groups=dim, padding="same"))),
+                 ActBn(nn.Conv2D(dim, dim, 1))) for i in range(depth)
+-        ])
++        ])
+\ No newline at end of file

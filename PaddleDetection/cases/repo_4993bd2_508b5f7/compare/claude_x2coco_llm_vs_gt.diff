@@ -1,0 +1,20 @@
+--- cases/repo_4993bd2_508b5f7/merge_x2coco.py	2026-03-03 16:50:15
++++ cases/repo_4993bd2_508b5f7/llm_claude_x2coco.py	2026-06-23 06:20:11
+@@ -43,8 +43,8 @@
+             return obj.tolist()
+         else:
+             return super(MyEncoder, self).default(obj)
+-        
+-        
++
++
+ def images_labelme(data, num):
+     image = {}
+     image['height'] = data['imageHeight']
+@@ -436,4 +436,4 @@
+ 
+ 
+ if __name__ == '__main__':
+-    main()
++    main()
+\ No newline at end of file

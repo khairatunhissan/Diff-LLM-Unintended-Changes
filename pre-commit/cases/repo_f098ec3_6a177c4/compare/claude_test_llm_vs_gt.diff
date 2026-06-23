@@ -1,0 +1,9 @@
+--- cases/repo_f098ec3_6a177c4/merge_test.py	2026-03-08 16:12:24
++++ cases/repo_f098ec3_6a177c4/llm_claude_test.py	2026-06-23 05:33:54
+@@ -127,4 +127,4 @@
+         assert check_hooks_apply.main(()) == 0
+ 
+     out, _ = capsys.readouterr()
+-    assert out == ''
++    assert out == ''
+\ No newline at end of file

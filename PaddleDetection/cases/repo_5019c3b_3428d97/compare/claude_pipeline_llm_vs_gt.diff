@@ -1,0 +1,9 @@
+--- cases/repo_5019c3b_3428d97/merge_pipeline.py	2026-03-28 21:38:48
++++ cases/repo_5019c3b_3428d97/llm_claude_pipeline.py	2026-06-23 06:32:48
+@@ -1003,4 +1003,4 @@
+     assert FLAGS.device in ['CPU', 'GPU', 'XPU'
+                             ], "device should be CPU, GPU or XPU"
+ 
+-    main()
++    main()
+\ No newline at end of file

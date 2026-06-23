@@ -1,0 +1,9 @@
+--- cases/repo_8c50eee_7651b8c/merge_fuz.py	2026-05-05 01:26:56
++++ cases/repo_8c50eee_7651b8c/llm_fuz.py	2026-05-05 01:30:26
+@@ -188,4 +188,4 @@
+             return
+ 
+         finally:
+-            self.stopThread()
++            self.stopThread()
+\ No newline at end of file

@@ -1,0 +1,38 @@
+--- cases/repo_b2e2729_8377e84/merge_trainer.py	2026-03-28 21:25:48
++++ cases/repo_b2e2729_8377e84/llm_claude_trainer.py	2026-06-23 06:28:27
+@@ -944,19 +944,17 @@
+ 
+                 merged_bboxs = []
+                 data['im_id'] = data['ori_im_id']
++                # update metrics
++                for metric in self._metrics:
++                    metric.update(data, merged_results)
+ 
+-                for _m in metrics:
+-                    _m.update(data, merged_results)
++                # multi-scale inputs: all inputs have same im_id
++                if isinstance(data, typing.Sequence):
++                    sample_num += data[0]['im_id'].numpy().shape[0]
++                else:
++                    sample_num += data['im_id'].numpy().shape[0]
+ 
+-                for key in ['im_shape', 'scale_factor', 'im_id']:
+-                    if isinstance(data, typing.Sequence):
+-                        merged_results[key] = data[0][key]
+-                    else:
+-                        merged_results[key] = data[key]
+-                for key, value in merged_results.items():
+-                    if hasattr(value, 'numpy'):
+-                        merged_results[key] = value.numpy()
+-                results.append(merged_results)
++            self._compose_callback.on_step_end(self.status)
+ 
+         for _m in metrics:
+             _m.accumulate()
+@@ -1503,4 +1501,4 @@
+                 if new_sublayer is not sublayer:
+                     setattr(layer, name, new_sublayer)
+ 
+-        return layer
++        return layer
+\ No newline at end of file

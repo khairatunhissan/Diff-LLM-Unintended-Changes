@@ -1,0 +1,18 @@
+--- cases/repo_0afb47d_8379368/merge_navigation.py	2026-05-04 15:29:12
++++ cases/repo_0afb47d_8379368/llm_claude_navigation.py	2026-06-22 16:23:04
+@@ -20,7 +20,7 @@
+     pause: bool,
+ ) -> None:
+     win: labelme.app.MainWindow = labelme.app.MainWindow(
+-        file_or_dir=str(data_path / "annotated")
++        filename=str(data_path / "annotated")
+     )
+     qtbot.addWidget(win)
+     show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+@@ -40,4 +40,4 @@
+     qtbot.wait(100)
+     # }}
+ 
+-    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
++    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+\ No newline at end of file

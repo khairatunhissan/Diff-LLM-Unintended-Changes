@@ -1,0 +1,9 @@
+--- cases/repo_77e21a0_56762b5/merge_desc.py	2026-05-19 15:00:17
++++ cases/repo_77e21a0_56762b5/llm_claude_desc.py	2026-06-23 13:15:41
+@@ -431,4 +431,4 @@
+ 
+ # Some exotics...
+ 
+-_D('Fujitsu Sonic Mouse', codename='Sonic', protocol=1.0, wpid='1029')
++_D('Fujitsu Sonic Mouse', codename='Sonic', protocol=1.0, wpid='1029')
+\ No newline at end of file

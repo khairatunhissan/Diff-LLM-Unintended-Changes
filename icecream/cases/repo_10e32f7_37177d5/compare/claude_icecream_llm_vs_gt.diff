@@ -1,0 +1,13 @@
+--- cases/repo_10e32f7_37177d5/merge_icecream.py	2026-05-04 15:08:50
++++ cases/repo_10e32f7_37177d5/llm_claude_icecream.py	2026-06-22 16:07:13
+@@ -382,8 +382,5 @@
+         if contextAbsPath is not _absent:
+             self.contextAbsPath = contextAbsPath
+ 
+-        if lineWrapWidth is not _absent:
+-            self.lineWrapWidth = lineWrapWidth
+ 
+-
+-ic = IceCreamDebugger()
++ic = IceCreamDebugger()
+\ No newline at end of file

@@ -1,0 +1,9 @@
+--- cases/repo_395e3aa_4f72fb4/merge_dataset.py	2026-03-03 15:43:40
++++ cases/repo_395e3aa_4f72fb4/llm_claude_dataset.py	2026-06-23 05:57:17
+@@ -163,4 +163,4 @@
+ 
+     def set_images(self, images):
+         self.image_dir = images
+-        self.roidbs = self._load_images()
++        self.roidbs = self._load_images()
+\ No newline at end of file

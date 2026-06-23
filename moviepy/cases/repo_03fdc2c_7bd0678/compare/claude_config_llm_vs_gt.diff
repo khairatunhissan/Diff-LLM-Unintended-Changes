@@ -1,0 +1,9 @@
+--- cases/repo_03fdc2c_7bd0678/merge_config.py	2026-05-04 22:33:24
++++ cases/repo_03fdc2c_7bd0678/llm_claude_config.py	2026-06-22 22:02:19
+@@ -101,4 +101,4 @@
+     if try_cmd([IMAGEMAGICK_BINARY])[0]:
+         print( "MoviePy : ImageMagick successfully found." )
+     else:
+-        print( "MoviePy : can't find or access ImageMagick." )
++        print( "MoviePy : can't find or access ImageMagick." )
+\ No newline at end of file
