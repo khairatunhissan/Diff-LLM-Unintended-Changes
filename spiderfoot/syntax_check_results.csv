@@ -1,0 +1,43 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_bba8242_fa02bc8,GPT,cases/repo_bba8242_fa02bc8/llm_credit.py,llm_credit.py,Yes,None
+repo_bba8242_fa02bc8,GPT,cases/repo_bba8242_fa02bc8/llm_iban.py,llm_iban.py,Yes,None
+repo_bba8242_fa02bc8,Gemini,cases/repo_bba8242_fa02bc8/llm_gemini_credit.py,llm_gemini_credit.py,Yes,None
+repo_bba8242_fa02bc8,Gemini,cases/repo_bba8242_fa02bc8/llm_gemini_iban.py,llm_gemini_iban.py,Yes,None
+repo_bba8242_fa02bc8,Claude,cases/repo_bba8242_fa02bc8/llm_claude_credit.py,llm_claude_credit.py,No,"Sorry: IndentationError: expected an indented block after function definition on line 30 (llm_claude_credit.py, line 31)"
+repo_bba8242_fa02bc8,Claude,cases/repo_bba8242_fa02bc8/llm_claude_iban.py,llm_claude_iban.py,No,"Sorry: IndentationError: expected an indented block after function definition on line 30 (llm_claude_iban.py, line 31)"
+repo_f35fec0_ddc5cd8,GPT,cases/repo_f35fec0_ddc5cd8/llm_flib.py,llm_flib.py,Yes,None
+repo_f35fec0_ddc5cd8,Claude,cases/repo_f35fec0_ddc5cd8/llm_claude_test.py,llm_claude_test.py,Yes,None
+repo_f35fec0_ddc5cd8,Gemini,cases/repo_f35fec0_ddc5cd8/llm_gemini_test.py,llm_gemini_test.py,Yes,None
+repo_f35fec0_ddc5cd8,Gemini,cases/repo_f35fec0_ddc5cd8/llm_gemini_bin.py,llm_gemini_bin.py,Yes,None
+repo_f35fec0_ddc5cd8,GPT,cases/repo_f35fec0_ddc5cd8/llm_file.py,llm_file.py,Yes,None
+repo_f35fec0_ddc5cd8,GPT,cases/repo_f35fec0_ddc5cd8/llm_test.py,llm_test.py,Yes,None
+repo_f35fec0_ddc5cd8,Claude,cases/repo_f35fec0_ddc5cd8/llm_claude_flib.py,llm_claude_flib.py,Yes,None
+repo_f35fec0_ddc5cd8,GPT,cases/repo_f35fec0_ddc5cd8/llm_bin.py,llm_bin.py,Yes,None
+repo_f35fec0_ddc5cd8,Gemini,cases/repo_f35fec0_ddc5cd8/llm_gemini_flib.py,llm_gemini_flib.py,Yes,None
+repo_f35fec0_ddc5cd8,Claude,cases/repo_f35fec0_ddc5cd8/llm_claude_bin.py,llm_claude_bin.py,Yes,None
+repo_f35fec0_ddc5cd8,Gemini,cases/repo_f35fec0_ddc5cd8/llm_gemini_file.py,llm_gemini_file.py,Yes,None
+repo_f35fec0_ddc5cd8,Claude,cases/repo_f35fec0_ddc5cd8/llm_claude_file.py,llm_claude_file.py,Yes,None
+repo_27ac7a3_9746aa1,Gemini,cases/repo_27ac7a3_9746aa1/llm_gemini_lib.py,llm_gemini_lib.py,Yes,None
+repo_27ac7a3_9746aa1,Gemini,cases/repo_27ac7a3_9746aa1/llm_gemini_spiderfoot.py,llm_gemini_spiderfoot.py,No,"Sorry: IndentationError: unexpected indent (llm_gemini_spiderfoot.py, line 389)"
+repo_27ac7a3_9746aa1,Claude,cases/repo_27ac7a3_9746aa1/llm_claude_lib.py,llm_claude_lib.py,Yes,None
+repo_27ac7a3_9746aa1,GPT,cases/repo_27ac7a3_9746aa1/llm_spiderfoot.py,llm_spiderfoot.py,Yes,None
+repo_27ac7a3_9746aa1,Claude,cases/repo_27ac7a3_9746aa1/llm_claude_spiderfoot.py,llm_claude_spiderfoot.py,Yes,None
+repo_27ac7a3_9746aa1,GPT,cases/repo_27ac7a3_9746aa1/llm_lib.py,llm_lib.py,Yes,None
+repo_cd43282_20c4509,Gemini,cases/repo_cd43282_20c4509/llm_gemini_lib.py,llm_gemini_lib.py,Yes,None
+repo_cd43282_20c4509,Claude,cases/repo_cd43282_20c4509/llm_claude_lib.py,llm_claude_lib.py,Yes,None
+repo_cd43282_20c4509,GPT,cases/repo_cd43282_20c4509/llm_lib.py,llm_lib.py,Yes,None
+repo_9e694dd_d2507e1,GPT,cases/repo_9e694dd_d2507e1/llm_sfbui.py,llm_sfbui.py,Yes,None
+repo_9e694dd_d2507e1,GPT,cases/repo_9e694dd_d2507e1/llm_foolhelper.py,llm_foolhelper.py,Yes,None
+repo_9e694dd_d2507e1,Claude,cases/repo_9e694dd_d2507e1/llm_claude_foothelper.py,llm_claude_foothelper.py,Yes,None
+repo_9e694dd_d2507e1,GPT,cases/repo_9e694dd_d2507e1/llm_sf.py,llm_sf.py,Yes,None
+repo_9e694dd_d2507e1,GPT,cases/repo_9e694dd_d2507e1/llm_helper.py,llm_helper.py,Yes,None
+repo_9e694dd_d2507e1,Claude,cases/repo_9e694dd_d2507e1/llm_claude_sfbui.py,llm_claude_sfbui.py,Yes,None
+repo_9e694dd_d2507e1,Gemini,cases/repo_9e694dd_d2507e1/llm_gemini_sf.py,llm_gemini_sf.py,Yes,None
+repo_9e694dd_d2507e1,Gemini,cases/repo_9e694dd_d2507e1/llm_gemini_foothelper.py,llm_gemini_foothelper.py,Yes,None
+repo_9e694dd_d2507e1,Claude,cases/repo_9e694dd_d2507e1/llm_claude_sf.py,llm_claude_sf.py,Yes,None
+repo_9e694dd_d2507e1,Gemini,cases/repo_9e694dd_d2507e1/llm_gemini_sfbui.py,llm_gemini_sfbui.py,Yes,None
+repo_9e694dd_d2507e1,Gemini,cases/repo_9e694dd_d2507e1/llm_gemini_helper.py,llm_gemini_helper.py,Yes,None
+repo_9e694dd_d2507e1,Claude,cases/repo_9e694dd_d2507e1/llm_claude_helper.py,llm_claude_helper.py,Yes,None
+repo_aae4a1f_7f04a49,Claude,cases/repo_aae4a1f_7f04a49/llm_claude_testspider.py,llm_claude_testspider.py,Yes,None
+repo_aae4a1f_7f04a49,Gemini,cases/repo_aae4a1f_7f04a49/llm_gemini_testspider.py,llm_gemini_testspider.py,No,SyntaxError: invalid syntax
+repo_aae4a1f_7f04a49,GPT,cases/repo_aae4a1f_7f04a49/llm_testspider.py,llm_testspider.py,Yes,None

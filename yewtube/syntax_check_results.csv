@@ -1,0 +1,8 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_8508c46_2e0a353,GPT,cases/repo_8508c46_2e0a353/llm_player.py,llm_player.py,Yes,None
+repo_8508c46_2e0a353,Gemini,cases/repo_8508c46_2e0a353/llm_gemini_player.py,llm_gemini_player.py,No,SyntaxError: invalid syntax
+repo_8508c46_2e0a353,Claude,cases/repo_8508c46_2e0a353/llm_claude_player.py,llm_claude_player.py,Yes,None
+repo_6b9a83a_e43b36f,GPT,cases/repo_6b9a83a_e43b36f/llm_playlist.py,llm_playlist.py,Yes,None
+repo_ea4831f_8d2c22d,GPT,cases/repo_ea4831f_8d2c22d/llm_main.py,llm_main.py,Yes,None
+repo_ea4831f_8d2c22d,Gemini,cases/repo_ea4831f_8d2c22d/llm_gemini_main.py,llm_gemini_main.py,Yes,None
+repo_ea4831f_8d2c22d,Claude,cases/repo_ea4831f_8d2c22d/llm_claude_main.py,llm_claude_main.py,Yes,None

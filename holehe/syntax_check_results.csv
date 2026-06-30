@@ -1,0 +1,14 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_7c2bde2_6b18248,Gemini,cases/repo_7c2bde2_6b18248/llm_gemini_setup.py,llm_gemini_setup.py,Yes,None
+repo_7c2bde2_6b18248,GPT,cases/repo_7c2bde2_6b18248/llm_setup.py,llm_setup.py,Yes,None
+repo_7c2bde2_6b18248,Claude,cases/repo_7c2bde2_6b18248/llm_claude_setup.py,llm_claude_setup.py,Yes,None
+repo_d283af9_68b8f4d,Gemini,cases/repo_d283af9_68b8f4d/llm_gemini_blab.py,llm_gemini_blab.py,Yes,None
+repo_d283af9_68b8f4d,Claude,cases/repo_d283af9_68b8f4d/llm_claude_blab.py,llm_claude_blab.py,Yes,None
+repo_d283af9_68b8f4d,GPT,cases/repo_d283af9_68b8f4d/llm_blab.py,llm_blab.py,Yes,None
+repo_aba9857_3438d40,Claude,cases/repo_aba9857_3438d40/llm_claude_office.py,llm_claude_office.py,Yes,None
+repo_aba9857_3438d40,Gemini,cases/repo_aba9857_3438d40/llm_gemini_office.py,llm_gemini_office.py,Yes,None
+repo_aba9857_3438d40,GPT,cases/repo_aba9857_3438d40/llm_axonaut.py,llm_axonaut.py,Yes,None
+repo_aba9857_3438d40,Gemini,cases/repo_aba9857_3438d40/llm_gemini_axonaut.py,llm_gemini_axonaut.py,Yes,None
+repo_aba9857_3438d40,Claude,cases/repo_aba9857_3438d40/llm_claude_axonaut.py,llm_claude_axonaut.py,Yes,None
+repo_aba9857_3438d40,GPT,cases/repo_aba9857_3438d40/llm_office.py,llm_office.py,Yes,None
+repo_b631679_2158f87,GPT,cases/repo_b631679_2158f87/llm_diigo.py,llm_diigo.py,Yes,None

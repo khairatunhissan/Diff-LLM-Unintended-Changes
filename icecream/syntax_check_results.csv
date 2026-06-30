@@ -1,0 +1,16 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_bdf922b_afc425b,GPT,cases/repo_bdf922b_afc425b/llm_icecream.py,llm_icecream.py,Yes,None
+repo_bdf922b_afc425b,Claude,cases/repo_bdf922b_afc425b/llm_claude_icecream.py,llm_claude_icecream.py,Yes,None
+repo_bdf922b_afc425b,Gemini,cases/repo_bdf922b_afc425b/llm_gemini_icecream.py,llm_gemini_icecream.py,Yes,None
+repo_10e32f7_37177d5,GPT,cases/repo_10e32f7_37177d5/llm_icecream.py,llm_icecream.py,Yes,None
+repo_10e32f7_37177d5,Claude,cases/repo_10e32f7_37177d5/llm_claude_icecream.py,llm_claude_icecream.py,Yes,None
+repo_10e32f7_37177d5,Gemini,cases/repo_10e32f7_37177d5/llm_gemini_icecream.py,llm_gemini_icecream.py,Yes,None
+repo_d970d6a_29cc0f6,Gemini,cases/repo_d970d6a_29cc0f6/llm_gemini_setup.py,llm_gemini_setup.py,Yes,None
+repo_d970d6a_29cc0f6,GPT,cases/repo_d970d6a_29cc0f6/llm_setup.py,llm_setup.py,Yes,None
+repo_d970d6a_29cc0f6,Claude,cases/repo_d970d6a_29cc0f6/llm_claude_setup.py,llm_claude_setup.py,Yes,None
+repo_c2baf17_ebce32a,GPT,cases/repo_c2baf17_ebce32a/llm_icecream.py,llm_icecream.py,Yes,None
+repo_c2baf17_ebce32a,GPT,cases/repo_c2baf17_ebce32a/llm_install.py,llm_install.py,Yes,None
+repo_c2baf17_ebce32a,Gemini,cases/repo_c2baf17_ebce32a/llm_gemini_install.py,llm_gemini_install.py,Yes,None
+repo_c2baf17_ebce32a,Claude,cases/repo_c2baf17_ebce32a/llm_claude_install.py,llm_claude_install.py,Yes,None
+repo_c2baf17_ebce32a,Claude,cases/repo_c2baf17_ebce32a/llm_claude_icecream.py,llm_claude_icecream.py,Yes,None
+repo_c2baf17_ebce32a,Gemini,cases/repo_c2baf17_ebce32a/llm_gemini_icecream.py,llm_gemini_icecream.py,Yes,None

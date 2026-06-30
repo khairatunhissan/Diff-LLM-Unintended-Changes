@@ -1,0 +1,4 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_1442154_17e5146,GPT,cases/repo_1442154_17e5146/llm_submaker.py,llm_submaker.py,Yes,None
+repo_1442154_17e5146,Gemini,cases/repo_1442154_17e5146/llm_gemini_submaker.py,llm_gemini_submaker.py,Yes,None
+repo_1442154_17e5146,Claude,cases/repo_1442154_17e5146/llm_claude_submaker.py,llm_claude_submaker.py,Yes,None

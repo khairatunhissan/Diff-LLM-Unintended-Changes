@@ -1,0 +1,10 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_be42ae7_1c64c28,Gemini,cases/repo_be42ae7_1c64c28/llm_gemini_sites.py,llm_gemini_sites.py,Yes,None
+repo_be42ae7_1c64c28,GPT,cases/repo_be42ae7_1c64c28/llm_sites.py,llm_sites.py,Yes,None
+repo_be42ae7_1c64c28,Claude,cases/repo_be42ae7_1c64c28/llm_claude_sites.py,llm_claude_sites.py,Yes,None
+repo_cfcc82a_947f1ad,Gemini,cases/repo_cfcc82a_947f1ad/llm_gemini_sites.py,llm_gemini_sites.py,Yes,None
+repo_cfcc82a_947f1ad,Claude,cases/repo_cfcc82a_947f1ad/llm_claude_sherlock.py,llm_claude_sherlock.py,Yes,None
+repo_cfcc82a_947f1ad,Gemini,cases/repo_cfcc82a_947f1ad/llm_gemini_sherlock.py,llm_gemini_sherlock.py,Yes,None
+repo_cfcc82a_947f1ad,GPT,cases/repo_cfcc82a_947f1ad/llm_sites.py,llm_sites.py,Yes,None
+repo_cfcc82a_947f1ad,Claude,cases/repo_cfcc82a_947f1ad/llm_claude_sites.py,llm_claude_sites.py,Yes,None
+repo_cfcc82a_947f1ad,GPT,cases/repo_cfcc82a_947f1ad/llm_sherlock.py,llm_sherlock.py,Yes,None

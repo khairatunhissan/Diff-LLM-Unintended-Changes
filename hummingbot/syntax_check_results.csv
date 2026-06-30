@@ -1,0 +1,26 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_ec9dec5_f8acb67,GPT,cases/repo_ec9dec5_f8acb67/llm_parser.py,llm_parser.py,Yes,None
+repo_ec9dec5_f8acb67,Claude,cases/repo_ec9dec5_f8acb67/llm_claude_parser.py,llm_claude_parser.py,Yes,None
+repo_ec9dec5_f8acb67,Gemini,cases/repo_ec9dec5_f8acb67/llm_gemini_parser.py,llm_gemini_parser.py,Yes,None
+repo_86125bd_6917de2,GPT,cases/repo_86125bd_6917de2/llm_pair.py,llm_pair.py,Yes,None
+repo_da7ca5a_320cf98,Gemini,cases/repo_da7ca5a_320cf98/llm_gemini_command.py,llm_gemini_command.py,Yes,None
+repo_da7ca5a_320cf98,Claude,cases/repo_da7ca5a_320cf98/llm_claude_command.py,llm_claude_command.py,Yes,None
+repo_da7ca5a_320cf98,GPT,cases/repo_da7ca5a_320cf98/llm_command.py,llm_command.py,Yes,None
+repo_95fb7e6_4b90e78,Claude,cases/repo_95fb7e6_4b90e78/llm_claude_market.py,llm_claude_market.py,No,SyntaxError: invalid syntax
+repo_95fb7e6_4b90e78,Gemini,cases/repo_95fb7e6_4b90e78/llm_gemini_market.py,llm_gemini_market.py,No,SyntaxError: invalid syntax
+repo_95fb7e6_4b90e78,GPT,cases/repo_95fb7e6_4b90e78/llm_market.py,llm_market.py,No,SyntaxError: invalid syntax
+repo_b87b726_c38aeb8,GPT,cases/repo_b87b726_c38aeb8/llm_rsi.py,llm_rsi.py,Yes,None
+repo_b87b726_c38aeb8,GPT,cases/repo_b87b726_c38aeb8/llm_base.py,llm_base.py,Yes,None
+repo_b87b726_c38aeb8,Claude,cases/repo_b87b726_c38aeb8/llm_claude_testbase.py,llm_claude_testbase.py,Yes,None
+repo_b87b726_c38aeb8,Gemini,cases/repo_b87b726_c38aeb8/llm_gemini_testbase.py,llm_gemini_testbase.py,Yes,None
+repo_b87b726_c38aeb8,Claude,cases/repo_b87b726_c38aeb8/llm_claude_rsi.py,llm_claude_rsi.py,Yes,None
+repo_b87b726_c38aeb8,Claude,cases/repo_b87b726_c38aeb8/llm_claude_base.py,llm_claude_base.py,Yes,None
+repo_b87b726_c38aeb8,GPT,cases/repo_b87b726_c38aeb8/llm_testbase.py,llm_testbase.py,Yes,None
+repo_b87b726_c38aeb8,Gemini,cases/repo_b87b726_c38aeb8/llm_gemini_base.py,llm_gemini_base.py,No,SyntaxError: Function parameters cannot be parenthesized
+repo_b87b726_c38aeb8,Gemini,cases/repo_b87b726_c38aeb8/llm_gemini_rsi.py,llm_gemini_rsi.py,Yes,None
+repo_13a7f7f_830a3d2,Claude,cases/repo_13a7f7f_830a3d2/llm_claude_test.py,llm_claude_test.py,Yes,None
+repo_13a7f7f_830a3d2,Gemini,cases/repo_13a7f7f_830a3d2/llm_gemini_test.py,llm_gemini_test.py,No,SyntaxError: Function parameters cannot be parenthesized
+repo_13a7f7f_830a3d2,GPT,cases/repo_13a7f7f_830a3d2/llm_test.py,llm_test.py,Yes,None
+repo_e798854_52c9d19,Claude,cases/repo_e798854_52c9d19/llm_claude_handler.py,llm_claude_handler.py,Yes,None
+repo_e798854_52c9d19,Gemini,cases/repo_e798854_52c9d19/llm_gemini_handler.py,llm_gemini_handler.py,Yes,None
+repo_e798854_52c9d19,GPT,cases/repo_e798854_52c9d19/llm_handler.py,llm_handler.py,Yes,None

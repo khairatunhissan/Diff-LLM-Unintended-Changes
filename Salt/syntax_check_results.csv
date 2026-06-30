@@ -1,0 +1,29 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_9ca574a_a96de0d,GPT,cases/repo_9ca574a_a96de0d/llm_keystone.py,llm_keystone.py,Yes,None
+repo_625da0d_9d458bb,Claude,cases/repo_625da0d_9d458bb/llm_claude_pkg.py,llm_claude_pkg.py,Yes,None
+repo_625da0d_9d458bb,GPT,cases/repo_625da0d_9d458bb/llm_pkg.py,llm_pkg.py,Yes,None
+repo_625da0d_9d458bb,Gemini,cases/repo_625da0d_9d458bb/llm_gemini_pkg.py,llm_gemini_pkg.py,Yes,None
+repo_9805bde_5ca7e72,Gemini,cases/repo_9805bde_5ca7e72/llm_gemini_gitfs.py,llm_gemini_gitfs.py,Yes,None
+repo_9805bde_5ca7e72,GPT,cases/repo_9805bde_5ca7e72/llm_gitfs.py,llm_gitfs.py,Yes,None
+repo_9805bde_5ca7e72,Claude,cases/repo_9805bde_5ca7e72/llm_claude_gitfs.py,llm_claude_gitfs.py,Yes,None
+repo_522d1d8_5300156,Claude,cases/repo_522d1d8_5300156/llm_claude_saltutil.py,llm_claude_saltutil.py,Yes,None
+repo_522d1d8_5300156,Gemini,cases/repo_522d1d8_5300156/llm_gemini_saltutil.py,llm_gemini_saltutil.py,Yes,None
+repo_522d1d8_5300156,GPT,cases/repo_522d1d8_5300156/llm_saltutil.py,llm_saltutil.py,Yes,None
+repo_a55aa59_4311b2c,Gemini,cases/repo_a55aa59_4311b2c/llm_gemini_cmdmod.py,llm_gemini_cmdmod.py,Yes,None
+repo_a55aa59_4311b2c,Claude,cases/repo_a55aa59_4311b2c/llm_claude_cmdmod.py,llm_claude_cmdmod.py,Yes,None
+repo_a55aa59_4311b2c,GPT,cases/repo_a55aa59_4311b2c/llm_cmdmod.py,llm_cmdmod.py,No,"Sorry: IndentationError: expected an indented block after 'try' statement on line 35 (llm_cmdmod.py, line 36)"
+repo_d76bd40_aeff594,Claude,cases/repo_d76bd40_aeff594/llm_claude_pkg.py,llm_claude_pkg.py,Yes,None
+repo_d76bd40_aeff594,GPT,cases/repo_d76bd40_aeff594/llm_pkg.py,llm_pkg.py,Yes,None
+repo_d76bd40_aeff594,Gemini,cases/repo_d76bd40_aeff594/llm_gemini_pkg.py,llm_gemini_pkg.py,Yes,None
+repo_b4db08e_d18e5c4,GPT,cases/repo_b4db08e_d18e5c4/llm_event.py,llm_event.py,No,SyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers
+repo_b4db08e_d18e5c4,Claude,cases/repo_b4db08e_d18e5c4/llm_claude_event.py,llm_claude_event.py,No,SyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers
+repo_b4db08e_d18e5c4,Gemini,cases/repo_b4db08e_d18e5c4/llm_gemini_event.py,llm_gemini_event.py,No,SyntaxError: unterminated triple-quoted string literal (detected at line 323)
+repo_8b7a575_d92abc6,Gemini,cases/repo_8b7a575_d92abc6/llm_gemini_postpone.py,llm_gemini_postpone.py,Yes,None
+repo_8b7a575_d92abc6,GPT,cases/repo_8b7a575_d92abc6/llm_eval.py,llm_eval.py,Yes,None
+repo_8b7a575_d92abc6,Claude,cases/repo_8b7a575_d92abc6/llm_claude_postpone.py,llm_claude_postpone.py,Yes,None
+repo_8b7a575_d92abc6,Claude,cases/repo_8b7a575_d92abc6/llm_claude_skip.py,llm_claude_skip.py,Yes,None
+repo_8b7a575_d92abc6,Gemini,cases/repo_8b7a575_d92abc6/llm_gemini_skip.py,llm_gemini_skip.py,Yes,None
+repo_8b7a575_d92abc6,Gemini,cases/repo_8b7a575_d92abc6/llm_gemini_eval.py,llm_gemini_eval.py,Yes,None
+repo_8b7a575_d92abc6,Claude,cases/repo_8b7a575_d92abc6/llm_claude_eval.py,llm_claude_eval.py,Yes,None
+repo_8b7a575_d92abc6,GPT,cases/repo_8b7a575_d92abc6/llm_postpone.py,llm_postpone.py,Yes,None
+repo_8b7a575_d92abc6,GPT,cases/repo_8b7a575_d92abc6/llm_skip.py,llm_skip.py,Yes,None

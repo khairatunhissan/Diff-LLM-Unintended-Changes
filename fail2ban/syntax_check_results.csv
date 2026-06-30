@@ -1,0 +1,15 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_e392f51_5b0c3e7,Claude,cases/repo_e392f51_5b0c3e7/llm_claude_client.py,llm_claude_client.py,Yes,None
+repo_e392f51_5b0c3e7,Gemini,cases/repo_e392f51_5b0c3e7/llm_gemini_client.py,llm_gemini_client.py,Yes,None
+repo_e392f51_5b0c3e7,GPT,cases/repo_e392f51_5b0c3e7/llm_case.py,llm_case.py,Yes,None
+repo_e392f51_5b0c3e7,Gemini,cases/repo_e392f51_5b0c3e7/llm_gemini_regex.py,llm_gemini_regex.py,Yes,None
+repo_e392f51_5b0c3e7,Gemini,cases/repo_e392f51_5b0c3e7/llm_gemini_server.py,llm_gemini_server.py,Yes,None
+repo_e392f51_5b0c3e7,Claude,cases/repo_e392f51_5b0c3e7/llm_claude_server.py,llm_claude_server.py,Yes,None
+repo_e392f51_5b0c3e7,Claude,cases/repo_e392f51_5b0c3e7/llm_claude_regex.py,llm_claude_regex.py,Yes,None
+repo_e392f51_5b0c3e7,GPT,cases/repo_e392f51_5b0c3e7/llm_client.py,llm_client.py,Yes,None
+repo_e392f51_5b0c3e7,Claude,cases/repo_e392f51_5b0c3e7/llm_claude_case.py,llm_claude_case.py,Yes,None
+repo_e392f51_5b0c3e7,GPT,cases/repo_e392f51_5b0c3e7/llm_regex.py,llm_regex.py,Yes,None
+repo_e392f51_5b0c3e7,GPT,cases/repo_e392f51_5b0c3e7/llm_server.py,llm_server.py,Yes,None
+repo_e392f51_5b0c3e7,Gemini,cases/repo_e392f51_5b0c3e7/llm_gemini_case.py,llm_gemini_case.py,Yes,None
+repo_2d52fc3_1721991,GPT,cases/repo_2d52fc3_1721991/llm_ticket.py,llm_ticket.py,Yes,None
+repo_d1a73d3_54298fe,GPT,cases/repo_d1a73d3_54298fe/llm_case.py,llm_case.py,Yes,None

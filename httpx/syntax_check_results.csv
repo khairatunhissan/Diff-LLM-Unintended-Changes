@@ -1,0 +1,28 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_4fbf275_81f385c,Claude,cases/repo_4fbf275_81f385c/llm_claude_api.py,llm_claude_api.py,No,"Sorry: IndentationError: unexpected indent (llm_claude_api.py, line 45)"
+repo_4fbf275_81f385c,GPT,cases/repo_4fbf275_81f385c/llm_api.py,llm_api.py,Yes,None
+repo_4fbf275_81f385c,Gemini,cases/repo_4fbf275_81f385c/llm_gemini_api.py,llm_gemini_api.py,Yes,None
+repo_d5da743_3462999,Claude,cases/repo_d5da743_3462999/llm_claude_redirects.py,llm_claude_redirects.py,Yes,None
+repo_d5da743_3462999,GPT,cases/repo_d5da743_3462999/llm_redirects.py,llm_redirects.py,Yes,None
+repo_d5da743_3462999,Claude,cases/repo_d5da743_3462999/llm_claude_models.py,llm_claude_models.py,Yes,None
+repo_d5da743_3462999,Gemini,cases/repo_d5da743_3462999/llm_gemini_models.py,llm_gemini_models.py,Yes,None
+repo_d5da743_3462999,GPT,cases/repo_d5da743_3462999/llm_models.py,llm_models.py,Yes,None
+repo_d5da743_3462999,Gemini,cases/repo_d5da743_3462999/llm_gemini_redirects.py,llm_gemini_redirects.py,Yes,None
+repo_9b6605c_991915a,Gemini,cases/repo_9b6605c_991915a/llm_gemini_lib.py,llm_gemini_lib.py,Yes,None
+repo_9b6605c_991915a,Claude,cases/repo_9b6605c_991915a/llm_claude_testconfig.py,llm_claude_testconfig.py,Yes,None
+repo_9b6605c_991915a,Claude,cases/repo_9b6605c_991915a/llm_claude_lib.py,llm_claude_lib.py,Yes,None
+repo_9b6605c_991915a,GPT,cases/repo_9b6605c_991915a/llm_testconfig.py,llm_testconfig.py,Yes,None
+repo_9b6605c_991915a,Gemini,cases/repo_9b6605c_991915a/llm_gemini_testconfig.py,llm_gemini_testconfig.py,Yes,None
+repo_9b6605c_991915a,GPT,cases/repo_9b6605c_991915a/llm_lib.py,llm_lib.py,Yes,None
+repo_f9d18a8_d5da743,Claude,cases/repo_f9d18a8_d5da743/llm_claude_client.py,llm_claude_client.py,No,SyntaxError: unterminated triple-quoted string literal (detected at line 894)
+repo_f9d18a8_d5da743,Gemini,cases/repo_f9d18a8_d5da743/llm_gemini_client.py,llm_gemini_client.py,Yes,None
+repo_f9d18a8_d5da743,GPT,cases/repo_f9d18a8_d5da743/llm_client.py,llm_client.py,No,SyntaxError: '(' was never closed
+repo_8d8ea8b_bb6e52f,Claude,cases/repo_8d8ea8b_bb6e52f/llm_claude_http2.py,llm_claude_http2.py,Yes,None
+repo_8d8ea8b_bb6e52f,GPT,cases/repo_8d8ea8b_bb6e52f/llm_http.py,llm_http.py,Yes,None
+repo_8d8ea8b_bb6e52f,GPT,cases/repo_8d8ea8b_bb6e52f/llm_http2.py,llm_http2.py,Yes,None
+repo_8d8ea8b_bb6e52f,GPT,cases/repo_8d8ea8b_bb6e52f/llm_http11.py,llm_http11.py,Yes,None
+repo_8d8ea8b_bb6e52f,Claude,cases/repo_8d8ea8b_bb6e52f/llm_claude_http.py,llm_claude_http.py,Yes,None
+repo_8d8ea8b_bb6e52f,Gemini,cases/repo_8d8ea8b_bb6e52f/llm_gemini_http2.py,llm_gemini_http2.py,Yes,None
+repo_8d8ea8b_bb6e52f,Gemini,cases/repo_8d8ea8b_bb6e52f/llm_gemini_http.py,llm_gemini_http.py,Yes,None
+repo_8d8ea8b_bb6e52f,Claude,cases/repo_8d8ea8b_bb6e52f/llm_claude_http11.py,llm_claude_http11.py,Yes,None
+repo_8d8ea8b_bb6e52f,Gemini,cases/repo_8d8ea8b_bb6e52f/llm_gemini_http11.py,llm_gemini_http11.py,Yes,None

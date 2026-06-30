@@ -1,0 +1,7 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_2e29b41_4aa1a40,Claude,cases/repo_2e29b41_4aa1a40/llm_claude_analysis.py,llm_claude_analysis.py,Yes,None
+repo_2e29b41_4aa1a40,Gemini,cases/repo_2e29b41_4aa1a40/llm_gemini_analysis.py,llm_gemini_analysis.py,Yes,None
+repo_2e29b41_4aa1a40,GPT,cases/repo_2e29b41_4aa1a40/llm_analysis.py,llm_analysis.py,Yes,None
+repo_81a27d4_4b9ea7b,Gemini,cases/repo_81a27d4_4b9ea7b/llm_gemini_veri.py,llm_gemini_veri.py,Yes,None
+repo_81a27d4_4b9ea7b,Claude,cases/repo_81a27d4_4b9ea7b/llm_claude_veri.py,llm_claude_veri.py,Yes,None
+repo_81a27d4_4b9ea7b,GPT,cases/repo_81a27d4_4b9ea7b/llm_veri.py,llm_veri.py,Yes,None

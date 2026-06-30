@@ -1,0 +1,7 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_9db7588_33d2a72,GPT,cases/repo_9db7588_33d2a72/llm_uc.py,llm_uc.py,Yes,None
+repo_9db7588_33d2a72,Gemini,cases/repo_9db7588_33d2a72/llm_gemini_uc.py,llm_gemini_uc.py,Yes,None
+repo_9db7588_33d2a72,Claude,cases/repo_9db7588_33d2a72/llm_claude_uc.py,llm_claude_uc.py,Yes,None
+repo_8049384_5edd9a7,GPT,cases/repo_8049384_5edd9a7/llm_patcher.py,llm_patcher.py,Yes,None
+repo_8049384_5edd9a7,Gemini,cases/repo_8049384_5edd9a7/llm_gemini_patcher.py,llm_gemini_patcher.py,Yes,None
+repo_8049384_5edd9a7,Claude,cases/repo_8049384_5edd9a7/llm_claude_patcher.py,llm_claude_patcher.py,Yes,None

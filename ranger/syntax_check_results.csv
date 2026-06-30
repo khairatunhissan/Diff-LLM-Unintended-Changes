@@ -1,0 +1,13 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_968b706_eb2ebc4,Gemini,cases/repo_968b706_eb2ebc4/llm_gemini_actions.py,llm_gemini_actions.py,Yes,None
+repo_968b706_eb2ebc4,Claude,cases/repo_968b706_eb2ebc4/llm_claude_actions.py,llm_claude_actions.py,Yes,None
+repo_968b706_eb2ebc4,GPT,cases/repo_968b706_eb2ebc4/llm_actions.py,llm_actions.py,No,SyntaxError: invalid syntax
+repo_bfe1dba_6859dae,Gemini,cases/repo_bfe1dba_6859dae/llm_gemini_actions.py,llm_gemini_actions.py,Yes,None
+repo_bfe1dba_6859dae,Claude,cases/repo_bfe1dba_6859dae/llm_claude_actions.py,llm_claude_actions.py,Yes,None
+repo_bfe1dba_6859dae,GPT,cases/repo_bfe1dba_6859dae/llm_actions.py,llm_actions.py,Yes,None
+repo_62a77e7_aed0637,Claude,cases/repo_62a77e7_aed0637/llm_claude_vcs.py,llm_claude_vcs.py,Yes,None
+repo_62a77e7_aed0637,GPT,cases/repo_62a77e7_aed0637/llm_vcs.py,llm_vcs.py,Yes,None
+repo_62a77e7_aed0637,Gemini,cases/repo_62a77e7_aed0637/llm_gemini_vcs.py,llm_gemini_vcs.py,Yes,None
+repo_2ec8ec5_3021209,GPT,cases/repo_2ec8ec5_3021209/llm_commands.py,llm_commands.py,Yes,None
+repo_2ec8ec5_3021209,Claude,cases/repo_2ec8ec5_3021209/llm_claude_commands.py,llm_claude_commands.py,Yes,None
+repo_2ec8ec5_3021209,Gemini,cases/repo_2ec8ec5_3021209/llm_gemini_commands.py,llm_gemini_commands.py,Yes,None

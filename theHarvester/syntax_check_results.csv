@@ -1,0 +1,10 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_28d92a8_cb18ecb,GPT,cases/repo_28d92a8_cb18ecb/llm_treach.py,llm_treach.py,Yes,None
+repo_28d92a8_cb18ecb,Claude,cases/repo_28d92a8_cb18ecb/llm_claude_treach.py,llm_claude_treach.py,No,"Sorry: IndentationError: expected an indented block after class definition on line 4 (llm_claude_treach.py, line 5)"
+repo_28d92a8_cb18ecb,Gemini,cases/repo_28d92a8_cb18ecb/llm_gemini_treach.py,llm_gemini_treach.py,Yes,None
+repo_1821ce4_c42f6c0,GPT,cases/repo_1821ce4_c42f6c0/llm_parser.py,llm_parser.py,Yes,None
+repo_1821ce4_c42f6c0,Claude,cases/repo_1821ce4_c42f6c0/llm_claude_parser.py,llm_claude_parser.py,Yes,None
+repo_1821ce4_c42f6c0,Gemini,cases/repo_1821ce4_c42f6c0/llm_gemini_parser.py,llm_gemini_parser.py,Yes,None
+repo_bc2fce0_e72876f,Claude,cases/repo_bc2fce0_e72876f/llm_claude_core.py,llm_claude_core.py,Yes,None
+repo_bc2fce0_e72876f,Gemini,cases/repo_bc2fce0_e72876f/llm_gemini_core.py,llm_gemini_core.py,Yes,None
+repo_bc2fce0_e72876f,GPT,cases/repo_bc2fce0_e72876f/llm_core.py,llm_core.py,Yes,None

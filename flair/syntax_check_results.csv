@@ -1,0 +1,36 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_fbe88ff_9da916e,Gemini,cases/repo_fbe88ff_9da916e/llm_gemini_model.py,llm_gemini_model.py,Yes,None
+repo_fbe88ff_9da916e,GPT,cases/repo_fbe88ff_9da916e/llm_trainer.py,llm_trainer.py,Yes,None
+repo_fbe88ff_9da916e,GPT,cases/repo_fbe88ff_9da916e/llm_model.py,llm_model.py,Yes,None
+repo_fbe88ff_9da916e,Gemini,cases/repo_fbe88ff_9da916e/llm_gemini_trainer.py,llm_gemini_trainer.py,No,SyntaxError: invalid syntax
+repo_fbe88ff_9da916e,Claude,cases/repo_fbe88ff_9da916e/llm_claude_trainer.py,llm_claude_trainer.py,Yes,None
+repo_fbe88ff_9da916e,Claude,cases/repo_fbe88ff_9da916e/llm_claude_model.py,llm_claude_model.py,Yes,None
+repo_3dc16e2_ef926e6,GPT,cases/repo_3dc16e2_ef926e6/llm_init.py,llm_init.py,Yes,None
+repo_3dc16e2_ef926e6,Gemini,cases/repo_3dc16e2_ef926e6/llm_gemini_init.py,llm_gemini_init.py,Yes,None
+repo_3dc16e2_ef926e6,Claude,cases/repo_3dc16e2_ef926e6/llm_claude_init.py,llm_claude_init.py,Yes,None
+repo_1577601_74754c6,GPT,cases/repo_1577601_74754c6/llm_init.py,llm_init.py,Yes,None
+repo_1577601_74754c6,Gemini,cases/repo_1577601_74754c6/llm_gemini_init.py,llm_gemini_init.py,Yes,None
+repo_1577601_74754c6,Claude,cases/repo_1577601_74754c6/llm_claude_init.py,llm_claude_init.py,Yes,None
+repo_288f7ce_31963ca,Gemini,cases/repo_288f7ce_31963ca/llm_gemini_model.py,llm_gemini_model.py,Yes,None
+repo_288f7ce_31963ca,GPT,cases/repo_288f7ce_31963ca/llm_model.py,llm_model.py,Yes,None
+repo_288f7ce_31963ca,Claude,cases/repo_288f7ce_31963ca/llm_claude_model.py,llm_claude_model.py,Yes,None
+repo_41d48d9_5577479,Gemini,cases/repo_41d48d9_5577479/llm_gemini_label.py,llm_gemini_label.py,Yes,None
+repo_41d48d9_5577479,Gemini,cases/repo_41d48d9_5577479/llm_gemini_link.py,llm_gemini_link.py,Yes,None
+repo_41d48d9_5577479,Claude,cases/repo_41d48d9_5577479/llm_claude_link.py,llm_claude_link.py,Yes,None
+repo_41d48d9_5577479,GPT,cases/repo_41d48d9_5577479/llm_bio.py,llm_bio.py,Yes,None
+repo_41d48d9_5577479,GPT,cases/repo_41d48d9_5577479/llm_label.py,llm_label.py,Yes,None
+repo_41d48d9_5577479,Claude,cases/repo_41d48d9_5577479/llm_claude_label.py,llm_claude_label.py,No,"Sorry: IndentationError: expected an indented block after function definition on line 3388 (llm_claude_label.py, line 3390)"
+repo_41d48d9_5577479,GPT,cases/repo_41d48d9_5577479/llm_link.py,llm_link.py,Yes,None
+repo_2b09404_8aa86b6,GPT,cases/repo_2b09404_8aa86b6/llm_base.py,llm_base.py,Yes,None
+repo_2b09404_8aa86b6,Claude,cases/repo_2b09404_8aa86b6/llm_claude_base.py,llm_claude_base.py,Yes,None
+repo_2b09404_8aa86b6,Gemini,cases/repo_2b09404_8aa86b6/llm_gemini_base.py,llm_gemini_base.py,Yes,None
+repo_66cd3bd_a4988ca,GPT,cases/repo_66cd3bd_a4988ca/llm_dataset.py,llm_dataset.py,Yes,None
+repo_e2865f7_005ec45,Claude,cases/repo_e2865f7_005ec45/llm_claude_doc.py,llm_claude_doc.py,Yes,None
+repo_e2865f7_005ec45,GPT,cases/repo_e2865f7_005ec45/llm_doc.py,llm_doc.py,Yes,None
+repo_e2865f7_005ec45,Gemini,cases/repo_e2865f7_005ec45/llm_gemini_doc.py,llm_gemini_doc.py,Yes,None
+repo_1d98531_4756d4c,GPT,cases/repo_1d98531_4756d4c/llm_trainer2.py,llm_trainer2.py,Yes,None
+repo_1d98531_4756d4c,GPT,cases/repo_1d98531_4756d4c/llm_trainer.py,llm_trainer.py,Yes,None
+repo_1d98531_4756d4c,Claude,cases/repo_1d98531_4756d4c/llm_claude_trainer2.py,llm_claude_trainer2.py,Yes,None
+repo_1d98531_4756d4c,Gemini,cases/repo_1d98531_4756d4c/llm_gemini_trainer.py,llm_gemini_trainer.py,Yes,None
+repo_1d98531_4756d4c,Claude,cases/repo_1d98531_4756d4c/llm_claude_trainer.py,llm_claude_trainer.py,Yes,None
+repo_1d98531_4756d4c,Gemini,cases/repo_1d98531_4756d4c/llm_gemini_trainer2.py,llm_gemini_trainer2.py,Yes,None

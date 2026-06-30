@@ -1,0 +1,10 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_ba68976_e8f1418,Gemini,cases/repo_ba68976_e8f1418/llm_gemini_pdfua.py,llm_gemini_pdfua.py,Yes,None
+repo_ba68976_e8f1418,GPT,cases/repo_ba68976_e8f1418/llm_pdfa.py,llm_pdfa.py,Yes,None
+repo_ba68976_e8f1418,Gemini,cases/repo_ba68976_e8f1418/llm_gemini_pdfa.py,llm_gemini_pdfa.py,Yes,None
+repo_ba68976_e8f1418,GPT,cases/repo_ba68976_e8f1418/llm_pdfua.py,llm_pdfua.py,Yes,None
+repo_ba68976_e8f1418,Claude,cases/repo_ba68976_e8f1418/llm_claude_pdfa.py,llm_claude_pdfa.py,No,"Sorry: IndentationError: expected an indented block after 'try' statement on line 2 (llm_claude_pdfa.py, line 4)"
+repo_ba68976_e8f1418,Claude,cases/repo_ba68976_e8f1418/llm_claude_pdfua.py,llm_claude_pdfua.py,Yes,None
+repo_0ff8692_c140c7b,GPT,cases/repo_0ff8692_c140c7b/llm_init.py,llm_init.py,Yes,None
+repo_0ff8692_c140c7b,Gemini,cases/repo_0ff8692_c140c7b/llm_gemini_init.py,llm_gemini_init.py,Yes,None
+repo_0ff8692_c140c7b,Claude,cases/repo_0ff8692_c140c7b/llm_claude_init.py,llm_claude_init.py,Yes,None

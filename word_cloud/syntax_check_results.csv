@@ -1,0 +1,10 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_bda4195_51f9983,GPT,cases/repo_bda4195_51f9983/llm_parrot.py,llm_parrot.py,Yes,None
+repo_bda4195_51f9983,Gemini,cases/repo_bda4195_51f9983/llm_gemini_parrot.py,llm_gemini_parrot.py,Yes,None
+repo_bda4195_51f9983,Claude,cases/repo_bda4195_51f9983/llm_claude_parrot.py,llm_claude_parrot.py,Yes,None
+repo_b79b3d6_d674088,Claude,cases/repo_b79b3d6_d674088/llm_claude_emoji.py,llm_claude_emoji.py,Yes,None
+repo_b79b3d6_d674088,GPT,cases/repo_b79b3d6_d674088/llm_emoji.py,llm_emoji.py,Yes,None
+repo_b79b3d6_d674088,Gemini,cases/repo_b79b3d6_d674088/llm_gemini_emoji.py,llm_gemini_emoji.py,Yes,None
+repo_59cb35d_be9bb5e,Claude,cases/repo_59cb35d_be9bb5e/llm_claude_wordcloud.py,llm_claude_wordcloud.py,Yes,None
+repo_59cb35d_be9bb5e,GPT,cases/repo_59cb35d_be9bb5e/llm_wordcloud.py,llm_wordcloud.py,Yes,None
+repo_59cb35d_be9bb5e,Gemini,cases/repo_59cb35d_be9bb5e/llm_gemini_wordcloud.py,llm_gemini_wordcloud.py,Yes,None

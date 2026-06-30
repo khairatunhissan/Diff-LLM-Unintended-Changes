@@ -1,0 +1,7 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_ede6169_9345a60,Gemini,cases/repo_ede6169_9345a60/llm_gemini_elements.py,llm_gemini_elements.py,Yes,None
+repo_ede6169_9345a60,Claude,cases/repo_ede6169_9345a60/llm_claude_elements.py,llm_claude_elements.py,Yes,None
+repo_ede6169_9345a60,GPT,cases/repo_ede6169_9345a60/llm_elements.py,llm_elements.py,Yes,None
+repo_721b6b5_0315081,GPT,cases/repo_721b6b5_0315081/llm_gui.py,llm_gui.py,Yes,None
+repo_721b6b5_0315081,Claude,cases/repo_721b6b5_0315081/llm_claude_gui.py,llm_claude_gui.py,Yes,None
+repo_721b6b5_0315081,Gemini,cases/repo_721b6b5_0315081/llm_gemini_gui.py,llm_gemini_gui.py,Yes,None

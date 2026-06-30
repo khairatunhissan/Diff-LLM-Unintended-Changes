@@ -1,0 +1,8 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_cdf6aa8_391c4cf,GPT,cases/repo_cdf6aa8_391c4cf/llm_case.py,llm_case.py,Yes,None
+repo_cdf6aa8_391c4cf,Claude,cases/repo_cdf6aa8_391c4cf/llm_claude_case.py,llm_claude_case.py,Yes,None
+repo_cdf6aa8_391c4cf,Gemini,cases/repo_cdf6aa8_391c4cf/llm_gemini_case.py,llm_gemini_case.py,Yes,None
+repo_ba9ec8c_b3fc8ef,GPT,cases/repo_ba9ec8c_b3fc8ef/llm_case.py,llm_case.py,Yes,None
+repo_ba9ec8c_b3fc8ef,Claude,cases/repo_ba9ec8c_b3fc8ef/llm_claude_case.py,llm_claude_case.py,No,"Sorry: IndentationError: expected an indented block after function definition on line 13 (llm_claude_case.py, line 14)"
+repo_ba9ec8c_b3fc8ef,Gemini,cases/repo_ba9ec8c_b3fc8ef/llm_gemini_case.py,llm_gemini_case.py,Yes,None
+repo_1954b26_4d12906,GPT,cases/repo_1954b26_4d12906/llm_zmqrpc.py,llm_zmqrpc.py,Yes,None

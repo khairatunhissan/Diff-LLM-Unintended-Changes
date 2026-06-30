@@ -1,0 +1,13 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_8f6e8ee_c3b6802,Claude,cases/repo_8f6e8ee_c3b6802/llm_claude_rec.py,llm_claude_rec.py,Yes,None
+repo_8f6e8ee_c3b6802,GPT,cases/repo_8f6e8ee_c3b6802/llm_rec.py,llm_rec.py,Yes,None
+repo_8f6e8ee_c3b6802,Gemini,cases/repo_8f6e8ee_c3b6802/llm_gemini_rec.py,llm_gemini_rec.py,Yes,None
+repo_77e21a0_56762b5,GPT,cases/repo_77e21a0_56762b5/llm_desc.py,llm_desc.py,Yes,None
+repo_77e21a0_56762b5,Gemini,cases/repo_77e21a0_56762b5/llm_gemini_desc.py,llm_gemini_desc.py,Yes,None
+repo_77e21a0_56762b5,Claude,cases/repo_77e21a0_56762b5/llm_claude_desc.py,llm_claude_desc.py,Yes,None
+repo_c224141_ecd90d6,GPT,cases/repo_c224141_ecd90d6/llm_status.py,llm_status.py,Yes,None
+repo_c224141_ecd90d6,GPT,cases/repo_c224141_ecd90d6/llm_desc.py,llm_desc.py,Yes,None
+repo_c224141_ecd90d6,Claude,cases/repo_c224141_ecd90d6/llm_claude_status.py,llm_claude_status.py,Yes,None
+repo_c224141_ecd90d6,Gemini,cases/repo_c224141_ecd90d6/llm_gemini_status.py,llm_gemini_status.py,Yes,None
+repo_c224141_ecd90d6,Gemini,cases/repo_c224141_ecd90d6/llm_gemini_desc.py,llm_gemini_desc.py,Yes,None
+repo_c224141_ecd90d6,Claude,cases/repo_c224141_ecd90d6/llm_claude_desc.py,llm_claude_desc.py,Yes,None

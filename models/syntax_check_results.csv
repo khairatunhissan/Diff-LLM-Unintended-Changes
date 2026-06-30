@@ -1,0 +1,29 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_e4cbe9e_f7cea8d,Gemini,cases/repo_e4cbe9e_f7cea8d/llm_gemini_model.py,llm_gemini_model.py,Yes,None
+repo_e4cbe9e_f7cea8d,GPT,cases/repo_e4cbe9e_f7cea8d/llm_model.py,llm_model.py,Yes,None
+repo_e4cbe9e_f7cea8d,Claude,cases/repo_e4cbe9e_f7cea8d/llm_claude_model.py,llm_claude_model.py,Yes,None
+repo_70b894b_325609e,GPT,cases/repo_70b894b_325609e/llm_base.py,llm_base.py,Yes,None
+repo_70b894b_325609e,Claude,cases/repo_70b894b_325609e/llm_claude_base.py,llm_claude_base.py,Yes,None
+repo_70b894b_325609e,Gemini,cases/repo_70b894b_325609e/llm_gemini_base.py,llm_gemini_base.py,Yes,None
+repo_320db20_7c42a17,GPT,cases/repo_320db20_7c42a17/llm_classifier.py,llm_classifier.py,Yes,None
+repo_320db20_7c42a17,Gemini,cases/repo_320db20_7c42a17/llm_gemini_classifier.py,llm_gemini_classifier.py,Yes,None
+repo_320db20_7c42a17,Claude,cases/repo_320db20_7c42a17/llm_claude_classifier.py,llm_claude_classifier.py,Yes,None
+repo_7d8a2c0_363d5e1,GPT,cases/repo_7d8a2c0_363d5e1/llm_far10.py,llm_far10.py,Yes,None
+repo_7d8a2c0_363d5e1,Claude,cases/repo_7d8a2c0_363d5e1/llm_claude_far10.py,llm_claude_far10.py,Yes,None
+repo_7d8a2c0_363d5e1,Gemini,cases/repo_7d8a2c0_363d5e1/llm_gemini_far10.py,llm_gemini_far10.py,Yes,None
+repo_057203e_f305d2d,GPT,cases/repo_057203e_f305d2d/llm_data.py,llm_data.py,No,SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+repo_057203e_f305d2d,GPT,cases/repo_057203e_f305d2d/llm_lstm.py,llm_lstm.py,Yes,None
+repo_057203e_f305d2d,Gemini,cases/repo_057203e_f305d2d/llm_gemini_lstm.py,llm_gemini_lstm.py,Yes,None
+repo_057203e_f305d2d,Claude,cases/repo_057203e_f305d2d/llm_claude_data.py,llm_claude_data.py,No,SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+repo_057203e_f305d2d,Gemini,cases/repo_057203e_f305d2d/llm_gemini_data.py,llm_gemini_data.py,No,SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+repo_057203e_f305d2d,Claude,cases/repo_057203e_f305d2d/llm_claude_lstm.py,llm_claude_lstm.py,Yes,None
+repo_780f526_d7676c1,Claude,cases/repo_780f526_d7676c1/llm_claude_test.py,llm_claude_test.py,Yes,None
+repo_780f526_d7676c1,Gemini,cases/repo_780f526_d7676c1/llm_gemini_test.py,llm_gemini_test.py,Yes,None
+repo_780f526_d7676c1,GPT,cases/repo_780f526_d7676c1/llm_test.py,llm_test.py,Yes,None
+repo_71e106f_d4ae8d1,Gemini,cases/repo_71e106f_d4ae8d1/llm_gemini_train.py,llm_gemini_train.py,Yes,None
+repo_71e106f_d4ae8d1,GPT,cases/repo_71e106f_d4ae8d1/llm_train.py,llm_train.py,Yes,None
+repo_71e106f_d4ae8d1,Claude,cases/repo_71e106f_d4ae8d1/llm_claude_train.py,llm_claude_train.py,Yes,None
+repo_861390b_6a5c66a,Gemini,cases/repo_861390b_6a5c66a/llm_gemini_download.py,llm_gemini_download.py,Yes,None
+repo_861390b_6a5c66a,Claude,cases/repo_861390b_6a5c66a/llm_claude_download.py,llm_claude_download.py,Yes,None
+repo_861390b_6a5c66a,GPT,cases/repo_861390b_6a5c66a/llm_download.py,llm_download.py,Yes,None
+repo_21b48a8_5f0776a,GPT,cases/repo_21b48a8_5f0776a/llm_main.py,llm_main.py,Yes,None

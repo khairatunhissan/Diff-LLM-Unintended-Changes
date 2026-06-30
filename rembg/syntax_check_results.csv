@@ -1,0 +1,13 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_30450d5_9079508,Claude,cases/repo_30450d5_9079508/llm_claude_factory.py,llm_claude_factory.py,Yes,None
+repo_30450d5_9079508,Gemini,cases/repo_30450d5_9079508/llm_gemini_factory.py,llm_gemini_factory.py,Yes,None
+repo_30450d5_9079508,Claude,cases/repo_30450d5_9079508/llm_claude_custom.py,llm_claude_custom.py,Yes,None
+repo_30450d5_9079508,Gemini,cases/repo_30450d5_9079508/llm_gemini_custom.py,llm_gemini_custom.py,Yes,None
+repo_30450d5_9079508,GPT,cases/repo_30450d5_9079508/llm_custom.py,llm_custom.py,Yes,None
+repo_30450d5_9079508,GPT,cases/repo_30450d5_9079508/llm_factory.py,llm_factory.py,Yes,None
+repo_1961a36_d62227d,GPT,cases/repo_1961a36_d62227d/llm_base.py,llm_base.py,Yes,None
+repo_1961a36_d62227d,GPT,cases/repo_1961a36_d62227d/llm_simple.py,llm_simple.py,Yes,None
+repo_1961a36_d62227d,Claude,cases/repo_1961a36_d62227d/llm_claude_base.py,llm_claude_base.py,Yes,None
+repo_1961a36_d62227d,Gemini,cases/repo_1961a36_d62227d/llm_gemini_simple.py,llm_gemini_simple.py,Yes,None
+repo_1961a36_d62227d,Claude,cases/repo_1961a36_d62227d/llm_claude_simple.py,llm_claude_simple.py,Yes,None
+repo_1961a36_d62227d,Gemini,cases/repo_1961a36_d62227d/llm_gemini_base.py,llm_gemini_base.py,Yes,None

@@ -1,0 +1,10 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_e2a136d_5b2a073,Gemini,cases/repo_e2a136d_5b2a073/llm_gemini_internal.py,llm_gemini_internal.py,Yes,None
+repo_e2a136d_5b2a073,Claude,cases/repo_e2a136d_5b2a073/llm_claude_internal.py,llm_claude_internal.py,Yes,None
+repo_e2a136d_5b2a073,GPT,cases/repo_e2a136d_5b2a073/llm_internal.py,llm_internal.py,Yes,None
+repo_4294b89_fa4bdc5,Claude,cases/repo_4294b89_fa4bdc5/llm_claude_url.py,llm_claude_url.py,Yes,None
+repo_4294b89_fa4bdc5,GPT,cases/repo_4294b89_fa4bdc5/llm_url.py,llm_url.py,Yes,None
+repo_4294b89_fa4bdc5,Gemini,cases/repo_4294b89_fa4bdc5/llm_gemini_url.py,llm_gemini_url.py,Yes,None
+repo_341af5b_54a1564,Gemini,cases/repo_341af5b_54a1564/llm_gemini_convert.py,llm_gemini_convert.py,Yes,None
+repo_341af5b_54a1564,Claude,cases/repo_341af5b_54a1564/llm_claude_convert.py,llm_claude_convert.py,Yes,None
+repo_341af5b_54a1564,GPT,cases/repo_341af5b_54a1564/llm_convert.py,llm_convert.py,Yes,None

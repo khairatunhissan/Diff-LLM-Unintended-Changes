@@ -1,0 +1,11 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_8c50eee_7651b8c,Claude,cases/repo_8c50eee_7651b8c/llm_claude_fuz.py,llm_claude_fuz.py,Yes,None
+repo_8c50eee_7651b8c,GPT,cases/repo_8c50eee_7651b8c/llm_fuz.py,llm_fuz.py,Yes,None
+repo_8c50eee_7651b8c,Gemini,cases/repo_8c50eee_7651b8c/llm_gemini_fuz.py,llm_gemini_fuz.py,Yes,None
+repo_45631f2_2a89a23,Claude,cases/repo_45631f2_2a89a23/llm_claude_fuz.py,llm_claude_fuz.py,Yes,None
+repo_45631f2_2a89a23,Gemini,cases/repo_45631f2_2a89a23/llm_gemini_controller.py,llm_gemini_controller.py,Yes,None
+repo_45631f2_2a89a23,GPT,cases/repo_45631f2_2a89a23/llm_controller.py,llm_controller.py,Yes,None
+repo_45631f2_2a89a23,Claude,cases/repo_45631f2_2a89a23/llm_claude_controller.py,llm_claude_controller.py,Yes,None
+repo_45631f2_2a89a23,GPT,cases/repo_45631f2_2a89a23/llm_fuz.py,llm_fuz.py,Yes,None
+repo_45631f2_2a89a23,GPT,cases/repo_45631f2_2a89a23/llm_parser.py,llm_parser.py,Yes,None
+repo_45631f2_2a89a23,Gemini,cases/repo_45631f2_2a89a23/llm_gemini_fuz.py,llm_gemini_fuz.py,Yes,None

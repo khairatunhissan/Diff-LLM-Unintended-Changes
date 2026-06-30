@@ -1,0 +1,10 @@
+case_id,model,file_path,filename,syntax_valid,syntax_error_message
+repo_4729e44_3c374c3,Claude,cases/repo_4729e44_3c374c3/llm_claude_scene.py,llm_claude_scene.py,Yes,None
+repo_4729e44_3c374c3,GPT,cases/repo_4729e44_3c374c3/llm_scene.py,llm_scene.py,Yes,None
+repo_4729e44_3c374c3,Gemini,cases/repo_4729e44_3c374c3/llm_gemini_scene.py,llm_gemini_scene.py,Yes,None
+repo_52c80f9_018b7ce,Claude,cases/repo_52c80f9_018b7ce/llm_claude_scene.py,llm_claude_scene.py,Yes,None
+repo_52c80f9_018b7ce,GPT,cases/repo_52c80f9_018b7ce/llm_scene.py,llm_scene.py,Yes,None
+repo_52c80f9_018b7ce,Gemini,cases/repo_52c80f9_018b7ce/llm_gemini_scene.py,llm_gemini_scene.py,Yes,None
+repo_66862db_5a70d67,GPT,cases/repo_66862db_5a70d67/llm_sys.py,llm_sys.py,Yes,None
+repo_66862db_5a70d67,Claude,cases/repo_66862db_5a70d67/llm_claude_sys.py,llm_claude_sys.py,Yes,None
+repo_66862db_5a70d67,Gemini,cases/repo_66862db_5a70d67/llm_gemini_sys.py,llm_gemini_sys.py,Yes,None
